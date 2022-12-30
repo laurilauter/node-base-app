@@ -6,9 +6,9 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const LOCAL_URI = "mongodb://localhost:27017/node-test"; //for local debugging
 const path = require("path");
-const { fileURLToPath } = require("url");
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//const { fileURLToPath } = require("url");
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
 
 const uri = process.env.PROD_URI;
 const Schema = mongoose.Schema;
