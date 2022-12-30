@@ -11,7 +11,7 @@ DEV_URI =
 
 PROD_URI =
   "mongodb://926ae402945ff72bd65591bfdae56624:3Koerapea@mongodb:27017/926ae402945ff72bd65591bfdae56624";
-const uri = PROD_URI;
+const uri = DEV_URI;
 const Schema = mongoose.Schema;
 
 const namesSchema = new Schema({
