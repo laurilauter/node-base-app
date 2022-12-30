@@ -1,17 +1,12 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-//const port = process.env.PORT;
-const port = 3000;
+const port = process.env.PORT;
 const mongoose = require("mongoose");
 require("dotenv").config();
 const LOCAL_URI = "mongodb://localhost:27017/node-test"; //for local debugging
-DEV_URI =
-  "mongodb://926ae402945ff72bd65591bfdae56624:3Koerapea@15a.mongo.evennode.com:27019/926ae402945ff72bd65591bfdae56624";
 
-PROD_URI =
-  "mongodb://926ae402945ff72bd65591bfdae56624:3Koerapea@mongodb:27017/926ae402945ff72bd65591bfdae56624";
-const uri = DEV_URI;
+const uri = process.env.PROD_URI;
 const Schema = mongoose.Schema;
 
 const namesSchema = new Schema({
