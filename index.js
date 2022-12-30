@@ -5,6 +5,10 @@ const port = process.env.PORT;
 const mongoose = require("mongoose");
 require("dotenv").config();
 const LOCAL_URI = "mongodb://localhost:27017/node-test"; //for local debugging
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const uri = process.env.PROD_URI;
 const Schema = mongoose.Schema;
@@ -26,8 +30,12 @@ mongoose
     console.log(e);
   });
 
+//serving public files, img and such
+app.use("/", express.static(path.join(__dirname, "./public")));
+
+//serv static FE
 app.get("/", (req, res) => {
-  res.json({ message: "Node server root" });
+  res.sendFile(path.join(__dirname, "./frontend/index.html"));
 });
 
 app.post("/data", async (req, res) => {
