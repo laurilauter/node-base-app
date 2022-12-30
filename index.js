@@ -5,7 +5,7 @@ const port = process.env.PORT;
 const mongoose = require("mongoose");
 require("dotenv").config();
 const LOCAL_URI = "mongodb://localhost:27017/node-test"; //for local debugging
-console.log("prod_uri ", PROD_URI);
+console.log("prod_uri ", process.env.PROD_URI);
 const Schema = mongoose.Schema;
 
 const namesSchema = new Schema({
