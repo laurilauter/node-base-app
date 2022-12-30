@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
-const port = 80;
 app.use(express.json());
+const port = process.env.PORT;
 const mongoose = require("mongoose");
 require("dotenv").config();
 const LOCAL_URI = "mongodb://localhost:27017/node-test"; //for local debuging
