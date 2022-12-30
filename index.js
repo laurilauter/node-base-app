@@ -4,9 +4,7 @@ const port = 3000;
 app.use(express.json());
 const mongoose = require("mongoose");
 require("dotenv").config();
-//const config = JSON.parse(process.env.APP_CONFIG);
-const mongoPassword = process.env.MONGO_PASSWORD;
-const DEV_URI = "mongodb://localhost:27017/node-test"; //for local debuging
+const LOCAL_URI = "mongodb://localhost:27017/node-test"; //for local debuging
 
 const Schema = mongoose.Schema;
 
@@ -19,7 +17,7 @@ const Names = mongoose.model("Names", namesSchema);
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.PROD_URI)
+  .connect(process.env.DEV_URI)
   .then(() => {
     console.log("Successfully connected to the DB");
   })
