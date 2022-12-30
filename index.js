@@ -17,7 +17,7 @@ const Names = mongoose.model("Names", namesSchema);
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.DEV_URI)
+  .connect(process.env.PROD_URI)
   .then(() => {
     console.log("Successfully connected to the DB");
   })
