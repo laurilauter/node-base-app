@@ -53,8 +53,9 @@ app.use("/game-plan", gamePlanRouter);
 app.use("/game", activeGameRouter);
 
 //serving public files, img and such
-app.use("/", express.static(path.join(__dirname, "./public")));
-app.use("/", express.static(path.join(__dirname, "./dist")));
+app.use("/", express.static(path.join(__dirname, "../public")));
+app.use("/", express.static(path.join(__dirname, "../dist")));
+console.log("dirname ", __dirname);
 //NOT SERVING STUFF IN DIST FOLDER???
 
 //serv static FE for all visitors
