@@ -25,7 +25,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: "http://localhost:5173", //Your Client, do not write '*'
+  //origin: "http://localhost:5173", //Your Client, do not write '*'
+  origin: "http://geoquiz.eu-4.evennode.com/", //Your Client, do not write '*'
   credentials: true,
 };
 app.use(cors(corsOptions));
