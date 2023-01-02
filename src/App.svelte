@@ -4,10 +4,10 @@
   import Login from "./lib/Login.svelte";
   import TextBox from "./lib/TextBox.svelte";
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = "http://localhost:8080";
+  axios.defaults.baseURL = import.meta.env.VITE_AXIOS_BASE_URL_DEV;
   //adjust axios baseURL depending on envirionment
   if (import.meta.env.MODE === "production") {
-    axios.defaults.baseURL = "http://geoquiz.eu-4.evennode.com/";
+    axios.defaults.baseURL = import.meta.env.VITE_AXIOS_BASE_URL_PROD;
   }
 </script>
 
