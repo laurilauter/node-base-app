@@ -24,9 +24,14 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+//adjust client url for cors
+let client_url = "http://localhost:5173";
+if (process.env.NODE_ENV === "production") {
+  client_url = "http://geoquiz.eu-4.evennode.com/";
+}
+
 const corsOptions = {
-  //origin: "http://localhost:5173", //Your Client, do not write '*'
-  origin: "http://geoquiz.eu-4.evennode.com/", //Your Client, do not write '*'
+  origin: client_url,
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -56,8 +61,6 @@ app.use("/game", activeGameRouter);
 //serving public files, img and such
 app.use("/", express.static(path.join(__dirname, "../public")));
 app.use("/", express.static(path.join(__dirname, "../dist")));
-console.log("dirname ", __dirname);
-//NOT SERVING STUFF IN DIST FOLDER???
 
 //serv static FE for all visitors
 app.get("/", (req, res) => {
