@@ -1,34 +1,70 @@
+// @ts-nocheck
+import { Game, GamePlan } from "../db/dbConnection.js";
 import crypto from "crypto";
+import moment from "moment";
 
 class ActiveGame {
-  gamePlan; //object
-  activeGameId;
-  players = []; //array of ids
-  isStarted = false; //boolean
+  gameId;
+  gameOwnerId;
+  gamePlan;
+  isGameActive;
+  isGameArchived = false; //cant be unpaused, will only show in archived games
+  isStarted = false;
+  duaration;
+  players = [];
 
   constructor(gamePlan) {
+    this.gameId = crypto.randomUUID();
     this.gamePlan = gamePlan;
-    this.activeGameId = crypto.randomUUID();
-  }
-  // Getters to check quiz answers from gameplan
-  get area() {
-    return this.calcArea();
-  }
-
-  get isGameActivated() {
-    return this.isGameActivated;
+    this.gameOwnerId = gamePlan.ownerId;
+    this.duaration = gamePlan.gameDuration;
+    this.isGameActive = true;
+    this.saveActiveGame(gamePlan);
   }
 
-  get activeGameId() {
-    return this.activeGameId;
+  get getIsGameActivated() {
+    return this.isGameActive;
   }
 
-  set activateGame(boolean) {
-    this.isStarted = boolean;
+  get getActiveGameId() {
+    return this.gameId;
   }
-  // Method
-  generateInvitation() {
-    return; //some uuid link //make a custom endpoint to accept these requests;
+
+  get getActiveGameOwnerId() {
+    return this.gameId.ownerId;
+  }
+
+  async startGame() {
+    const filter = { _id: this.gameId };
+    const now = moment();
+    const update = {
+      gameStartTime: now,
+      gameEndTime: now.add(this.duaration, "minutes"),
+    };
+    const options = { sort: { _id: 1 }, new: true, overwrite: true };
+
+    try {
+      await Game.findOneAndUpdate(filter, update, options);
+      this.isStarted = true;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async saveActiveGame(gamePlan) {
+    const newGameData = {
+      gamePlan: gamePlan,
+      gameId: this.gameId,
+      gameOwnerId: this.gameOwnerId,
+      gameStartTime: null,
+      gameEndTime: null,
+      players: [],
+    };
+    try {
+      await Game.create(newGameData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

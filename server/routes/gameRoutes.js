@@ -1,16 +1,18 @@
-import express from "express";
-const activeGameRouter = express.Router();
-import * as activeGameController from "../controllers/activeGameController.js";
-import bodyParser from "body-parser";
-activeGameRouter.use(bodyParser.json());
-activeGameRouter.use(bodyParser.urlencoded({ extended: false }));
+import express from 'express';
+const gameRouter = express.Router();
+import * as gameController from '../controllers/gameController.js';
+import bodyParser from 'body-parser';
+gameRouter.use(bodyParser.json());
+gameRouter.use(bodyParser.urlencoded({ extended: false }));
 
 //create a game
-activeGameRouter.post("/activate", activeGameController.activateGame);
+gameRouter.post('/activate', gameController.activateGame);
 
-activeGameRouter.get("/join/:id", activeGameController.joinGame);
+gameRouter.post('/sharejoinlink', gameController.shareJoinLink);
 
-activeGameRouter.post("/setname", activeGameController.setName);
+//activeGameRouter.post('/join/:id', activeGameController.joinGame);
+
+//activeGameRouter.post("/setname", activeGameController.setName);
 // //create a marker
 // gamePlanRouter.post("/create-marker", gamePlanController.createMarker);
 
@@ -36,4 +38,4 @@ activeGameRouter.post("/setname", activeGameController.setName);
 // //delete a game
 // gamePlanRouter.delete("/delete/:id", gamePlanController.deleteGame);
 
-export default activeGameRouter;
+export default gameRouter;

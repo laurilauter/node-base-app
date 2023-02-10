@@ -1,15 +1,16 @@
-import { GamePlan } from "../dbConnection.js";
-import { Marker } from "../dbConnection.js";
+import { GamePlan } from "../db/dbConnection.js";
+import { Marker } from "../db/dbConnection.js";
 //import moment from "moment";
 
 export async function createGame(req, res) {
   try {
-    const { gameTitle, ownerId, gameMap } = req.body;
+    const { gameTitle, gameMap, ownerId, gameDuration } = req.body;
     if (gameTitle && ownerId) {
       const newGamePlanData = {
         gameTitle: gameTitle,
         gameMap: gameMap,
         ownerId: ownerId,
+        gameDuration: gameDuration,
         markers: [],
       };
 

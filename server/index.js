@@ -3,8 +3,9 @@ import session from "express-session";
 import mongoose from "mongoose";
 
 import userRouter from "./routes/userRoutes.js";
+import sessionsRouter from "./routes/sessionsRoutes.js";
 import gamePlanRouter from "./routes/gamePlanRoutes.js";
-import activeGameRouter from "./routes/activeGameRoutes.js";
+import gameRouter from "./routes/gameRoutes.js";
 
 import MongoStore from "connect-mongo";
 import cors from "cors";
@@ -27,7 +28,7 @@ app.use(cookieParser());
 //adjust client url for cors
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
-  client_url = "http://geoquiz.eu-4.evennode.com/";
+  client_url = "http://quizgame.eu-4.evennode.com/";
 }
 
 const corsOptions = {
@@ -35,6 +36,12 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+mongoose.set("strictQuery", false);
+
+mongoose.connect(process.env.MONGO_URI).then(() => {
+  console.log("Connected to MongoDB");
+});
 
 app.use(
   session({
@@ -52,11 +59,13 @@ app.use(
     }),
   })
 );
+
 app.set("trust proxy", 1); // trust first proxy in production
 
-app.use("/users", userRouter);
+app.use("/user", userRouter);
+app.use("/sessions", sessionsRouter);
 app.use("/game-plan", gamePlanRouter);
-app.use("/game", activeGameRouter);
+app.use("/game", gameRouter);
 
 //serving public files, img and such
 app.use("/", express.static(path.join(__dirname, "../public")));
