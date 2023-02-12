@@ -1,6 +1,9 @@
 <script>
   import { onMount } from "svelte";
-  const baseURL = import.meta.env.VITE_BASE_URL_DEV;
+  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
+  if (import.meta.env.PROD) {
+    baseURL = import.meta.env.VITE_BASE_URL_PROD;
+  }
 
   let gamePlans = [];
 

@@ -1,7 +1,11 @@
 <script>
-  const baseURL = import.meta.env.VITE_BASE_URL_DEV;
   import { push, pop, replace } from "svelte-spa-router";
   import { isLoggedIn } from "../stores.js";
+
+  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
+  if (import.meta.env.PROD) {
+    baseURL = import.meta.env.VITE_BASE_URL_PROD;
+  }
 
   let message;
 

@@ -2,7 +2,10 @@
 import { GamePlan } from "../db/dbConnection.js";
 import { Game } from "../db/dbConnection.js";
 import ActiveGame from "../classes/ActiveGame.js";
-const baseUrl = process.env.VITE_BASE_URL_DEV;
+let baseURL = import.meta.env.VITE_BASE_URL_DEV;
+if (import.meta.env.PROD) {
+  baseURL = import.meta.env.VITE_BASE_URL_PROD;
+}
 
 let currentGame;
 //import moment from "moment";
