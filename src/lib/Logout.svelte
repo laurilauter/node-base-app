@@ -28,16 +28,7 @@
   }
 </script>
 
-<span on:click={logout}> <h4 class="logout">VÄLJU</h4> </span>
+<button class="link-button" on:click={logout}>Välju</button>
 
 <style>
-  .logout {
-    color: goldenrod;
-    cursor: pointer;
-  }
-
-  .logout:hover {
-    background-color: rgb(54, 65, 65);
-    color: gold;
-  }
 </style>

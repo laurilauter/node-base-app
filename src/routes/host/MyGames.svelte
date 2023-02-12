@@ -1,21 +1,33 @@
 <div>
   <h1>Minu mängud</h1>
 
-  <p>
-    This sample shows how to set up the router with minimum functionality. <br
-    />
-    The route definition object contains a number of routes (including some with
-    parameters and a catch-all at the end).<br />
-    The links below allow navigating between pages.
-  </p>
+  <h4>USE > BREADCRUMBS > HERE</h4>
 
-  <p>This is the Home component, which contains markup only.</p>
+  <div>
+    <ul>
+      <li><a href="#">Mäng 1</a></li>
+      <li><a href="#">Mäng 2</a></li>
+      <li><a href="#">Mäng 3</a></li>
+    </ul>
+  </div>
 
-  <p>
-    <em>Hint:</em> Try navigating with the links below, then use your browser's back
-    and forward buttons.
-  </p>
+  <div>
+    <ul>
+      <li><a href="#/game/game-plan">Mängu plaan</a></li>
+      <li><a href="#/game/game-map">Mängu kaart</a></li>
+      <li><a href="#/game/game-quiz">Mängu küsimused</a></li>
+      <li><a href="#/game/my-codes">Minu QR koodid</a></li>
+    </ul>
+  </div>
 </div>
 
 <style>
+  ul {
+    list-style-type: none;
+    font-weight: bold;
+    font-size: 24px;
+  }
+  li {
+    padding: 16px;
+  }
 </style>

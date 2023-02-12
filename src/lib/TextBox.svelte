@@ -1,5 +1,4 @@
-<script>
-  import axios from "axios";
+<!-- <script>
 
   let publicData = "textarea for publicdata";
   let userData = "textarea for userdata";
@@ -69,4 +68,4 @@
     flex-direction: column;
     align-items: center;
   }
-</style>
+</style> -->

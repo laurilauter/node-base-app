@@ -1,29 +1,33 @@
 <script>
-  // Import the router component
-  // Normally, this would be: `import Router from 'svelte-spa-router'`
+  import { push, pop, replace } from "svelte-spa-router";
   import Router from "svelte-spa-router";
-  // Import the list of routes
   import routes from "./routes/routes";
   import Header from "./lib/Header.svelte";
   import Footer from "./lib/Footer.svelte";
-  //
+
+  // Handles the "conditionsFailed" event dispatched by the router when a component can't be loaded because one of its pre-condition failed
+  function conditionsFailed(event) {
+    console.error("conditionsFailed event", event.detail);
+
+    // Perform any action, for example replacing the current route
+    //if (event.detail.userData.foo == "bar") {
+    replace("/");
+    //}
+  }
+
+  // Handles the "routeLoaded" event dispatched by the router when a component was loaded
+  function routeLoaded(event) {
+    console.log("routeLoaded event", event.detail);
+  }
 </script>
 
 <Header />
-
-<div class="router-content">
-  <!-- Show the router -->
-  <div>
-    <Router {routes} />
-  </div>
-</div>
-
+<Router
+  {routes}
+  on:conditionsFailed={conditionsFailed}
+  on:routeLoaded={routeLoaded}
+/>
 <Footer />
 
 <style>
-  .router-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 </style>

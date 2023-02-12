@@ -80,27 +80,9 @@
 </div>
 
 <style>
-  .row-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .column-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
   .login-form {
     max-width: 300px;
   }
-  /* Bordered form */
-  /* form {
-  border: 1px solid #f1f1f1;
-  border-radius: 9px;
-} */
 
   /* Full-width inputs */
   input[type="email"],

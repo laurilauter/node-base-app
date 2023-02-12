@@ -3,10 +3,16 @@ import { GamePlan } from "../db/dbConnection.js";
 import { Game } from "../db/dbConnection.js";
 import ActiveGame from "../classes/ActiveGame.js";
 
-// let baseURL = process.env.VITE_BASE_URL_DEV;
+//TODO: FIX THIS
+// let baseURL = import.meta.env.VITE_BASE_URL_DEV;
 // if (import.meta.env.PROD) {
-//   baseURL = process.env.VITE_BASE_URL_PROD;
+//   baseURL = import.meta.env.VITE_BASE_URL_PROD;
 // }
+
+let client_url = "http://localhost:5173";
+if (process.env.NODE_ENV === "production") {
+  client_url = "http://quizgame.eu-4.evennode.com/";
+}
 
 let currentGame;
 //import moment from "moment";
@@ -37,8 +43,8 @@ export async function activateGame(req, res) {
         currentGame = new ActiveGame(foundGamePlan);
         //make this link a QR code for the game master in the client
         res.status(200).send({
-          message: "join link here",
-          //joinUrl: baseUrl + "/join/" + currentGame.gameId,
+          //message: "join link here",
+          joinUrl: client_url + "/start/" + currentGame.gameId,
           //this could be a separate endpoint in case the owner needs
           //to get the link again without relaunching the game
         });
@@ -61,7 +67,7 @@ export async function shareJoinLink(req, res) {
     let foundGame = await Game.findOne({ gameId: gameId });
     if (foundGame) {
       res.status(200).send({
-        joinUrl: baseUrl + "/join/" + foundGame.gameId,
+        joinUrl: client_url + "/start/" + foundGame.gameId,
         //this could be a separate endpoint in case the owner needs
         //to get the link again without relaunching the game
       });
@@ -74,14 +80,22 @@ export async function shareJoinLink(req, res) {
 }
 
 //Fix this
-export async function setName(req, res) {
+export async function playerJoin(req, res) {
   const { name } = req.body;
+  const { gameId } = req.body;
   try {
-    if (name) {
+    if (name && gameId) {
       //try to get an active game with the id and register a name on it
-      console.log(`${name} received`); //add player instance with given name to ActiveGame
-      //res.status(200).send({ message: "all good" });
-      res.redirect("/"); //  "/gamestart" or something
+
+      console.log(`name: ${name} and gameId: ${gameId} received`); //add player instance with given name to ActiveGame
+
+      res
+        .status(200)
+        .send({
+          message:
+            "all good: SEND GAME ID AND NAME, SO FE CAN SAVE TO STORE AND PUSH MAPVIEW",
+        });
+      //res.redirect(client_url + "/map-view"); //  "/gamestart" or something
     } else {
       res.status(404).send({ error: "No active game with this Id" });
     }
@@ -89,21 +103,3 @@ export async function setName(req, res) {
     res.status(500).send({ error: error });
   }
 }
-
-//JOIN LINK shoul be handled in FE
-// export async function joinGame(req: express.Request, res: express.Response) {
-// 	console.log('currentGame ', currentGame.activeGameId);
-// 	console.log('req.params.id  ', req.params.id);
-// 	console.log('req.body.name ', req.body.name);
-// 	try {
-// 		if (req.params.id === currentGame.activeGameId) {
-// 			console.log('Redirected to enter your name');
-// 			res.status(200).send({ message: 'all good' });
-// 			//res.redirect("/join"); //redirects here after login
-// 		} else {
-// 			res.status(404).send({ error: 'No active game with this Id' });
-// 		}
-// 	} catch (error) {
-// 		res.status(500).send({ error: error });
-// 	}
-// }
