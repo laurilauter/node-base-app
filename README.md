@@ -1,3 +1,3 @@
 # Mis? Kus?
 
-Orienteerumismäng, kus tuleb leida pinktid kus asuvad küsimused.
+Selles orienteerumismängus leiad kaardilt punkte ja saad vastata seal olevatele küsimustele.
