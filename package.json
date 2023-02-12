@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server/index.js",
     "start-dev": "vite build & nodemon server/index.js",
-    "start": "vite build & NODE_ENV=production node server/index.js",
+    "start": "vite build & node server/index.js",
     "client-dev": "vite",
     "client-build": "vite build",
     "client-preview": "vite preview --port=8888"
