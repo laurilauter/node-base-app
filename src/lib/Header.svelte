@@ -35,7 +35,7 @@
     justify-content: center;
   }
 
-  ul {
+  /* ul {
     position: relative;
     padding: 0;
     margin: 0;
@@ -51,7 +51,7 @@
   li {
     position: relative;
     height: 100%;
-  }
+  } */
 
   /* li[aria-current="page"]::before {
     --size: 6px;
@@ -65,7 +65,7 @@
     border-top: var(--size) solid var(--color-theme-1);
   } */
 
-  nav a {
+  /* nav a {
     display: flex;
     height: 100%;
     align-items: center;
@@ -81,5 +81,5 @@
 
   a:hover {
     color: var(--color-theme-1);
-  }
+  } */
 </style>

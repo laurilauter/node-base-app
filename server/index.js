@@ -31,6 +31,9 @@ if (process.env.NODE_ENV === "production") {
   client_url = "http://quizgame.eu-4.evennode.com/";
 }
 
+console.log("process.env.NODE_ENV ", process.env.NODE_ENV);
+console.log("client_url ", client_url);
+
 const corsOptions = {
   origin: client_url,
   credentials: true,
