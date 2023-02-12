@@ -3,10 +3,10 @@ import { GamePlan } from "../db/dbConnection.js";
 import { Game } from "../db/dbConnection.js";
 import ActiveGame from "../classes/ActiveGame.js";
 
-let baseURL = process.env.VITE_BASE_URL_DEV;
-if (import.meta.env.PROD) {
-  baseURL = process.env.VITE_BASE_URL_PROD;
-}
+// let baseURL = process.env.VITE_BASE_URL_DEV;
+// if (import.meta.env.PROD) {
+//   baseURL = process.env.VITE_BASE_URL_PROD;
+// }
 
 let currentGame;
 //import moment from "moment";
@@ -37,7 +37,8 @@ export async function activateGame(req, res) {
         currentGame = new ActiveGame(foundGamePlan);
         //make this link a QR code for the game master in the client
         res.status(200).send({
-          joinUrl: baseUrl + "/join/" + currentGame.gameId,
+          message: "join link here",
+          //joinUrl: baseUrl + "/join/" + currentGame.gameId,
           //this could be a separate endpoint in case the owner needs
           //to get the link again without relaunching the game
         });
