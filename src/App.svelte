@@ -1,40 +1,29 @@
 <script>
-  import axios from "axios";
-
-  import { Router, Route, Link } from "svelte-routing";
-  import Home from "./lib/Home.svelte";
-  import Some from "./lib/Some.svelte";
-  import Join from "./lib/Join.svelte";
-
-  axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = import.meta.env.VITE_AXIOS_BASE_URL_DEV;
-  //adjust axios baseURL depending on envirionment
-  if (import.meta.env.MODE === "production") {
-    axios.defaults.baseURL = import.meta.env.VITE_AXIOS_BASE_URL_PROD;
-  }
-
-  export let url = "{url}";
+  // Import the router component
+  // Normally, this would be: `import Router from 'svelte-spa-router'`
+  import Router from "svelte-spa-router";
+  // Import the list of routes
+  import routes from "./routes/routes";
+  import Header from "./lib/Header.svelte";
+  import Footer from "./lib/Footer.svelte";
+  //
 </script>
 
-<!-- <Router>
-  <Route component={Home} />
-  <Route component={Some} />
-  <Route path="/join/:id" let:params>
-    <Join id={params.id} />
-  </Route>
-</Router> -->
+<Header />
 
-<Router {url}>
-  <nav>
-    <Link to="/">Home</Link>
-    <Link to="/some">some</Link>
-    <Link to="/join">join game link</Link>
-  </nav>
+<div class="router-content">
+  <!-- Show the router -->
   <div>
-    <Route path="/"><Home /></Route>
-    <Route path="/join/:id" let:params={id}>
-      <Join {id} />
-    </Route>
-    <Route path="/some" component={Some} />
+    <Router {routes} />
   </div>
-</Router>
+</div>
+
+<Footer />
+
+<style>
+  .router-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>

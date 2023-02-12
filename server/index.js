@@ -51,9 +51,11 @@ app.use(
     cookie: {
       sameSite: false,
       secure: false,
-      maxAge: 10 * 60000,
+      maxAge: 10 * 60000, // 10 min
+      //maxAge: 7 * 24 * 3600 * 1000, //a week
       httpOnly: true,
-    }, // store for 10 minutes
+    },
+    rolling: true,
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
     }),

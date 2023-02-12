@@ -1,63 +1,72 @@
 <script>
-  import axios from "axios";
+  import { push, pop, replace } from "svelte-spa-router";
+  import { isLoggedIn } from "../stores.js";
 
+  const baseURL = import.meta.env.VITE_BASE_URL_DEV;
   let email;
   let password;
-  let message;
+  let error;
+  let session;
 
   async function loginUser() {
-    console.log("email ", email);
-    console.log("password ", password);
-
-    try {
-      const config = {
-        headers: {
-          header: "application/json",
-        },
-      };
-
-      const data = {
+    const response = await fetch(`${baseURL}/sessions/login`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
         email: email,
         password: password,
-      };
+      }),
+    });
 
-      const response = await axios.post("users/login", data, config);
-      const responseData = response.data;
-      message = responseData.message;
-      console.log("data ", responseData.message);
-    } catch (error) {
-      message = error.response.data.error;
-      console.log("error ", error);
+    const responseData = await response.json();
+    //responseData = JSON.stringify(json);
+    session = responseData.session;
+    error = responseData.error;
+    console.log("responseData ", responseData);
+
+    if (session) {
+      console.log("in");
+      $isLoggedIn = true;
+      replace("/dashboard");
+    } else {
+      $isLoggedIn = false;
     }
+    console.log("isLoggedIn Login afterSession  ", $isLoggedIn);
   }
 </script>
 
 <div class="row-container">
   <div class="column-container">
     <div class="login-form">
-      <h2>Login here</h2>
+      <h2>Logige sisse</h2>
       <form action="" method="post">
         <div class="container">
           <input
             type="email"
-            placeholder="Enter Email"
+            placeholder="Email"
             name="email"
             bind:value={email}
             required
           />
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Salasõna"
             name="password"
             bind:value={password}
             required
           />
           <button type="button" id="login-button" on:click={loginUser}
-            >Login</button
+            >Sisene</button
           >
+          <!-- <p>
+            <input type="checkbox" id="remember" name="remember" value="true" />
+            <label for="remember"> Mäleta mind selles seadmes</label>
+          </p> -->
           <p>
-            {#if message}
-              {message}
+            {#if error}
+              {error}
             {/if}
           </p>
         </div>
