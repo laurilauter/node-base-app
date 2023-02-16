@@ -87,7 +87,7 @@ export default {
   }),
 
   //host game creation
-  "/game/my-codes": wrap({
+  "/my-codes": wrap({
     // The Svelte component used by the route
     component: MyCodes,
     // List of route pre-conditions
@@ -100,20 +100,7 @@ export default {
     ],
   }),
 
-  "/game/game-map": wrap({
-    // The Svelte component used by the route
-    component: GameMap,
-    // List of route pre-conditions
-    conditions: [
-      // First pre-condition function
-      (detail) => {
-        let boolean = get(isLoggedIn);
-        return boolean;
-      },
-    ],
-  }),
-
-  "/game/game-plan": wrap({
+  "/game-plan/:id": wrap({
     // The Svelte component used by the route
     component: GamePlan,
     // List of route pre-conditions
@@ -126,7 +113,20 @@ export default {
     ],
   }),
 
-  "/game/game-quiz": wrap({
+  "/game-plan/game-map/:id": wrap({
+    // The Svelte component used by the route
+    component: GameMap,
+    // List of route pre-conditions
+    conditions: [
+      // First pre-condition function
+      (detail) => {
+        let boolean = get(isLoggedIn);
+        return boolean;
+      },
+    ],
+  }),
+
+  "/game-plan/game-quiz/:id": wrap({
     // The Svelte component used by the route
     component: GameQuiz,
     // List of route pre-conditions

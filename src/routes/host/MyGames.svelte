@@ -1,22 +1,37 @@
+<script>
+  import { onMount } from "svelte";
+  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
+  if (import.meta.env.PROD) {
+    baseURL = import.meta.env.VITE_BASE_URL_PROD;
+  }
+
+  let gamePlans = [];
+
+  onMount(async () => {
+    const response = await fetch(`${baseURL}/game-plan/list`);
+    gamePlans = await response.json();
+  });
+</script>
+
 <div>
   <h1>Minu mängud</h1>
-
-  <h4>USE > BREADCRUMBS > HERE</h4>
-
   <div>
-    <ul>
-      <li><a href="#">Mäng 1</a></li>
-      <li><a href="#">Mäng 2</a></li>
-      <li><a href="#">Mäng 3</a></li>
-    </ul>
+    {#each gamePlans as gamePlan}
+      <div>
+        <ul>
+          <li>
+            <a href="#/game-plan/{gamePlan._id}">{gamePlan.gameTitle}</a>
+          </li>
+        </ul>
+      </div>
+    {:else}
+      <p>loading...</p>
+    {/each}
   </div>
-
+  <br />
   <div>
     <ul>
-      <li><a href="#/game/game-plan">Mängu plaan</a></li>
-      <li><a href="#/game/game-map">Mängu kaart</a></li>
-      <li><a href="#/game/game-quiz">Mängu küsimused</a></li>
-      <li><a href="#/game/my-codes">Minu QR koodid</a></li>
+      <li><a href="#/my-codes">Minu QR koodid</a></li>
     </ul>
   </div>
 </div>
