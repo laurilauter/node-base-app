@@ -1,3 +1,7 @@
-<h2>NotFound</h2>
+<h2>Kadunud</h2>
 
-<p>Oops, this route doesn't exist!</p>
+<p>Oou, seda lehte pole olemas!</p>
+<a href="#/">Mine algusesse</a>
+
+<style>
+</style>

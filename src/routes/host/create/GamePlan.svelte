@@ -1,5 +1,6 @@
 <script>
   export let params = {};
+  import { currentGamePlan } from "../../../stores.js";
   import { onMount } from "svelte";
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
@@ -11,6 +12,7 @@
   onMount(async () => {
     const response = await fetch(`${baseURL}/game-plan/${params.id}`);
     gamePlan = await response.json();
+    currentGamePlan.set(gamePlan);
   });
 </script>
 

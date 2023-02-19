@@ -14,7 +14,7 @@
   <nav>
     {#if $isLoggedIn}
       <div>
-        <button class="link-button" on:click={back}>Back</button>
+        <button class="link-button" on:click={back}>Tagasi</button>
       </div>
       <p>{$location}</p>
       <div>

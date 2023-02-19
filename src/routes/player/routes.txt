@@ -1,0 +1,32 @@
+import { wrap } from "svelte-spa-router/wrap";
+import { isLoggedIn } from "../../stores.js";
+import { get } from "svelte/store";
+
+//UNPROTECTED
+//player routes
+import MapView from "./MapView.svelte";
+import QuestionView from "./QuestionView.svelte";
+
+// Export the route definition object
+export default {
+  //player routes
+  "/map-view": MapView,
+  "/question-view": QuestionView,
+
+  //outer host routes
+  // "/dashboard": Dashboard,
+
+  // // This route has a pre-condition function that lets people in only 50% of times, and a second pre-condition that is always true
+  // "/dashboard": wrap({
+  //   // The Svelte component used by the route
+  //   component: Dashboard,
+  //   // List of route pre-conditions
+  //   conditions: [
+  //     // First pre-condition function
+  //     (detail) => {
+  //       let boolean = get(isLoggedIn);
+  //       return boolean;
+  //     },
+  //   ],
+  // }),
+};

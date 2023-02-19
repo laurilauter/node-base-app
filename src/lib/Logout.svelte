@@ -9,8 +9,6 @@
 
   let message;
 
-  console.log("isLoggedInUser Logout ", $isLoggedIn);
-
   async function logout() {
     const response = await fetch(`${baseURL}/sessions/logout`, {
       method: "GET",
@@ -21,8 +19,9 @@
 
     const responseData = await response.json();
     message = responseData.message;
-    if (message) {
+    if (message && $isLoggedIn) {
       $isLoggedIn = false;
+      console.log("isLoggedInUser at LOGOUT ", $isLoggedIn);
       push("/");
     }
   }

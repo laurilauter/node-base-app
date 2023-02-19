@@ -8,20 +8,23 @@
   // Handles the "conditionsFailed" event dispatched by the router when a component can't be loaded because one of its pre-condition failed
   function conditionsFailed(event) {
     console.error("conditionsFailed event", event.detail);
+    console.log("loginState ", event.detail.userData);
 
     // Perform any action, for example replacing the current route
     //if (event.detail.userData.foo == "bar") {
-    replace("/");
+    replace("/host-start");
     //}
   }
 
   // Handles the "routeLoaded" event dispatched by the router when a component was loaded
   function routeLoaded(event) {
     console.log("routeLoaded event", event.detail);
+    console.log("loginState ", event.detail.userData);
   }
 </script>
 
 <Header />
+<!-- Use one router for Host and another for Player -->
 <Router
   {routes}
   on:conditionsFailed={conditionsFailed}

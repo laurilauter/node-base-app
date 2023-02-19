@@ -1,5 +1,6 @@
 <script>
   import { push, pop, replace } from "svelte-spa-router";
+  import Splash from "../Splash.svelte";
   //import { isLoggedIn } from "../stores.js";
   export let params = {};
 
@@ -47,6 +48,7 @@
 
 <div class="row-container">
   <div class="column-container">
+    <Splash />
     <div class="start-form">
       <h2>Alusta mängu</h2>
       <form action="" method="post">
@@ -83,54 +85,8 @@
 </div>
 
 <style>
-  .row-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .column-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
   .start-form {
     max-width: 300px;
-  }
-  /* Bordered form */
-  /* form {
-  border: 1px solid #f1f1f1;
-  border-radius: 9px;
-} */
-
-  /* Full-width inputs */
-  input[type="text"] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    border-radius: 9px;
-  }
-
-  /* Set a style for all buttons */
-  button {
-    background-color: #04aa6d;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    border-radius: 9px;
-  }
-
-  /* Add a hover effect for buttons */
-  button:hover {
-    opacity: 0.8;
   }
 
   /* Add padding to containers */

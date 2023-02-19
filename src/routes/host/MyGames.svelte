@@ -1,5 +1,8 @@
 <script>
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
+  import { isLoggedIn } from "../../stores.js";
+
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
@@ -10,10 +13,11 @@
   onMount(async () => {
     const response = await fetch(`${baseURL}/game-plan/list`);
     gamePlans = await response.json();
+    console.log("isLoggedIn at MyGames ", $isLoggedIn);
   });
 </script>
 
-<div>
+<div in:fade={{ duration: 2000 }}>
   <h1>Minu mängud</h1>
   <div>
     {#each gamePlans as gamePlan}

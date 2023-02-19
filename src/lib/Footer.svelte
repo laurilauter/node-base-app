@@ -1,5 +1,5 @@
 <footer>
-  <p>Olen jalus, kellelgi jalus</p>
+  <p>Otsi ja vasta - 2023</p>
 </footer>
 
 <style>

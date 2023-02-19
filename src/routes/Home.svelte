@@ -1,21 +1,27 @@
 <script>
-  import Login from "../lib/Login.svelte";
+  import { push, pop, replace } from "svelte-spa-router";
+  import Splash from "./Splash.svelte";
+
+  function play() {
+    push("/player-code");
+  }
+
+  function create() {
+    push("/host-start");
+  }
 </script>
 
 <div>
-  <img src="global-search.svg" alt="Search icon" />
-  <h1>Otsi ja vasta</h1>
-  <div>
-    <p>
-      This sample shows how to set up the router with minimum functionality.
-    </p>
-    <p>
-      <em>Hint:</em> Try navigating with the links below, then use your browser's
-      back and forward buttons.
-    </p>
-  </div>
-  <div class="card">
-    <Login />
+  <Splash />
+  <div class="column-container">
+    <div class="container">
+      <p>Vali kas soovid mängida, või luua mänge.</p>
+    </div>
+    <div class="container">
+      <button type="button" id="login-button" on:click={play}>Mängija</button>
+      <br />
+      <button type="button" id="login-button" on:click={create}>Looja</button>
+    </div>
   </div>
 </div>
 
@@ -24,9 +30,9 @@
     border: solid red 1px;
   } */
 
-  img {
-    margin-top: 50px;
-    max-height: 100px;
-    width: auto;
+  /* Add padding to containers */
+  .container {
+    min-width: 300px;
+    padding: 16px;
   }
 </style>

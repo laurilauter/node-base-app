@@ -87,6 +87,17 @@ export async function getMarker(req, res) {
   }
 }
 
+export async function getMarkers(req, res) {
+  try {
+    const filter = { gamePlanId: req.params.id };
+    let foundMarkers = await Marker.find(filter);
+
+    res.status(200).send(foundMarkers);
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
 export async function updateGame(req, res) {
   try {
     const filter = { _id: req.params.id };

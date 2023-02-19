@@ -6,11 +6,12 @@
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
   }
 
-  let gamePlan;
+  let gamePlanMarkers;
 
   onMount(async () => {
-    const response = await fetch(`${baseURL}/game-plan/${params.id}`);
-    gamePlan = await response.json();
+    const response = await fetch(`${baseURL}/game-plan/markers/${params.id}`);
+    gamePlanMarkers = await response.json();
+    console.log("gamePlanMarkers ", gamePlanMarkers);
   });
 
   //if gamePlan, then get each marker.data ...
@@ -18,10 +19,15 @@
 
 <h1>Mängu küsimused</h1>
 
-{#if gamePlan}
+{#if gamePlanMarkers}
   <div>
-    {#each gamePlan.markers as marker}
-      <p>{marker}</p>
+    {#each gamePlanMarkers as marker}
+      <p>
+        <span class="bold">{marker.title}</span>
+        <span>{marker.content.quiz.question}</span>
+        <span>EDIT</span>
+        <span>DELETE</span>
+      </p>
     {:else}
       <p>loading...</p>
     {/each}

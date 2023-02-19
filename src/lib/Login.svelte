@@ -15,6 +15,7 @@
   async function loginUser() {
     const response = await fetch(`${baseURL}/sessions/login`, {
       method: "POST",
+      //credentials: "same-origin",
       headers: {
         "content-type": "application/json",
       },
@@ -28,16 +29,14 @@
     //responseData = JSON.stringify(json);
     session = responseData.session;
     error = responseData.error;
-    console.log("responseData ", responseData);
+    console.log("responseData at LOGIN", responseData);
 
-    if (session) {
-      console.log("in");
+    if (session && !$isLoggedIn) {
+      console.log("inSession at LOGIN");
       $isLoggedIn = true;
-      replace("/dashboard");
-    } else {
-      $isLoggedIn = false;
+      push("/host");
     }
-    console.log("isLoggedIn Login afterSession  ", $isLoggedIn);
+    console.log("isLoggedIn at LOGIN", $isLoggedIn);
   }
 </script>
 
@@ -82,35 +81,6 @@
 <style>
   .login-form {
     max-width: 300px;
-  }
-
-  /* Full-width inputs */
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    border-radius: 9px;
-  }
-
-  /* Set a style for all buttons */
-  button {
-    background-color: #04aa6d;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    border-radius: 9px;
-  }
-
-  /* Add a hover effect for buttons */
-  button:hover {
-    opacity: 0.8;
   }
 
   /* Add padding to containers */
