@@ -4,6 +4,10 @@
 
 span {
   border: solid orange 1px;
+}
+
+p {
+  border: solid rgb(232, 114, 234) 1px;
 } */
 
 :root {
@@ -34,6 +38,16 @@ a:hover {
 
 h1 {
   font-size: 3.2em;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 2.2em;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: 1.6em;
   line-height: 1.1;
 }
 
@@ -92,4 +106,9 @@ input[type="password"] {
   border: 1px solid #ccc;
   box-sizing: border-box;
   border-radius: 9px;
+}
+
+/* MENU ITEMS */
+
+.font-bold {
 }

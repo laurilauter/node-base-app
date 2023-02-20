@@ -1,4 +1,5 @@
 <script>
+  import MapFrame from "./MapFrame.svelte";
   export let params = {};
   import { onMount } from "svelte";
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
@@ -18,6 +19,12 @@
 
 {#if gamePlan}
   <h3>{gamePlan.gameMap}</h3>
+  <div class="column-container">
+    <MapFrame>
+      <img src="vikk-map.png" alt="vite icon" />
+      <!-- <img {gamePlan.gameMap} alt="vite icon" /> -->
+    </MapFrame>
+  </div>
   <br />
   <h4>Markerid</h4>
   <div>
@@ -35,5 +42,12 @@
   .bold {
     font-weight: bold;
     color: #d4cab0;
+  }
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    border: none;
   }
 </style>

@@ -20,33 +20,28 @@
 <div in:fade={{ duration: 2000 }}>
   <h1>Minu mängud</h1>
   <div>
-    {#each gamePlans as gamePlan}
-      <div>
-        <ul>
-          <li>
-            <a href="#/game-plan/{gamePlan._id}">{gamePlan.gameTitle}</a>
-          </li>
-        </ul>
-      </div>
-    {:else}
-      <p>loading...</p>
-    {/each}
+    <ul>
+      {#each gamePlans as gamePlan}
+        <li>
+          <a href="#/game-plan/{gamePlan._id}"><h3>{gamePlan.gameTitle}</h3></a>
+        </li>
+      {:else}
+        <p>loading...</p>
+      {/each}
+    </ul>
   </div>
   <br />
   <div>
-    <ul>
-      <li><a href="#/my-codes">Minu QR koodid</a></li>
-    </ul>
+    <h3><a href="#/my-codes">Minu QR koodid</a></h3>
   </div>
 </div>
 
 <style>
   ul {
     list-style-type: none;
-    font-weight: bold;
-    font-size: 24px;
+    padding-left: 0;
   }
   li {
-    padding: 16px;
+    margin: 10px;
   }
 </style>
