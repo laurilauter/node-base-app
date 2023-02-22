@@ -1,10 +1,11 @@
 <script>
-  export let params = {};
+  import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
   }
+  export let params = {};
 
   let gamePlanMarkers;
 
@@ -20,7 +21,7 @@
 <h1>Mängu küsimused</h1>
 
 {#if gamePlanMarkers}
-  <div>
+  <div in:fade={{ duration: 1000 }}>
     {#each gamePlanMarkers as marker}
       <p>
         <span class="bold">{marker.title}</span>

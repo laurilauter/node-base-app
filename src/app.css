@@ -8,6 +8,14 @@ span {
 
 p {
   border: solid rgb(232, 114, 234) 1px;
+}
+
+ul {
+  border: solid rgb(117, 223, 36) 1px;
+}
+
+li {
+  border: solid rgb(206, 21, 107) 1px;
 } */
 
 :root {
@@ -63,7 +71,7 @@ h3 {
 
 /* Set a style for all buttons */
 button {
-  background-color: #04aa6d;
+  background-color: #009966;
   color: white;
   padding: 14px 20px;
   font-size: large;

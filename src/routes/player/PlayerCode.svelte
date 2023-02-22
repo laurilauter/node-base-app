@@ -1,7 +1,7 @@
 <script>
   import { push, pop, replace } from "svelte-spa-router";
-  import Splash from "../Splash.svelte";
-  //import { isLoggedIn } from "../stores.js";
+  import Splash from "../../lib/Splash.svelte";
+  //import { isUserLoggedIn } from "../stores.js";
   //export let params = {};
 
   let code;
@@ -42,12 +42,12 @@
 
   // if (session) {
   //   console.log("in");
-  //   $isLoggedIn = true;
+  //   $isUserLoggedIn = true;
   //   replace("/dashboard");
   // } else {
-  //   $isLoggedIn = false;
+  //   $isUserLoggedIn = false;
   // }
-  // console.log("isLoggedIn Login afterSession  ", $isLoggedIn);
+  // console.log("isUserLoggedIn Login afterSession  ", $isUserLoggedIn);
   // }
 </script>
 

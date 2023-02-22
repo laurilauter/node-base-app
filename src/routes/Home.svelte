@@ -1,13 +1,13 @@
 <script>
   import { push, pop, replace } from "svelte-spa-router";
-  import Splash from "./Splash.svelte";
+  import Splash from "../lib/Splash.svelte";
 
   function play() {
     push("/player-code");
   }
 
   function create() {
-    push("/host-start");
+    push("/host-login");
   }
 </script>
 

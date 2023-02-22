@@ -1,5 +1,6 @@
 <script>
   import MapFrame from "./MapFrame.svelte";
+  import { fade } from "svelte/transition";
   export let params = {};
   import { onMount } from "svelte";
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
@@ -19,7 +20,7 @@
 
 {#if gamePlan}
   <h3>{gamePlan.gameMap}</h3>
-  <div class="column-container">
+  <div class="column-container" in:fade={{ duration: 1000 }}>
     <MapFrame>
       <img src="vikk-map.png" alt="vite icon" />
       <!-- <img {gamePlan.gameMap} alt="vite icon" /> -->

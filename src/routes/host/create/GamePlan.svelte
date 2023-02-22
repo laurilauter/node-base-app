@@ -1,7 +1,8 @@
 <script>
-  export let params = {};
+  import { fade } from "svelte/transition";
   import { currentGamePlan } from "../../../stores.js";
   import { onMount } from "svelte";
+  export let params = {};
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
@@ -17,7 +18,7 @@
 </script>
 
 {#if gamePlan}
-  <div class="column-container">
+  <div class="column-container" in:fade={{ duration: 1000 }}>
     <div>
       <h1>{gamePlan.gameTitle}</h1>
       <h3><span>Duration</span> {gamePlan.gameDuration} min</h3>

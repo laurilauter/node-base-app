@@ -1,5 +1,5 @@
 import { wrap } from "svelte-spa-router/wrap";
-import { isLoggedIn } from "../../stores.js";
+import { isUserLoggedIn } from "../../stores.js";
 import { get } from "svelte/store";
 
 //import NotFound from "./NotFound.svelte";
@@ -26,7 +26,7 @@ export default {
   //   conditions: [
   //     // First pre-condition function
   //     (detail) => {
-  //       let boolean = get(isLoggedIn);
+  //       let boolean = get(isUserLoggedIn);
   //       return boolean;
   //     },
   //   ],
@@ -40,7 +40,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],
@@ -54,7 +54,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],
@@ -67,7 +67,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],
@@ -80,7 +80,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],
@@ -94,7 +94,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],
@@ -107,7 +107,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],
@@ -120,7 +120,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],
@@ -133,7 +133,7 @@ export default {
     conditions: [
       // First pre-condition function
       (detail) => {
-        let boolean = get(isLoggedIn);
+        let boolean = get(isUserLoggedIn);
         return boolean;
       },
     ],

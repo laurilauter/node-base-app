@@ -1,6 +1,6 @@
 <script>
   import { push, pop, replace } from "svelte-spa-router";
-  import { isLoggedIn } from "../stores.js";
+  import { isUserLoggedIn } from "../stores.js";
 
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
@@ -19,15 +19,18 @@
 
     const responseData = await response.json();
     message = responseData.message;
-    if (message && $isLoggedIn) {
-      $isLoggedIn = false;
-      console.log("isLoggedInUser at LOGOUT ", $isLoggedIn);
+    if (message && $isUserLoggedIn) {
+      $isUserLoggedIn = false;
+      console.log("isLoggedInUser at LOGOUT ", $isUserLoggedIn);
       push("/");
     }
   }
 </script>
 
-<button class="link-button" on:click={logout}>Välju</button>
+<div class="row-container">
+  <slot />
+  <button class="link-button" on:click={logout}>Välju</button>
+</div>
 
 <style>
 </style>

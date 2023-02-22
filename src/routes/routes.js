@@ -1,5 +1,5 @@
 import { wrap } from "svelte-spa-router/wrap";
-import { isLoggedIn } from "../stores.js";
+import { isUserLoggedIn } from "../stores.js";
 import { get } from "svelte/store";
 
 // //UNPROTECTED
@@ -17,7 +17,8 @@ import NotFound from "./NotFound.svelte";
 // //PROTECTED
 // //host routes
 import Dashboard from "./host/Dashboard.svelte";
-import HostStart from "./host/HostStart.svelte";
+import HostLogin from "./host/HostLogin.svelte";
+import HostRegister from "./host/HostRegister.svelte";
 //host routes
 import CurrentGame from "./host/CurrentGame.svelte";
 import GameHistory from "./host/GameHistory.svelte";
@@ -34,7 +35,8 @@ export default {
   "/": Home,
 
   //outer host routes
-  "/host-start": HostStart,
+  "/host-login": HostLogin,
+  "/host-register": HostRegister,
 
   //TEMP unguarded
   "/host": Dashboard,
@@ -49,14 +51,14 @@ export default {
   //   // This is optional and can be omitted
   //   // It can be useful to understand the component who caused the pre-condition failure
   //   userData: {
-  //     userLoginState: get(isLoggedIn),
+  //     userLoginState: get(isUserLoggedIn),
   //   },
   //   // List of route pre-conditions
   //   conditions: [
   //     // First pre-condition function
   //     (detail) => {
-  //       let boolean = get(isLoggedIn);
-  //       console.log("isLoggedIn at /host WRAP", get(isLoggedIn));
+  //       let boolean = get(isUserLoggedIn);
+  //       console.log("isUserLoggedIn at /host WRAP", get(isUserLoggedIn));
   //       return boolean;
   //     },
   //   ],
@@ -70,14 +72,14 @@ export default {
   //   // This is optional and can be omitted
   //   // It can be useful to understand the component who caused the pre-condition failure
   //   userData: {
-  //     userLoginState: get(isLoggedIn),
+  //     userLoginState: get(isUserLoggedIn),
   //   },
   //   // List of route pre-conditions
   //   conditions: [
   //     // First pre-condition function
   //     (detail) => {
-  //       let boolean = get(isLoggedIn);
-  //       console.log("isLoggedIn at /host WRAP", get(isLoggedIn));
+  //       let boolean = get(isUserLoggedIn);
+  //       console.log("isUserLoggedIn at /host WRAP", get(isUserLoggedIn));
   //       return boolean;
   //     },
   //   ],

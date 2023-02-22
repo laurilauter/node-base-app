@@ -1,5 +1,14 @@
 import { writable } from "svelte/store";
 
-export const isLoggedIn = writable(false);
-console.log("isLoggedIn at STORES ", isLoggedIn);
-export const currentGamePlan = writable({});
+//session
+export const isUserLoggedIn = writable(false);
+export const sessionId = writable();
+export const sessionUserInfo = writable({
+  id: "id",
+  email: "email",
+  role: "role",
+});
+//gameplan
+export const currentGamePlan = writable();
+//player
+export const playerName = writable();

@@ -2,36 +2,39 @@
   import { push, pop, replace } from "svelte-spa-router";
   import { isUserLoggedIn } from "../stores.js";
   import { sessionId } from "../stores.js";
-  import { sessionUserInfo } from "../stores.js";
 
   let email;
-  let password;
+  let passwordFirst;
+  let passwordSecond;
   let error;
   let session;
-  let sessionInfo;
 
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
   }
 
-  async function setSessionInfo(session) {
-    const response = await fetch(`${baseURL}/sessions/${session}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    let responseData = await response.json();
-    sessionInfo = responseData.sessionUser;
-    $sessionUserInfo = {
-      id: sessionInfo.id,
-      email: sessionInfo.email,
-      role: sessionInfo.role,
-    };
-    error = responseData.error;
-    console.log("responseData at LOGIN S", responseData);
+  async function registerUser() {
+    if (passwordFirst === passwordSecond) {
+      const response = await fetch(`${baseURL}/user/register`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: passwordFirst,
+          role: "user",
+        }),
+      });
+      const responseData = await response.json();
+      error = responseData.error;
+      console.log("responseData at REGISTER", responseData);
+
+      loginUser();
+    } else {
+      error = "Salasõnad on erinevad";
+    }
   }
 
   async function loginUser() {
@@ -43,7 +46,7 @@
       },
       body: JSON.stringify({
         email: email,
-        password: password,
+        password: passwordFirst,
       }),
     });
 
@@ -51,19 +54,13 @@
     //responseData = JSON.stringify(json);
     session = responseData.session;
     error = responseData.error;
-    console.log("responseData at LOGIN", responseData);
+    console.log("responseData at LOGIN R ", responseData);
 
     if (session && !$isUserLoggedIn) {
-      console.log("inSession at LOGIN R ", session);
+      console.log("inSession at LOGIN R ");
       $isUserLoggedIn = true;
       $sessionId = session;
-      setSessionInfo(session);
       push("/host");
-    } else {
-      console.log(
-        "session && !$isUserLoggedIn not met at LOGIN R, logging out"
-      );
-      push("/host-login");
     }
     console.log("isUserLoggedIn at LOGIN R ", $isUserLoggedIn);
     console.log("sessionId at LOGIN R ", $sessionId);
@@ -73,7 +70,7 @@
 <div class="row-container">
   <div class="column-container">
     <div class="login-form">
-      <h2>Logige sisse</h2>
+      <h2>Looge konto</h2>
       <form action="" method="post">
         <div class="container">
           <input
@@ -86,23 +83,26 @@
           <input
             type="password"
             placeholder="Salasõna"
-            name="password"
-            bind:value={password}
+            name="password-first"
+            bind:value={passwordFirst}
             required
           />
-          <button type="button" id="login-button" on:click={loginUser}
-            >Sisene</button
+          <input
+            type="password"
+            placeholder="Salasõna"
+            name="password-second"
+            bind:value={passwordSecond}
+            required
+          />
+          <button type="button" id="login-button" on:click={registerUser}
+            >Registreeri</button
           >
-          <!-- <p>
-            <input type="checkbox" id="remember" name="remember" value="true" />
-            <label for="remember"> Mäleta mind selles seadmes</label>
-          </p> -->
           <p>
             {#if error}
               {error}
             {/if}
           </p>
-          <p><a href="#/host-register">Registreerige konto</a></p>
+          <p><a href="#/host-login">Logige hoopis sisse</a></p>
         </div>
       </form>
     </div>

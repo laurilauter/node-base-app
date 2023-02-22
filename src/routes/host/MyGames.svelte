@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { isLoggedIn } from "../../stores.js";
+  import { isUserLoggedIn } from "../../stores.js";
 
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
@@ -13,11 +13,11 @@
   onMount(async () => {
     const response = await fetch(`${baseURL}/game-plan/list`);
     gamePlans = await response.json();
-    console.log("isLoggedIn at MyGames ", $isLoggedIn);
+    console.log("isUserLoggedIn at MyGames ", $isUserLoggedIn);
   });
 </script>
 
-<div in:fade={{ duration: 2000 }}>
+<div in:fade={{ duration: 1000 }}>
   <h1>Minu mängud</h1>
   <div>
     <ul>
@@ -32,7 +32,7 @@
   </div>
   <br />
   <div>
-    <h3><a href="#/my-codes">Minu QR koodid</a></h3>
+    <h3><a href="#/host/my-codes">Minu QR koodid</a></h3>
   </div>
 </div>
 

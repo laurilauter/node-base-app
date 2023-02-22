@@ -12,7 +12,7 @@
 
     // Perform any action, for example replacing the current route
     //if (event.detail.userData.foo == "bar") {
-    replace("/host-start");
+    replace("/host-login");
     //}
   }
 
@@ -23,14 +23,20 @@
   }
 </script>
 
-<Header />
-<!-- Use one router for Host and another for Player -->
-<Router
-  {routes}
-  on:conditionsFailed={conditionsFailed}
-  on:routeLoaded={routeLoaded}
-/>
-<Footer />
+<div id="page-container">
+  <div id="content-wrap">
+    <Header />
+    <!-- Use one router for Host and another for Player -->
+    <Router
+      {routes}
+      on:conditionsFailed={conditionsFailed}
+      on:routeLoaded={routeLoaded}
+    />
+    <footer id="footer">
+      <Footer />
+    </footer>
+  </div>
+</div>
 
 <style>
 </style>

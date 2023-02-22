@@ -1,9 +1,16 @@
 <script>
   import { push, pop, replace, location } from "svelte-spa-router";
   import Logout from "./Logout.svelte";
-  import { isLoggedIn } from "../stores.js";
+  import { isUserLoggedIn } from "../stores.js";
+  import { playerName } from "../stores.js";
+  import { sessionUserInfo } from "../stores.js";
 
-  console.log("isLoggedIn Header ", $isLoggedIn);
+  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
+  if (import.meta.env.PROD) {
+    baseURL = import.meta.env.VITE_BASE_URL_PROD;
+  }
+
+  console.log("isUserLoggedIn Header ", $isUserLoggedIn);
 
   function back() {
     pop();
@@ -12,14 +19,24 @@
 
 <header>
   <nav>
-    {#if $isLoggedIn}
+    {#if $isUserLoggedIn || $playerName}
       <div>
         <button class="link-button" on:click={back}>Tagasi</button>
       </div>
-      <p>{$location}</p>
-      <div>
-        <Logout />
+    {/if}
+    {#if $isUserLoggedIn}
+      <div class="row-container">
+        <p>{$location}</p>
       </div>
+      <div>
+        <Logout>
+          <span>
+            {$sessionUserInfo.email}
+          </span>
+        </Logout>
+      </div>
+    {:else if $playerName}
+      <div class="player-name">{$playerName}</div>
     {/if}
   </nav>
 </header>
@@ -37,5 +54,10 @@
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
+  }
+
+  .player-name {
+    display: flex;
+    align-items: center;
   }
 </style>
