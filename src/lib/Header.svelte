@@ -22,7 +22,7 @@
 
 <header>
   <nav>
-    <div class="column-container">
+    <div class="column-container width-100-perc">
       <div class="row-container-between">
         {#if $isUserLoggedIn || $playerName}
           <div>
@@ -82,14 +82,5 @@
 
   .side-m5 {
     margin: 0 5px 0 5px;
-  }
-
-  .row-container-between {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: center;
-    align-items: center;
-    min-width: 100%;
   }
 </style>
