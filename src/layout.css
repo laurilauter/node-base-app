@@ -1,4 +1,4 @@
-#app {
+/* #app {
   max-width: 1280px;
   margin: 0 auto;
   text-align: center;
@@ -12,14 +12,14 @@
 }
 
 #content-wrap {
-  padding-bottom: 2.5rem; /* Footer height */
+  padding-bottom: 2.5rem;
 }
 
 #footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 2.5rem; /* Footer height */
+  height: 2.5rem;
 }
 
 .row-container {
@@ -28,7 +28,6 @@
   justify-content: center;
   text-align: center;
   align-items: center;
-  /* min-width: 100%; */
 }
 
 .row-container-between {
@@ -52,4 +51,4 @@
 
 .width-100-perc {
   width: 100%;
-}
+} */
