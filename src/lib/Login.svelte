@@ -1,4 +1,5 @@
 <script>
+  import baseURL from "./utilities/baseUrl";
   import { push, pop, replace } from "svelte-spa-router";
   import { isUserLoggedIn } from "../stores.js";
   import { sessionId } from "../stores.js";
@@ -9,11 +10,6 @@
   let error;
   let session;
   let sessionGetter;
-
-  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-  if (import.meta.env.PROD) {
-    baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
 
   async function loginUser() {
     const response = await fetch(`${baseURL}/sessions/login`, {

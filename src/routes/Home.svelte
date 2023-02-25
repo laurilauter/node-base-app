@@ -1,6 +1,11 @@
 <script>
+  import LogOutFunc from "../lib/utilities/LogOutFunc.svelte";
   import { push, pop, replace } from "svelte-spa-router";
+  import { onMount } from "svelte";
   import Splash from "../lib/utilities/Splash.svelte";
+  import { isUserLoggedIn } from "../stores.js";
+
+  let logOutGetter;
 
   function play() {
     push("/player-code");
@@ -9,6 +14,12 @@
   function create() {
     push("/host-login");
   }
+
+  onMount(async () => {
+    if ($isUserLoggedIn) {
+      logOutGetter.logout();
+    }
+  });
 </script>
 
 <div>
@@ -23,13 +34,10 @@
       <button type="button" id="login-button" on:click={create}>Looja</button>
     </div>
   </div>
+  <LogOutFunc bind:this={logOutGetter} />
 </div>
 
 <style>
-  /* div {
-    border: solid red 1px;
-  } */
-
   /* Add padding to containers */
   .container {
     min-width: 300px;

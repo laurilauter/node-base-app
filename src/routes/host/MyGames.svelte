@@ -1,25 +1,50 @@
 <script>
+  import baseURL from "../../lib/utilities/baseUrl";
   import Loader from "../../lib/utilities/Loader.svelte";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { isUserLoggedIn } from "../../stores.js";
+  import { sessionUserInfo } from "../../stores.js";
   import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
 
-  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-  if (import.meta.env.PROD) {
-    baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
   // Icon properties
   export let size = "3em"; // string | number
   export let ariaHidden = false; // boolean
 
   let gamePlans = [];
 
-  onMount(async () => {
+  async function getGamePlans() {
     const response = await fetch(`${baseURL}/game-plan/list`);
     gamePlans = await response.json();
     console.log("isUserLoggedIn at MyGames ", $isUserLoggedIn);
+  }
+
+  onMount(async () => {
+    getGamePlans();
   });
+
+  async function addGamePlan() {
+    const response = await fetch(`${baseURL}/game-plan/create`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        gameTitle: "New Game",
+        gameMap: "testmap.png",
+        ownerId: $sessionUserInfo.id,
+        gameDuration: 45,
+        markers: [],
+      }),
+    });
+
+    const responseData = await response.json();
+    // session = responseData.session;
+    // error = responseData.error;
+    console.log("responseData at ADD PLAN", responseData);
+    getGamePlans();
+  }
 </script>
 
 <div in:fade={{ duration: 1000 }}>
@@ -34,7 +59,7 @@
         <Loader />
       {/each}
     </ul>
-    <span class="link-button">
+    <span class="link-button" on:click={addGamePlan} on:keypress>
       <PlusCircleOutline {size} {ariaHidden} />
     </span>
   </div>

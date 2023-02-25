@@ -1,4 +1,4 @@
-<div class="column-container box">
+<div class="box">
   <slot />
 </div>
 
@@ -8,5 +8,8 @@
     border-radius: 9px;
     max-width: 90%;
     height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>

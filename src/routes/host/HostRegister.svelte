@@ -1,14 +1,23 @@
 <script>
+  import LogOutFunc from "../../lib/utilities/LogOutFunc.svelte";
   import Register from "./../../lib/Register.svelte";
-  import { push, pop, replace } from "svelte-spa-router";
-  import Router from "svelte-spa-router";
-  import routes from "./routes.txt";
   import Splash from "../../lib/utilities/Splash.svelte";
+  import { onMount } from "svelte";
+  import { isUserLoggedIn } from "../../stores.js";
+
+  let logOutGetter;
+
+  onMount(async () => {
+    if ($isUserLoggedIn) {
+      logOutGetter.logout();
+    }
+  });
 </script>
 
 <div>
   <Splash />
   <Register />
+  <LogOutFunc bind:this={logOutGetter} />
 </div>
 
 <style>

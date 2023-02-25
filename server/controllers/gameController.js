@@ -3,12 +3,6 @@ import { GamePlan } from "../db/dbConnection.js";
 import { Game } from "../db/dbConnection.js";
 import ActiveGame from "../classes/ActiveGame.js";
 
-//TODO: FIX THIS
-// let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-// if (import.meta.env.PROD) {
-//   baseURL = import.meta.env.VITE_BASE_URL_PROD;
-// }
-
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
   client_url = "http://quizgame.eu-4.evennode.com/";
@@ -89,12 +83,10 @@ export async function playerJoin(req, res) {
 
       console.log(`name: ${name} and gameId: ${gameId} received`); //add player instance with given name to ActiveGame
 
-      res
-        .status(200)
-        .send({
-          message:
-            "all good: SEND GAME ID AND NAME, SO FE CAN SAVE TO STORE AND PUSH MAPVIEW",
-        });
+      res.status(200).send({
+        message:
+          "all good: SEND GAME ID AND NAME, SO FE CAN SAVE TO STORE AND PUSH MAPVIEW",
+      });
       //res.redirect(client_url + "/map-view"); //  "/gamestart" or something
     } else {
       res.status(404).send({ error: "No active game with this Id" });

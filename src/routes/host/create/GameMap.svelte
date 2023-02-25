@@ -1,4 +1,5 @@
 <script>
+  import baseURL from "../../../lib/utilities/baseUrl";
   import { currentGamePlanLink } from "./../../../stores.js";
   import MapFrame from "./MapFrame.svelte";
   import MapPlus from "svelte-material-icons/MapPlus.svelte";
@@ -6,10 +7,6 @@
   export let params = {};
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
-  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-  if (import.meta.env.PROD) {
-    baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
 
   // Icon properties
   export let size = "3em"; // string | number
@@ -67,12 +64,12 @@
     </MapFrame>
   </div>
   <br />
-  <h4>Markerid</h4>
+  <h2>Küsimuste markerid</h2>
   <div>
     {#each gamePlan.markers as marker}
       <p>{marker}</p>
     {:else}
-      <p><Loader /></p>
+      <h3>Küsimused puuduvad</h3>
     {/each}
   </div>
 {:else}

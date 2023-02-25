@@ -1,12 +1,14 @@
 <script>
+  import baseURL from "../../../lib/utilities/baseUrl";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
-  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-  if (import.meta.env.PROD) {
-    baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
+  import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
+
   export let params = {};
+  // Icon properties
+  export let size = "3em"; // string | number
+  export let ariaHidden = false; // boolean
 
   let gamePlanMarkers;
 
@@ -35,13 +37,16 @@
         {/each}
       </p>
     {:else}
-      <p><Loader /></p>
+      <h3>Küsimused puuduvad</h3>
     {/each}
   </div>
 {:else}
   <p><Loader /></p>
+  <p>hjkhkj</p>
 {/if}
-<p>ADD</p>
+<span class="link-button">
+  <PlusCircleOutline {size} {ariaHidden} />
+</span>
 
 <style>
   .bold {

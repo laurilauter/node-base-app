@@ -9,10 +9,6 @@
   import { onMount } from "svelte";
   import Home from "svelte-material-icons/Home.svelte";
 
-  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-  if (import.meta.env.PROD) {
-    baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
   // all properties are optional
   export let size = "3em"; // string | number
   export let ariaHidden = false; // boolean
@@ -26,31 +22,39 @@
 
 <header>
   <nav>
-    {#if $isUserLoggedIn || $playerName}
+    <div class="column-container">
+      <div class="row-container-between">
+        {#if $isUserLoggedIn || $playerName}
+          <div>
+            <span class="side-m5">
+              <a href="#/host/"> <Home {size} {ariaHidden} /></a>
+            </span>
+          </div>
+        {/if}
+        {#if $isUserLoggedIn}
+          <div>
+            <Logout>
+              <span id="user-email" class="side-m5">
+                {$sessionUserInfo.email}
+              </span>
+            </Logout>
+          </div>
+        {:else if $playerName}
+          <div class="player-name">{$playerName}</div>
+        {/if}
+      </div>
       <div class="row-container">
-        <span class="side-m5">
-          <a href="#/host/"> <Home {size} {ariaHidden} /></a>
-        </span>
         {#if $currentGamePlanLink && $location.slice(0, 15) === "/game-plan/game"}
           <span class="side-m5">
-            <a href="/#{$currentGamePlanLink.location}"
-              >{$currentGamePlanLink.title}</a
-            >
+            <h3>
+              <a href="/#{$currentGamePlanLink.location}">
+                {$currentGamePlanLink.title}</a
+              >
+            </h3>
           </span>
         {/if}
       </div>
-    {/if}
-    {#if $isUserLoggedIn}
-      <div>
-        <Logout>
-          <span class="side-m5">
-            {$sessionUserInfo.email}
-          </span>
-        </Logout>
-      </div>
-    {:else if $playerName}
-      <div class="player-name">{$playerName}</div>
-    {/if}
+    </div>
   </nav>
   <Session bind:this={sessionGetter} />
 </header>
@@ -78,5 +82,14 @@
 
   .side-m5 {
     margin: 0 5px 0 5px;
+  }
+
+  .row-container-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    min-width: 100%;
   }
 </style>

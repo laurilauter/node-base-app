@@ -1,17 +1,12 @@
 <script>
+  import baseURL from "../../lib/utilities/baseUrl";
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";
-  //import { isUserLoggedIn } from "../stores.js";
   export let params = {};
 
   let name;
   let message;
   let error;
-
-  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-  if (import.meta.env.PROD) {
-    baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
 
   async function startGame() {
     const response = await fetch(`${baseURL}/game/playerjoin`, {

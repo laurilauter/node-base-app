@@ -1,10 +1,8 @@
 <script>
+  import baseURL from "./baseUrl";
   import { isUserLoggedIn } from "../../stores.js";
   import { sessionUserInfo } from "../../stores.js";
-  let baseURL = import.meta.env.VITE_BASE_URL_DEV;
-  if (import.meta.env.PROD) {
-    baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
+
   let error;
   let sessionInfo;
 
