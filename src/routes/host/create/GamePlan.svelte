@@ -1,7 +1,9 @@
 <script>
   import { fade } from "svelte/transition";
-  import { currentGamePlan } from "../../../stores.js";
+  import { push, pop, replace, location } from "svelte-spa-router";
+  import { currentGamePlanLink } from "../../../stores.js";
   import { onMount } from "svelte";
+  import Loader from "../../../lib/utilities/Loader.svelte";
   export let params = {};
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
@@ -13,7 +15,10 @@
   onMount(async () => {
     const response = await fetch(`${baseURL}/game-plan/${params.id}`);
     gamePlan = await response.json();
-    currentGamePlan.set(gamePlan);
+    $currentGamePlanLink = {
+      location: $location,
+      title: gamePlan.gameTitle,
+    };
   });
 </script>
 
@@ -34,15 +39,10 @@
     </div>
   </div>
 {:else}
-  <p>loading...</p>
+  <p><Loader /></p>
 {/if}
 
 <style>
-  /* .bold {
-    font-weight: bold;
-    color: #d4cab0;
-  } */
-
   .box {
     border: 1px solid grey;
     border-radius: 9px;

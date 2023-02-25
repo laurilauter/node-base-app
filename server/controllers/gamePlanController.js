@@ -1,6 +1,12 @@
 import { GamePlan } from "../db/dbConnection.js";
 import { Marker } from "../db/dbConnection.js";
 //import moment from "moment";
+import path from "path";
+import * as url from "url";
+import * as fs from "fs";
+import { rm } from "node:fs/promises";
+//const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 export async function createGame(req, res) {
   try {
@@ -179,6 +185,55 @@ export async function deleteGame(req, res) {
     } else {
       res.status(204).send({ message: "Game deleted" });
     }
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+export async function uploadMap(req, res) {
+  const gamePlanId = req.params.id;
+  try {
+    let file = req.files.file;
+    let deletePath = path.join(
+      __dirname,
+      "..",
+      "..",
+      ".",
+      "public",
+      "uploads",
+      gamePlanId
+    );
+    let filePath = path.join(
+      __dirname,
+      "..",
+      "..",
+      ".",
+      "public",
+      "uploads",
+      gamePlanId,
+      file.name
+    ); //a unique id should be added
+
+    const newGameMap = gamePlanId + "/" + file.name;
+    const filter = { _id: gamePlanId };
+    const update = {
+      gameMap: newGameMap,
+    };
+    const options = { sort: { _id: 1 }, new: true, overwrite: false };
+    await rm(deletePath, { recursive: true, force: true });
+    await file.mv(filePath, function (err) {
+      if (err) {
+        console.log("save error");
+      }
+      console.log("file saved");
+    });
+
+    let updatedGamePlan = await GamePlan.findOneAndUpdate(
+      filter,
+      update,
+      options
+    );
+    res.status(200).send(updatedGamePlan);
   } catch (error) {
     res.status(500).send({ error: error });
   }

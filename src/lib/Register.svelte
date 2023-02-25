@@ -2,16 +2,53 @@
   import { push, pop, replace } from "svelte-spa-router";
   import { isUserLoggedIn } from "../stores.js";
   import { sessionId } from "../stores.js";
+  import Session from "./utilities/Session.svelte";
 
   let email;
   let passwordFirst;
   let passwordSecond;
   let error;
   let session;
+  let sessionGetter;
 
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
+  }
+
+  async function loginUser() {
+    const response = await fetch(`${baseURL}/sessions/login`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: passwordFirst,
+      }),
+    });
+
+    const responseData = await response.json();
+    session = responseData.session;
+    error = responseData.error;
+    console.log("responseData at LOGIN R ", responseData);
+
+    if (session && !$isUserLoggedIn) {
+      console.log("inSession at LOGIN R ", session);
+      $isUserLoggedIn = true;
+      $sessionId = session;
+      sessionStorage.setItem("sessionId", session);
+      sessionGetter.getSession();
+      replace("/host");
+    } else {
+      console.log(
+        "session && !$isUserLoggedIn not met at LOGIN R, logging out"
+      );
+      replace("/host-login");
+    }
+    console.log("isUserLoggedIn at LOGIN R ", $isUserLoggedIn);
+    console.log("sessionId at LOGIN R ", $sessionId);
   }
 
   async function registerUser() {
@@ -35,35 +72,6 @@
     } else {
       error = "Salasõnad on erinevad";
     }
-  }
-
-  async function loginUser() {
-    const response = await fetch(`${baseURL}/sessions/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: passwordFirst,
-      }),
-    });
-
-    const responseData = await response.json();
-    //responseData = JSON.stringify(json);
-    session = responseData.session;
-    error = responseData.error;
-    console.log("responseData at LOGIN R ", responseData);
-
-    if (session && !$isUserLoggedIn) {
-      console.log("inSession at LOGIN R ");
-      $isUserLoggedIn = true;
-      $sessionId = session;
-      push("/host");
-    }
-    console.log("isUserLoggedIn at LOGIN R ", $isUserLoggedIn);
-    console.log("sessionId at LOGIN R ", $sessionId);
   }
 </script>
 
@@ -107,6 +115,7 @@
       </form>
     </div>
   </div>
+  <Session bind:this={sessionGetter} />
 </div>
 
 <style>

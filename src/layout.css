@@ -1,3 +1,11 @@
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
 #page-container {
   position: relative;
   min-height: 100vh;
@@ -14,12 +22,6 @@
   height: 2.5rem; /* Footer height */
 }
 
-body {
-  margin: 0 auto;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
 .row-container {
   display: flex;
   flex-direction: row;
@@ -32,4 +34,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.width-90-perc {
+  max-width: 90%;
 }

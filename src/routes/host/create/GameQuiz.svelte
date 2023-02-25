@@ -1,6 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
+  import Loader from "../../../lib/utilities/Loader.svelte";
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
@@ -14,8 +15,6 @@
     gamePlanMarkers = await response.json();
     console.log("gamePlanMarkers ", gamePlanMarkers);
   });
-
-  //if gamePlan, then get each marker.data ...
 </script>
 
 <h1>Mängu küsimused</h1>
@@ -25,21 +24,36 @@
     {#each gamePlanMarkers as marker}
       <p>
         <span class="bold">{marker.title}</span>
+        <span> - </span>
         <span>{marker.content.quiz.question}</span>
-        <span>EDIT</span>
-        <span>DELETE</span>
+        {#each marker.content.quiz.answers as answer}
+          {#if answer.isCorrect}
+            <p class="green">{answer.text}</p>
+          {:else}
+            <p class="red">{answer.text}</p>
+          {/if}
+        {/each}
       </p>
     {:else}
-      <p>loading...</p>
+      <p><Loader /></p>
     {/each}
   </div>
 {:else}
-  <p>loading...</p>
+  <p><Loader /></p>
 {/if}
+<p>ADD</p>
 
 <style>
   .bold {
     font-weight: bold;
     color: #d4cab0;
+  }
+
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red;
   }
 </style>

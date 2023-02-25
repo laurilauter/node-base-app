@@ -1,6 +1,6 @@
 <script>
   import { push, pop, replace } from "svelte-spa-router";
-  import Splash from "../../lib/Splash.svelte";
+  import Splash from "../../lib/utilities/Splash.svelte";
   //import { isUserLoggedIn } from "../stores.js";
   export let params = {};
 

@@ -9,6 +9,6 @@ export const sessionUserInfo = writable({
   role: "role",
 });
 //gameplan
-export const currentGamePlan = writable();
+export const currentGamePlanLink = writable();
 //player
 export const playerName = writable();

@@ -8,19 +8,19 @@
 <style>
   .splash-frame {
     margin-top: 5vh;
-    min-height: 200px;
+    min-height: 140px;
     width: auto;
   }
 
   .img-frame {
-    min-height: 140px;
+    min-height: 80px;
     width: auto;
   }
 
   img {
     margin: 5px;
-    height: 140px;
-    width: 140px;
+    height: 80px;
+    width: 80px;
     object-fit: cover;
   }
 </style>

@@ -21,15 +21,16 @@
     message = responseData.message;
     if (message && $isUserLoggedIn) {
       $isUserLoggedIn = false;
+      sessionStorage.clear();
       console.log("isLoggedInUser at LOGOUT ", $isUserLoggedIn);
-      push("/");
+      replace("/");
     }
   }
 </script>
 
 <div class="row-container">
   <slot />
-  <button class="link-button" on:click={logout}>Välju</button>
+  <button class="link-button" on:click={logout}>Logi välja</button>
 </div>
 
 <style>

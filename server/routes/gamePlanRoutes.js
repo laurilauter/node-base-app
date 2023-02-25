@@ -4,6 +4,12 @@ import * as gamePlanController from "../controllers/gamePlanController.js";
 import bodyParser from "body-parser";
 gamePlanRouter.use(bodyParser.json());
 gamePlanRouter.use(bodyParser.urlencoded({ extended: false }));
+import fileUpload from "express-fileupload";
+gamePlanRouter.use(
+  fileUpload({
+    createParentPath: true,
+  })
+);
 
 //create a game
 gamePlanRouter.post("/create", gamePlanController.createGame);
@@ -35,5 +41,9 @@ gamePlanRouter.delete("/delete-marker/:id", gamePlanController.deleteMarker);
 
 //delete a game
 gamePlanRouter.delete("/delete/:id", gamePlanController.deleteGame);
+
+//map base image
+//upload image
+gamePlanRouter.post("/upload-map/:id", gamePlanController.uploadMap);
 
 export default gamePlanRouter;

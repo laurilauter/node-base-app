@@ -1,12 +1,17 @@
 <script>
+  import Loader from "../../lib/utilities/Loader.svelte";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { isUserLoggedIn } from "../../stores.js";
+  import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
 
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
   }
+  // Icon properties
+  export let size = "3em"; // string | number
+  export let ariaHidden = false; // boolean
 
   let gamePlans = [];
 
@@ -26,9 +31,12 @@
           <a href="#/game-plan/{gamePlan._id}"><h3>{gamePlan.gameTitle}</h3></a>
         </li>
       {:else}
-        <p>loading...</p>
+        <Loader />
       {/each}
     </ul>
+    <span class="link-button">
+      <PlusCircleOutline {size} {ariaHidden} />
+    </span>
   </div>
   <br />
   <div>

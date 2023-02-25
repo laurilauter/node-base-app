@@ -1,14 +1,16 @@
 <script>
-  import { push, pop, replace } from "svelte-spa-router";
+  import { push, pop, replace, location } from "svelte-spa-router";
   import Router from "svelte-spa-router";
   import routes from "./routes/routes";
   import Header from "./lib/Header.svelte";
   import Footer from "./lib/Footer.svelte";
+  // import { links } from "./stores.js";
+
+  // let localLinks = [];
 
   // Handles the "conditionsFailed" event dispatched by the router when a component can't be loaded because one of its pre-condition failed
   function conditionsFailed(event) {
     console.error("conditionsFailed event", event.detail);
-    console.log("loginState ", event.detail.userData);
 
     // Perform any action, for example replacing the current route
     //if (event.detail.userData.foo == "bar") {
@@ -19,7 +21,18 @@
   // Handles the "routeLoaded" event dispatched by the router when a component was loaded
   function routeLoaded(event) {
     console.log("routeLoaded event", event.detail);
-    console.log("loginState ", event.detail.userData);
+
+    // let crumbs = function () {
+    //   const arr = $location.split("/");
+    //   arr.forEach((item) => {
+    //     if (item != "") {
+    //       localLinks.push(item);
+    //     }
+    //   });
+    //   return ($links = localLinks);
+    // };
+
+    // console.log("crumbs ", crumbs());
   }
 </script>
 

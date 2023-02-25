@@ -24,10 +24,18 @@ li {
   line-height: 24px;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* COLORS */
+  --main-bg-color: #242424;
+  --main-color: rgba(255, 255, 255, 0.8);
 
+  --link-color: #d4cab0;
+  --link-hover-color: #f3da9a;
+
+  --btn-bg-color: #009966;
+  --input-border-color: #ccc;
+  --input-bg-color: rgba(255, 255, 255, 0.6);
+
+  /* END COLORS */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -35,15 +43,23 @@ li {
   -webkit-text-size-adjust: 100%;
 }
 
+body {
+  color: var(--main-color);
+  background-color: var(--main-bg-color);
+  margin: 0 auto;
+  min-width: 320px;
+  min-height: 100vh;
+}
+/* LINKS */
 a {
   font-weight: 500;
-  color: #d4cab0;
+  color: var(--link-color);
   text-decoration: inherit;
 }
 a:hover {
-  color: #f3da9a;
+  color: var(--link-hover-color);
 }
-
+/* HEADINGS */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -59,20 +75,12 @@ h3 {
   line-height: 1.1;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
 /* 90vh Where does this come from? */
 
 /* Set a style for all buttons */
 button {
-  background-color: #009966;
-  color: white;
+  background-color: var(--btn-bg-color);
+  color: var(--main-color);
   padding: 14px 20px;
   font-size: large;
   margin: 16px 0;
@@ -88,7 +96,7 @@ button:hover {
 }
 
 .link-button {
-  color: #d4cab0;
+  color: var(--link-color);
   border-radius: 0;
   border: 0px solid transparent;
   padding: 0.6em 1.2em;
@@ -100,23 +108,21 @@ button:hover {
 }
 
 .link-button:hover {
-  color: #f3da9a;
+  color: var(--link-hover-color);
 }
 
 /* Full-width inputs */
 input[type="text"],
 input[type="email"],
 input[type="password"] {
+  background-color: var(--main-color);
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid var(--input-border-color);
   box-sizing: border-box;
   border-radius: 9px;
 }
 
 /* MENU ITEMS */
-
-.font-bold {
-}

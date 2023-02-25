@@ -2,36 +2,17 @@
   import { push, pop, replace } from "svelte-spa-router";
   import { isUserLoggedIn } from "../stores.js";
   import { sessionId } from "../stores.js";
-  import { sessionUserInfo } from "../stores.js";
+  import Session from "./utilities/Session.svelte";
 
   let email;
   let password;
   let error;
   let session;
-  let sessionInfo;
+  let sessionGetter;
 
   let baseURL = import.meta.env.VITE_BASE_URL_DEV;
   if (import.meta.env.PROD) {
     baseURL = import.meta.env.VITE_BASE_URL_PROD;
-  }
-
-  async function setSessionInfo(session) {
-    const response = await fetch(`${baseURL}/sessions/${session}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    let responseData = await response.json();
-    sessionInfo = responseData.sessionUser;
-    $sessionUserInfo = {
-      id: sessionInfo.id,
-      email: sessionInfo.email,
-      role: sessionInfo.role,
-    };
-    error = responseData.error;
-    console.log("responseData at LOGIN S", responseData);
   }
 
   async function loginUser() {
@@ -48,7 +29,6 @@
     });
 
     const responseData = await response.json();
-    //responseData = JSON.stringify(json);
     session = responseData.session;
     error = responseData.error;
     console.log("responseData at LOGIN", responseData);
@@ -57,13 +37,14 @@
       console.log("inSession at LOGIN R ", session);
       $isUserLoggedIn = true;
       $sessionId = session;
-      setSessionInfo(session);
-      push("/host");
+      sessionStorage.setItem("sessionId", session);
+      sessionGetter.getSession();
+      replace("/host");
     } else {
       console.log(
         "session && !$isUserLoggedIn not met at LOGIN R, logging out"
       );
-      push("/host-login");
+      replace("/host-login");
     }
     console.log("isUserLoggedIn at LOGIN R ", $isUserLoggedIn);
     console.log("sessionId at LOGIN R ", $sessionId);
@@ -73,7 +54,7 @@
 <div class="row-container">
   <div class="column-container">
     <div class="login-form">
-      <h2>Logige sisse</h2>
+      <h3>Logige sisse</h3>
       <form action="" method="post">
         <div class="container">
           <input
@@ -93,10 +74,6 @@
           <button type="button" id="login-button" on:click={loginUser}
             >Sisene</button
           >
-          <!-- <p>
-            <input type="checkbox" id="remember" name="remember" value="true" />
-            <label for="remember"> Mäleta mind selles seadmes</label>
-          </p> -->
           <p>
             {#if error}
               {error}
@@ -107,6 +84,7 @@
       </form>
     </div>
   </div>
+  <Session bind:this={sessionGetter} />
 </div>
 
 <style>
