@@ -75,8 +75,6 @@ h3 {
   line-height: 1.1;
 }
 
-/* 90vh Where does this come from? */
-
 /* Set a style for all buttons */
 button {
   background-color: var(--btn-bg-color);
@@ -183,12 +181,11 @@ input[type="password"] {
 
 /* MENU ITEMS */
 
-
+/* 
 @media screen and (max-width: 560px) {
   #user-email{
    display: none;
- }
-
+ } */
 
 /* SPLASH */
 
@@ -199,14 +196,14 @@ input[type="password"] {
 }
 
 .img-frame {
-  min-height: 80px;
+  min-height: 100px;
   width: auto;
 }
 
 .img-frame img {
   margin: 5px;
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   object-fit: cover;
 }
 
@@ -219,6 +216,3 @@ input[type="password"] {
 .login-container {
   padding: 16px;
 }
-
-
-

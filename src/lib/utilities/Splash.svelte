@@ -6,21 +6,21 @@
 </div>
 
 <style>
-  /* .splash-frame {
+  .splash-frame {
     margin-top: 5vh;
     min-height: 140px;
     width: auto;
   }
 
   .img-frame {
-    min-height: 80px;
+    min-height: 100px;
     width: auto;
   }
 
   .img-frame img {
     margin: 5px;
-    height: 80px;
-    width: 80px;
+    height: 100px;
+    width: 100px;
     object-fit: cover;
-  } */
+  }
 </style>

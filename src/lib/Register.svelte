@@ -115,11 +115,4 @@
 </div>
 
 <style>
-  /* .login-form {
-  max-width: 300px;
-}
-
-.login-container {
-  padding: 16px;
-} */
 </style>
