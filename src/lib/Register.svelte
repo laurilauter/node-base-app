@@ -76,7 +76,7 @@
     <div class="login-form">
       <h2>Looge konto</h2>
       <form action="" method="post">
-        <div class="container">
+        <div class="login-container">
           <input
             type="email"
             placeholder="Email"
@@ -115,12 +115,11 @@
 </div>
 
 <style>
-  .login-form {
-    max-width: 300px;
-  }
+  /* .login-form {
+  max-width: 300px;
+}
 
-  /* Add padding to containers */
-  .container {
-    padding: 16px;
-  }
+.login-container {
+  padding: 16px;
+} */
 </style>

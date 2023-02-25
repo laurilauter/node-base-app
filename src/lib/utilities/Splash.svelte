@@ -6,7 +6,7 @@
 </div>
 
 <style>
-  .splash-frame {
+  /* .splash-frame {
     margin-top: 5vh;
     min-height: 140px;
     width: auto;
@@ -17,10 +17,10 @@
     width: auto;
   }
 
-  img {
+  .img-frame img {
     margin: 5px;
     height: 80px;
     width: 80px;
     object-fit: cover;
-  }
+  } */
 </style>

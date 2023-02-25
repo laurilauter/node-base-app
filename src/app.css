@@ -188,3 +188,37 @@ input[type="password"] {
   #user-email{
    display: none;
  }
+
+
+/* SPLASH */
+
+.splash-frame {
+  margin-top: 5vh;
+  min-height: 140px;
+  width: auto;
+}
+
+.img-frame {
+  min-height: 80px;
+  width: auto;
+}
+
+.img-frame img {
+  margin: 5px;
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+}
+
+/* LOGIN, REGISTER */
+
+.login-form {
+  max-width: 300px;
+}
+
+.login-container {
+  padding: 16px;
+}
+
+
+

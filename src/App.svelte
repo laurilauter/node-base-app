@@ -4,9 +4,6 @@
   import routes from "./routes/routes";
   import Header from "./lib/Header.svelte";
   import Footer from "./lib/Footer.svelte";
-  // import { links } from "./stores.js";
-
-  // let localLinks = [];
 
   // Handles the "conditionsFailed" event dispatched by the router when a component can't be loaded because one of its pre-condition failed
   function conditionsFailed(event) {
@@ -21,18 +18,6 @@
   // Handles the "routeLoaded" event dispatched by the router when a component was loaded
   function routeLoaded(event) {
     console.log("routeLoaded event", event.detail);
-
-    // let crumbs = function () {
-    //   const arr = $location.split("/");
-    //   arr.forEach((item) => {
-    //     if (item != "") {
-    //       localLinks.push(item);
-    //     }
-    //   });
-    //   return ($links = localLinks);
-    // };
-
-    // console.log("crumbs ", crumbs());
   }
 </script>
 
