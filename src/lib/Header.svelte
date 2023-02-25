@@ -34,7 +34,7 @@
         {#if $isUserLoggedIn}
           <div>
             <Logout>
-              <span id="user-email" class="side-m5">
+              <span class="side-m5 hidden-mobile">
                 {$sessionUserInfo.email}
               </span>
             </Logout>
