@@ -14,7 +14,9 @@
   let gamePlans = [];
   //THIS LISTS GAMES FROM ALL USERS !!
   async function getGamePlans() {
-    const response = await fetch(`${baseURL}/game-plan/list`);
+    const response = await fetch(
+      `${baseURL}/game-plan/list/${$sessionUserInfo.id}`
+    );
     gamePlans = await response.json();
     console.log("isUserLoggedIn at MyGames ", $isUserLoggedIn);
   }
