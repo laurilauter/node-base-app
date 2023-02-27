@@ -12,7 +12,7 @@
   export let ariaHidden = false; // boolean
 
   let gamePlans = [];
-
+  //THIS LISTS GAMES FROM ALL USERS !!
   async function getGamePlans() {
     const response = await fetch(`${baseURL}/game-plan/list`);
     gamePlans = await response.json();

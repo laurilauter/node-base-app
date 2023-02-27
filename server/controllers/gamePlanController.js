@@ -64,7 +64,9 @@ export async function createMarker(req, res) {
 
 export async function listGames(req, res) {
   try {
-    const list = await GamePlan.find();
+    const filter = { ownerId: req.params.id };
+    const list = await GamePlan.find(filter);
+    console.log("list ", list);
     res.status(200).send(list);
   } catch (error) {
     res.status(500).send({ error: error });

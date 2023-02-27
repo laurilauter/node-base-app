@@ -18,7 +18,7 @@ gamePlanRouter.post("/create", gamePlanController.createGame);
 gamePlanRouter.post("/create-marker", gamePlanController.createMarker);
 
 //list your games
-gamePlanRouter.get("/list", gamePlanController.listGames);
+gamePlanRouter.get("/list/:id", gamePlanController.listGames);
 
 //get a game by id
 gamePlanRouter.get("/:id", gamePlanController.getGame);
