@@ -17,6 +17,7 @@
     const response = await fetch(
       `${baseURL}/game-plan/list/${$sessionUserInfo.id}`
     );
+    // const response = await fetch(`${baseURL}/game-plan/list`);
     gamePlans = await response.json();
     console.log("isUserLoggedIn at MyGames ", $isUserLoggedIn);
   }
@@ -33,7 +34,7 @@
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        gameTitle: "New Game",
+        gameTitle: "Edit Title",
         gameMap: "testmap.png",
         ownerId: $sessionUserInfo.id,
         gameDuration: 45,

@@ -64,9 +64,17 @@ export async function createMarker(req, res) {
 
 export async function listGames(req, res) {
   try {
+    const list = await GamePlan.find();
+    res.status(200).send(list);
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+export async function listMyGames(req, res) {
+  try {
     const filter = { ownerId: req.params.id };
     const list = await GamePlan.find(filter);
-    console.log("list ", list);
     res.status(200).send(list);
   } catch (error) {
     res.status(500).send({ error: error });
@@ -115,7 +123,8 @@ export async function updateGame(req, res) {
       gameMap: gameMap,
       ownerId: ownerId,
     };
-    const options = { sort: { _id: 1 }, new: true, overwrite: true };
+    //const options = { sort: { _id: 1 }, new: true, overwrite: true };
+    const options = { sort: { _id: 1 }, new: true };
 
     let updatedGamePlan = await GamePlan.findOneAndUpdate(
       filter,

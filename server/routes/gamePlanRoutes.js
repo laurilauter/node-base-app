@@ -17,8 +17,11 @@ gamePlanRouter.post("/create", gamePlanController.createGame);
 //create a marker
 gamePlanRouter.post("/create-marker", gamePlanController.createMarker);
 
+//list games
+gamePlanRouter.get("/list", gamePlanController.listGames);
+
 //list your games
-gamePlanRouter.get("/list/:id", gamePlanController.listGames);
+gamePlanRouter.get("/list/:id", gamePlanController.listMyGames);
 
 //get a game by id
 gamePlanRouter.get("/:id", gamePlanController.getGame);
@@ -29,7 +32,7 @@ gamePlanRouter.get("/marker/:id", gamePlanController.getMarker);
 //get all gameplan marker by gameplan id
 gamePlanRouter.get("/markers/:id", gamePlanController.getMarkers);
 
-//patch a game
+//patch a gameplan
 gamePlanRouter.patch("/update/:id", gamePlanController.updateGame);
 
 //need to test if this can be upsert.
