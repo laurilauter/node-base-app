@@ -5,6 +5,7 @@ const GamePlanSchema = new Schema({
   gameTitle: { type: String, required: true },
   gameMap: { type: String },
   ownerId: { type: String, required: true },
+  gameDuration: { type: Number },
   markers: [{ type: String }],
 });
 

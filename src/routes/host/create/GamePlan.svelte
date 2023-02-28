@@ -7,18 +7,15 @@
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
-  import InPlaceEdit from "../../.././lib/utilities/InPlaceEdit.svelte";
+  import EditTitle from "../../../lib/utilities/EditTitle.svelte";
+  import EditDuration from "../../../lib/utilities/EditDuration.svelte";
   export let params = {};
 
   // Icon properties
-  export let size = "3em"; // string | number
+  export let size = "2em"; // string | number
   export let ariaHidden = false; // boolean
 
   let gamePlan = $currentGamePlan;
-  //let title = gamePlan.gameTitle;
-  // let title = $currentGamePlan.gameTitle;
-  console.log("$currentGamePlan ", $currentGamePlan);
-  let duration = $currentGamePlan.gameDuration;
 
   async function deleteGamePlan() {
     const response = await fetch(
@@ -27,48 +24,63 @@
         method: "DELETE",
       }
     );
-    //const deleteResponse = await response.json();
     console.log("response ", response);
     replace("/host/my-games");
   }
 
-  function submit(field) {
-    console.log("in submit field ", field);
+  function submitTitle(field) {
+    console.log("in submit func - ", field);
     return ({ detail: newValue }) => {
-      // IRL: POST value to server here
       console.log(`updated ${field}, new value is: "${newValue}"`);
+      (async () => {
+        try {
+          const response = await fetch(
+            `${baseURL}/game-plan/update/${gamePlan._id}`,
+            {
+              method: "PATCH",
+              credentials: "include",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                gameTitle: newValue,
+              }),
+            }
+          );
+          console.log("gamePlan updated via submitTitle");
+          gamePlan = await response.json();
+        } catch (error) {
+          console.log({ error: error });
+        }
+      })();
+    };
+  }
 
-      console.log("in return");
-      // let bodyContent;
-      // if (field === "title") {
-      //   console.log("in title");
-      //   bodyContent = {
-      //     gameTitle: newValue,
-      //   };
-      // } else if (field === "duration") {
-      //   bodyContent = {
-      //     gameDuration: newValue,
-      //   };
-      // }
-      async function callTitle(id) {
-        console.log("in call title");
-        const response = await fetch(`${baseURL}/game-plan/update/${id}`, {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            gameTitle: newValue,
-          }),
-        });
-
-        const gamePlan = await response.json();
-        console.log("updated gamePlan from DB", gamePlan);
-        return gamePlan;
-      }
-      callTitle(gamePlan._id);
-      getGamePlan(params.id);
+  function submitDuration(field) {
+    console.log("in submit func - ", field);
+    return ({ detail: newValue }) => {
+      console.log(`updated ${field}, new value is: "${newValue}"`);
+      (async () => {
+        try {
+          const response = await fetch(
+            `${baseURL}/game-plan/update/${gamePlan._id}`,
+            {
+              method: "PATCH",
+              credentials: "include",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                gameDuration: parseInt(newValue),
+              }),
+            }
+          );
+          console.log("gamePlan updated via submitDuration");
+          gamePlan = await response.json();
+        } catch (error) {
+          console.log({ error: error });
+        }
+      })();
     };
   }
 
@@ -80,14 +92,6 @@
       location: $location,
       title: gamePlan.gameTitle,
     };
-    // $currentGamePlan = {
-    //   _id: gamePlan._id,
-    //   gameTitle: gamePlan.gameTitle,
-    //   gameMap: gamePlan.gameMap,
-    //   ownerId: gamePlan.ownerId,
-    //   gameDuration: gamePlan.gameDuration,
-    //   markers: gamePlan.markers,
-    // };
   }
 
   onMount(async () => {
@@ -98,20 +102,29 @@
 {#if gamePlan}
   <div class="column-container" in:fade={{ duration: 1000 }}>
     <div>
-      <!-- <h1>
-        {gamePlan.gameTitle}
-      </h1> -->
-      <h1>
-        <InPlaceEdit
+      <!-- <h2>
+        <EditTitle
           bind:value={gamePlan.gameTitle}
-          on:submit={submit("title")}
+          on:submitTitle={submitTitle("title")}
         />
-      </h1>
+      </h2> -->
+
       <span class="link-button" on:click={deleteGamePlan} on:keypress>
         <TrashCanOutline {size} {ariaHidden} />
       </span>
 
-      <h3><span>Kestus</span> {gamePlan.gameDuration} min</h3>
+      <h3>
+        <span>Kestus</span>
+        <span>
+          <EditDuration
+            bind:value={gamePlan.gameDuration}
+            on:submitDuration={submitDuration("duaration")}
+          />
+        </span>
+
+        min
+      </h3>
+
       <a href="#/game-plan/game-quiz/{gamePlan._id}"
         ><h3 class="bold">Mängu küsimused</h3></a
       >
@@ -123,13 +136,6 @@
       <p>ID: {gamePlan._id}</p>
       <p>OwnerId: {gamePlan.ownerId}</p>
     </div>
-
-    <!-- <p>
-      <InPlaceEdit
-        bind:value={gamePlan.gameDuration}
-        on:submit={submit("duration")}
-      />
-    </p> -->
   </div>
 {:else}
   <p><Loader /></p>
