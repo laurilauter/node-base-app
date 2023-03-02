@@ -102,28 +102,30 @@
 {#if gamePlan}
   <div class="column-container" in:fade={{ duration: 1000 }}>
     <div>
-      <!-- <h2>
-        <EditTitle
-          bind:value={gamePlan.gameTitle}
-          on:submitTitle={submitTitle("title")}
-        />
-      </h2> -->
-
-      <span class="link-button" on:click={deleteGamePlan} on:keypress>
-        <TrashCanOutline {size} {ariaHidden} />
-      </span>
-
-      <h3>
-        <span>Kestus</span>
-        <span>
-          <EditDuration
-            bind:value={gamePlan.gameDuration}
-            on:submitDuration={submitDuration("duaration")}
+      <div class="row-container">
+        <h2>
+          <EditTitle
+            bind:value={gamePlan.gameTitle}
+            on:submitTitle={submitTitle("title")}
           />
-        </span>
+        </h2>
 
-        min
-      </h3>
+        <div>
+          <span class="link-button" on:click={deleteGamePlan} on:keypress>
+            <TrashCanOutline {size} {ariaHidden} />
+          </span>
+        </div>
+      </div>
+      <div class="row-container">
+        <h3>
+          <span>
+            <EditDuration
+              bind:value={gamePlan.gameDuration}
+              on:submitDuration={submitDuration("duaration")}
+            />
+          </span>
+        </h3>
+      </div>
 
       <a href="#/game-plan/game-quiz/{gamePlan._id}"
         ><h3 class="bold">Mängu küsimused</h3></a
