@@ -39,23 +39,37 @@
 
 {#if editing}
   <form on:submit|preventDefault={submit} on:keydown={keydown}>
-    <input bind:value on:blur={submit} {required} use:focus />
+    <input
+      bind:value
+      on:blur={submit}
+      {required}
+      use:focus
+      size={value.length}
+    />
   </form>
 {:else}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div on:click={edit}>
+  <div class="value-div" on:click={edit}>
     {value}
   </div>
 {/if}
 
 <style>
+  /* .input-div {
+    width: fit-content;
+  } */
+  .value-div {
+    margin: 0 5px 0 5px;
+  }
   input {
+    width: 100%;
     border: none;
-    background: none;
+    background: var(--main-bg-color);
     font-size: inherit;
     color: inherit;
     font-weight: inherit;
     text-align: inherit;
     box-shadow: none;
+    margin: 0 5px 0 5px;
   }
 </style>

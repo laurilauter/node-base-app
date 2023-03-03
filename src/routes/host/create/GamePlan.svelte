@@ -7,8 +7,7 @@
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
-  import EditTitle from "../../../lib/utilities/EditTitle.svelte";
-  import EditDuration from "../../../lib/utilities/EditDuration.svelte";
+  import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
   export let params = {};
 
   // Icon properties
@@ -28,39 +27,34 @@
     replace("/host/my-games");
   }
 
-  function submitTitle(field) {
+  function submit(field) {
     console.log("in submit func - ", field);
     return ({ detail: newValue }) => {
       console.log(`updated ${field}, new value is: "${newValue}"`);
-      (async () => {
-        try {
-          const response = await fetch(
-            `${baseURL}/game-plan/update/${gamePlan._id}`,
-            {
-              method: "PATCH",
-              credentials: "include",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify({
-                gameTitle: newValue,
-              }),
-            }
-          );
-          console.log("gamePlan updated via submitTitle");
-          gamePlan = await response.json();
-        } catch (error) {
-          console.log({ error: error });
-        }
-      })();
-    };
-  }
+      console.log("typeof newValue ", typeof newValue);
 
-  function submitDuration(field) {
-    console.log("in submit func - ", field);
-    return ({ detail: newValue }) => {
-      console.log(`updated ${field}, new value is: "${newValue}"`);
+      let bodyContent;
+      if (field === "title") {
+        bodyContent = JSON.stringify({
+          gameTitle: newValue,
+        });
+      } else if (field === "duration") {
+        console.log("newValue parsed ", newValue);
+
+        newValue = parseInt(newValue);
+        if (isNaN(newValue)) {
+          newValue = 45;
+          console.log("newValue gameDuration ", newValue);
+        }
+
+        console.log("newValue not altered ", newValue);
+        bodyContent = JSON.stringify({
+          gameDuration: newValue,
+        });
+      }
+
       (async () => {
+        console.log("bodyContent ", bodyContent);
         try {
           const response = await fetch(
             `${baseURL}/game-plan/update/${gamePlan._id}`,
@@ -70,12 +64,10 @@
               headers: {
                 "content-type": "application/json",
               },
-              body: JSON.stringify({
-                gameDuration: parseInt(newValue),
-              }),
+              body: bodyContent,
             }
           );
-          console.log("gamePlan updated via submitDuration");
+          console.log("gamePlan updated via submit");
           gamePlan = await response.json();
         } catch (error) {
           console.log({ error: error });
@@ -103,12 +95,15 @@
   <div class="column-container" in:fade={{ duration: 1000 }}>
     <div>
       <div class="row-container">
-        <h2>
-          <EditTitle
-            bind:value={gamePlan.gameTitle}
-            on:submitTitle={submitTitle("title")}
-          />
-        </h2>
+        <div class="invisible-dummy" />
+        <div class="title-box">
+          <h2>
+            <InPlaceEdit
+              bind:value={gamePlan.gameTitle}
+              on:submit={submit("title")}
+            />
+          </h2>
+        </div>
 
         <div>
           <span class="link-button" on:click={deleteGamePlan} on:keypress>
@@ -116,15 +111,20 @@
           </span>
         </div>
       </div>
-      <div class="row-container">
-        <h3>
-          <span>
-            <EditDuration
-              bind:value={gamePlan.gameDuration}
-              on:submitDuration={submitDuration("duaration")}
-            />
+      <div class="row-container min-box-wrapper">
+        <span class="min-span-height"><h3>Kestus</h3></span>
+        <div class="min-box">
+          <span
+            ><h3>
+              <InPlaceEdit
+                bind:value={gamePlan.gameDuration}
+                on:submit={submit("duration")}
+              />
+            </h3>
           </span>
-        </h3>
+        </div>
+
+        <span> <h3>min</h3></span>
       </div>
 
       <a href="#/game-plan/game-quiz/{gamePlan._id}"
@@ -144,6 +144,28 @@
 {/if}
 
 <style>
+  .title-box {
+    display: flex;
+    align-items: space-between;
+    color: var(--link-color);
+  }
+  .invisible-dummy {
+    width: 72px;
+    display: block;
+  }
+  .min-box {
+    display: flex;
+    align-items: center;
+    color: var(--link-color);
+    width: 42px;
+    max-height: 2rem;
+    margin: 0 10px 0 10px;
+  }
+  .min-box-wrapper {
+    display: flex;
+    align-items: center;
+    max-height: 2rem;
+  }
   .box {
     border: 1px solid grey;
     border-radius: 9px;

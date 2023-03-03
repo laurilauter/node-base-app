@@ -54,8 +54,8 @@ app.use(
     cookie: {
       sameSite: false,
       secure: false,
-      maxAge: 10 * 60000, // 10 min
-      //maxAge: 7 * 24 * 3600 * 1000, //a week
+      //maxAge: 10 * 60000, // 10 min
+      maxAge: 7 * 24 * 3600 * 1000, //a week
       httpOnly: true,
     },
     rolling: true,
@@ -64,6 +64,12 @@ app.use(
     }),
   })
 );
+
+//Check if this works //should change cookie so it gets renewed
+app.use(function (req, res, next) {
+  req.session.nowInMinutes = Math.floor(Date.now() / 60e3);
+  next();
+});
 
 app.set("trust proxy", 1); // trust first proxy in production
 

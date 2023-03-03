@@ -39,6 +39,8 @@
               </span>
             </Logout>
           </div>
+        {:else if $sessionUserInfo.email === undefined}
+          hkjashdjkashjkd
         {:else if $playerName}
           <div class="player-name">{$playerName}</div>
         {/if}

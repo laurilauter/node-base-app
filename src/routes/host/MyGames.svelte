@@ -34,7 +34,7 @@
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        gameTitle: "Edit Title",
+        gameTitle: "Mängu Nimi",
         gameMap: "testmap.png",
         ownerId: $sessionUserInfo.id,
         gameDuration: 45,

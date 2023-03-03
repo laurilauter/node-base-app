@@ -4,6 +4,8 @@
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
   import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
+  import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
+  import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
 
   export let params = {};
   // Icon properties
@@ -11,6 +13,18 @@
   export let ariaHidden = false; // boolean
 
   let gamePlanMarkers;
+
+  async function addQuestion() {}
+
+  async function updateQuestion() {}
+
+  async function removeQuestion() {}
+
+  async function addAnswer() {}
+
+  async function updateAnswer() {}
+
+  async function removeAnswer() {}
 
   onMount(async () => {
     const response = await fetch(`${baseURL}/game-plan/markers/${params.id}`);
@@ -42,9 +56,8 @@
   </div>
 {:else}
   <p><Loader /></p>
-  <p>hjkhkj</p>
 {/if}
-<span class="link-button">
+<span class="link-button" on:click={addQuestion} on:keypress>
   <PlusCircleOutline {size} {ariaHidden} />
 </span>
 

@@ -65,7 +65,6 @@
 
 <style>
   input {
-    max-width: 60px;
     border: none;
     background: none;
     font-size: inherit;
