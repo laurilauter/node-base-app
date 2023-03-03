@@ -156,6 +156,9 @@ export async function updateMarker(req, res) {
 export async function deleteMarker(req, res) {
   try {
     const result = await Marker.deleteOne({ _id: req.params.id });
+    if (!req.body.gamePlanId) {
+      res.status(403).send({ message: "GamePlan ID not found on body" });
+    }
     if (result.deletedCount === 0) {
       res.status(403).send({ message: "Marker not found" });
     } else {

@@ -23,38 +23,28 @@
         method: "DELETE",
       }
     );
-    console.log("response ", response);
+    console.log("delete response ", response);
     replace("/host/my-games");
   }
 
   function submit(field) {
-    console.log("in submit func - ", field);
     return ({ detail: newValue }) => {
-      console.log(`updated ${field}, new value is: "${newValue}"`);
-      console.log("typeof newValue ", typeof newValue);
-
       let bodyContent;
       if (field === "title") {
         bodyContent = JSON.stringify({
           gameTitle: newValue,
         });
       } else if (field === "duration") {
-        console.log("newValue parsed ", newValue);
-
         newValue = parseInt(newValue);
         if (isNaN(newValue)) {
           newValue = 45;
-          console.log("newValue gameDuration ", newValue);
         }
-
-        console.log("newValue not altered ", newValue);
         bodyContent = JSON.stringify({
           gameDuration: newValue,
         });
       }
 
       (async () => {
-        console.log("bodyContent ", bodyContent);
         try {
           const response = await fetch(
             `${baseURL}/game-plan/update/${gamePlan._id}`,
@@ -67,7 +57,6 @@
               body: bodyContent,
             }
           );
-          console.log("gamePlan updated via submit");
           gamePlan = await response.json();
         } catch (error) {
           console.log({ error: error });
@@ -77,12 +66,19 @@
   }
 
   async function getGamePlan(id) {
-    console.log("getGamePlan from DB");
     const response = await fetch(`${baseURL}/game-plan/${id}`);
     gamePlan = await response.json();
     $currentGamePlanLink = {
       location: $location,
       title: gamePlan.gameTitle,
+    };
+    $currentGamePlan = {
+      _id: gamePlan._id,
+      gameTitle: gamePlan.gameTitle,
+      gameMap: gamePlan.gameMap,
+      ownerId: gamePlan.ownerId,
+      gameDuration: gamePlan.gameDuration,
+      markers: gamePlan.markers,
     };
   }
 
@@ -134,9 +130,17 @@
     </div>
 
     <div class="box">
+      <p>from DB</p>
       <p>Map: {gamePlan.gameMap}</p>
       <p>ID: {gamePlan._id}</p>
       <p>OwnerId: {gamePlan.ownerId}</p>
+    </div>
+
+    <div class="box">
+      <p>from STORE</p>
+      <p>Map: {$currentGamePlan.gameMap}</p>
+      <p>ID: {$currentGamePlan._id}</p>
+      <p>OwnerId: {$currentGamePlan.ownerId}</p>
     </div>
   </div>
 {:else}
@@ -149,10 +153,16 @@
     align-items: space-between;
     color: var(--link-color);
   }
+
+  .title-box:hover {
+    color: var(--link-hover-color);
+  }
+
   .invisible-dummy {
     width: 72px;
     display: block;
   }
+
   .min-box {
     display: flex;
     align-items: center;
@@ -161,11 +171,17 @@
     max-height: 2rem;
     margin: 0 10px 0 10px;
   }
+
+  .min-box:hover {
+    color: var(--link-hover-color);
+  }
+
   .min-box-wrapper {
     display: flex;
     align-items: center;
     max-height: 2rem;
   }
+
   .box {
     border: 1px solid grey;
     border-radius: 9px;
