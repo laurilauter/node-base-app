@@ -2,23 +2,22 @@
   import baseURL from "../../../lib/utilities/baseUrl";
   import { fade } from "svelte/transition";
   import { push, pop, replace, location } from "svelte-spa-router";
-  import { currentGamePlanLink } from "../../../stores.js";
   import { currentGamePlan } from "../../../stores.js";
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
+  import GamePlanGet from "../../../lib/utilities/GamePlanGet.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
   import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
   export let params = {};
 
+  let gamePlanGetter;
   // Icon properties
   export let size = "2em"; // string | number
   export let ariaHidden = false; // boolean
 
-  let gamePlan = $currentGamePlan;
-
   async function deleteGamePlan() {
     const response = await fetch(
-      `${baseURL}/game-plan/delete/${gamePlan._id}`,
+      `${baseURL}/game-plan/delete/${$currentGamePlan._id}`,
       {
         method: "DELETE",
       }
@@ -47,7 +46,7 @@
       (async () => {
         try {
           const response = await fetch(
-            `${baseURL}/game-plan/update/${gamePlan._id}`,
+            `${baseURL}/game-plan/update/${$currentGamePlan._id}`,
             {
               method: "PATCH",
               credentials: "include",
@@ -57,7 +56,7 @@
               body: bodyContent,
             }
           );
-          gamePlan = await response.json();
+          $currentGamePlan = await response.json();
         } catch (error) {
           console.log({ error: error });
         }
@@ -65,29 +64,12 @@
     };
   }
 
-  async function getGamePlan(id) {
-    const response = await fetch(`${baseURL}/game-plan/${id}`);
-    gamePlan = await response.json();
-    $currentGamePlanLink = {
-      location: $location,
-      title: gamePlan.gameTitle,
-    };
-    $currentGamePlan = {
-      _id: gamePlan._id,
-      gameTitle: gamePlan.gameTitle,
-      gameMap: gamePlan.gameMap,
-      ownerId: gamePlan.ownerId,
-      gameDuration: gamePlan.gameDuration,
-      markers: gamePlan.markers,
-    };
-  }
-
   onMount(async () => {
-    getGamePlan(params.id);
+    await gamePlanGetter.getGamePlan(params.id);
   });
 </script>
 
-{#if gamePlan}
+{#if $currentGamePlan}
   <div class="column-container" in:fade={{ duration: 1000 }}>
     <div>
       <div class="row-container">
@@ -95,7 +77,7 @@
         <div class="title-box">
           <h2>
             <InPlaceEdit
-              bind:value={gamePlan.gameTitle}
+              bind:value={$currentGamePlan.gameTitle}
               on:submit={submit("title")}
             />
           </h2>
@@ -113,7 +95,7 @@
           <span
             ><h3>
               <InPlaceEdit
-                bind:value={gamePlan.gameDuration}
+                bind:value={$currentGamePlan.gameDuration}
                 on:submit={submit("duration")}
               />
             </h3>
@@ -123,17 +105,12 @@
         <span> <h3>min</h3></span>
       </div>
 
-      <a href="#/game-plan/game-quiz/{gamePlan._id}"
+      <a href="#/game-plan/game-quiz/{$currentGamePlan._id}"
         ><h3 class="bold">Mängu küsimused</h3></a
       >
-      <a href="#/game-plan/game-map/{gamePlan._id}"><h3>Mängu kaart</h3></a>
-    </div>
-
-    <div class="box">
-      <p>from DB</p>
-      <p>Map: {gamePlan.gameMap}</p>
-      <p>ID: {gamePlan._id}</p>
-      <p>OwnerId: {gamePlan.ownerId}</p>
+      <a href="#/game-plan/game-map/{$currentGamePlan._id}"
+        ><h3>Mängu kaart</h3></a
+      >
     </div>
 
     <div class="box">
@@ -146,6 +123,7 @@
 {:else}
   <p><Loader /></p>
 {/if}
+<GamePlanGet bind:this={gamePlanGetter} />
 
 <style>
   .title-box {

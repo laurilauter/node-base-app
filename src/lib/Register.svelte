@@ -3,7 +3,7 @@
   import { push, pop, replace } from "svelte-spa-router";
   import { isUserLoggedIn } from "../stores.js";
   import { sessionId } from "../stores.js";
-  import Session from "./utilities/Session.svelte";
+  import SessionGet from "./utilities/SessionGet.svelte";
 
   let email;
   let passwordFirst;
@@ -111,7 +111,7 @@
       </form>
     </div>
   </div>
-  <Session bind:this={sessionGetter} />
+  <SessionGet bind:this={sessionGetter} />
 </div>
 
 <style>

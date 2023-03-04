@@ -2,24 +2,23 @@
   // @ts-nocheck
 
   import baseURL from "../../../lib/utilities/baseUrl";
+  import { push, pop, replace, location } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
+  import GamePlanGet from "../../../lib/utilities/GamePlanGet.svelte";
   import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
   import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
   import { currentGamePlan } from "../../../stores.js";
+  import { currentGamePlanMarkers } from "../../../stores.js";
 
+  let gamePlanGetter;
+  let checked;
   export let params = {};
-  // Icon properties
-  export let size = "3em"; // string | number
-  export let ariaHidden = false; // boolean
-
-  let gamePlan = $currentGamePlan;
-  let gamePlanMarkers;
 
   async function addQuestion() {
-    console.log("$currentGamePlan._id ", gamePlan._id);
+    console.log("$currentGamePlan._id is:", $currentGamePlan._id);
     const response = await fetch(`${baseURL}/game-plan/create-marker`, {
       method: "POST",
       credentials: "include",
@@ -28,27 +27,27 @@
       },
       body: JSON.stringify({
         marker: {
-          title: gamePlanMarkers.length + 1,
-          gamePlanId: gamePlan._id,
+          title: $currentGamePlanMarkers.length + 1,
+          gamePlanId: $currentGamePlan._id,
           content: {
             position: {
-              x: 20,
-              y: 30,
+              x: 0,
+              y: 0,
             },
             qrcode: "some QR code",
             quiz: {
-              question: "Mitu jalga on koeral?",
+              question: "Kas soovid muuta küsimust?",
               answers: [
                 {
-                  text: "kolm",
+                  text: "pole kindel",
                   isCorrect: false,
                 },
                 {
-                  text: "neli",
+                  text: "jah",
                   isCorrect: true,
                 },
                 {
-                  text: "viis",
+                  text: "ei",
                   isCorrect: false,
                 },
               ],
@@ -63,8 +62,6 @@
     getQuestions(params.id);
   }
 
-  async function updateQuestion() {}
-
   async function removeQuestion(markerId) {
     const response = await fetch(
       `${baseURL}/game-plan/delete-marker/${markerId}`,
@@ -75,7 +72,7 @@
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          gamePlanId: gamePlan._id,
+          gamePlanId: $currentGamePlan._id,
         }),
       }
     );
@@ -84,48 +81,151 @@
     getQuestions(params.id);
   }
 
-  async function addAnswer() {}
+  function submit(field) {
+    return ({ detail: newValue }) => {
+      const fragments = field.split("-");
+      console.log("fragments ", fragments);
+      console.log("newValue ", newValue);
 
-  async function updateAnswer() {}
+      if (fragments[0] === "question") {
+        $currentGamePlanMarkers[fragments[1]].content.quiz.question = newValue;
+      } else if (fragments[0] === "answer" && fragments.length > 2) {
+        $currentGamePlanMarkers[fragments[1]].content.quiz.answers[
+          fragments[2]
+        ].text = newValue;
+      } else if (fragments[0] === "check" && fragments.length > 2) {
+        let toggle =
+          $currentGamePlanMarkers[fragments[1]].content.quiz.answers[
+            fragments[2]
+          ].isCorrect;
+        $currentGamePlanMarkers[fragments[1]].content.quiz.answers[
+          fragments[2]
+        ].isCorrect = !toggle;
+      } else if (fragments[0] === "addanswer") {
+        $currentGamePlanMarkers[fragments[1]].content.quiz.answers.push({
+          text: "vastus",
+          isCorrect: true,
+        });
+      } else if (fragments[0] === "removeanswer" && fragments.length > 2) {
+        $currentGamePlanMarkers[fragments[1]].content.quiz.answers.splice(
+          fragments[2],
+          1
+        );
+      }
+      console.log("store after submit ", $currentGamePlanMarkers[fragments[1]]);
 
-  async function removeAnswer() {}
+      (async () => {
+        try {
+          const response = await fetch(
+            `${baseURL}/game-plan/update-marker/${
+              $currentGamePlanMarkers[fragments[1]]._id
+            }`,
+            {
+              method: "PATCH",
+              credentials: "include",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify($currentGamePlanMarkers[fragments[1]]),
+            }
+          );
+          let updatedGamePlanMarker = await response.json();
+          console.log("updatedGamePlanMarker ", updatedGamePlanMarker);
+        } catch (error) {
+          console.log({ error: error });
+        }
+        await getQuestions(params.id);
+      })();
+    };
+  }
 
   async function getQuestions(id) {
     const response = await fetch(`${baseURL}/game-plan/markers/${id}`);
-    gamePlanMarkers = await response.json();
-    console.log("gamePlanMarkers ", gamePlanMarkers);
+    $currentGamePlanMarkers = await response.json();
+    console.log("$currentGamePlanMarkers ", $currentGamePlanMarkers);
   }
 
   onMount(async () => {
-    getQuestions(params.id);
+    await gamePlanGetter.getGamePlan(params.id);
+    await getQuestions(params.id);
   });
 </script>
 
 <h1>Mängu küsimused</h1>
 
-{#if gamePlanMarkers}
+{#if $currentGamePlanMarkers}
   <div class="column-container" in:fade={{ duration: 1000 }}>
     <div>
-      {#each gamePlanMarkers as marker}
-        <div class="question-title">
-          <span class="bold">{marker.title}</span>
-          <span> - </span>
-          <span>{marker.content.quiz.question}</span>
-          <span
-            class="link-button"
-            on:click={removeQuestion(marker._id)}
-            on:keypress
-          >
-            <TrashCanOutline {size} {ariaHidden} />
-          </span>
-        </div>
-
-        <div>
-          {#each marker.content.quiz.answers as answer}
-            <ul>
-              <li>{answer.text}</li>
-            </ul>
-          {/each}
+      {#each Object.entries($currentGamePlanMarkers) as [key, value]}
+        <div class="question-container">
+          <div class="question-box">
+            <div class="row-container">
+              <div class="question-title">
+                <span>{parseInt(key) + 1}</span>
+                <!-- <span>{value.title}</span> -->
+              </div>
+              <div>
+                <span>
+                  <InPlaceEdit
+                    bind:value={value.content.quiz.question}
+                    on:submit={submit(`question-${key}`)}
+                  />
+                </span>
+              </div>
+            </div>
+            <div class="question-box-trash">
+              <span
+                class="link-button"
+                on:click={removeQuestion(value._id)}
+                on:keypress
+              >
+                <span>
+                  <TrashCanOutline size={"2rem"} ariaHidden={false} />
+                </span>
+              </span>
+            </div>
+          </div>
+          <div class="answers-container">
+            {#each Object.entries(value.content.quiz.answers) as [answersKey, answersValue]}
+              <div class="answer">
+                <div class="answer-ckh-txt">
+                  <div>
+                    <input
+                      type="checkbox"
+                      id={answersValue.id}
+                      checked={answersValue.isCorrect ? true : false}
+                      bind:value={checked}
+                      on:change={submit(`check-${key}-${answersKey}`)}
+                    />
+                  </div>
+                  <label for={answersValue.id}>
+                    <InPlaceEdit
+                      bind:value={answersValue.text}
+                      on:submit={submit(`answer-${key}-${answersKey}`)}
+                    />
+                  </label>
+                </div>
+                <div>
+                  <span
+                    class="link-button"
+                    on:click={submit(`removeanswer-${key}-${answersKey}`)}
+                    on:keypress
+                  >
+                    <TrashCanOutline size={"1.4rem"} ariaHidden={false} />
+                  </span>
+                </div>
+              </div>
+            {/each}
+            <div class="add-answer">
+              <span
+                class="link-button"
+                on:click={submit(`addanswer-${key}`)}
+                on:keypress
+              >
+                <PlusCircleOutline size={"2.1rem"} ariaHidden={false} />
+              </span>
+            </div>
+          </div>
         </div>
       {:else}
         <h3>Küsimused puuduvad</h3>
@@ -136,25 +236,51 @@
   <p><Loader /></p>
 {/if}
 <span class="link-button" on:click={addQuestion} on:keypress>
-  <PlusCircleOutline {size} {ariaHidden} />
+  <PlusCircleOutline size={"3rem"} ariaHidden={false} />
 </span>
+<GamePlanGet bind:this={gamePlanGetter} />
 
 <style>
-  .bold {
-    font-weight: bold;
-    color: #d4cab0;
+  .question-container {
+    max-width: 600px;
+    padding: 1rem;
   }
-
-  ul {
+  .question-box {
+    height: fit-content;
     display: flex;
-  }
-
-  li {
+    justify-content: space-between;
+    align-items: center;
   }
 
   .question-title {
+    margin-left: 3px;
+    margin-right: 12px;
+    border: 2px solid var(--main-color);
+    border-radius: 50%;
+    min-width: 24px;
+    height: auto;
+    font-weight: 900;
+  }
+
+  .add-answer {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    width: fit-content;
+    height: 2.4rem;
+  }
+
+  .add-answer > span {
+    margin-left: -19px;
+  }
+
+  .answer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .answer-ckh-txt {
+    display: flex;
+    justify-content: space-between;
   }
 </style>

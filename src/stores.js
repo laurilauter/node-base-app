@@ -18,5 +18,6 @@ export const currentGamePlan = writable({
   gameDuration: "",
   markers: "",
 });
+export const currentGamePlanMarkers = writable([]);
 //player
 export const playerName = writable();

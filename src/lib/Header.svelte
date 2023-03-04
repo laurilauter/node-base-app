@@ -2,7 +2,7 @@
   import { currentGamePlanLink } from "./../stores.js";
   import { push, pop, replace, location } from "svelte-spa-router";
   import Logout from "./Logout.svelte";
-  import Session from "./utilities/Session.svelte";
+  import SessionGet from "./utilities/SessionGet.svelte";
   import { isUserLoggedIn } from "../stores.js";
   import { playerName } from "../stores.js";
   import { sessionUserInfo } from "../stores.js";
@@ -58,7 +58,7 @@
       </div>
     </div>
   </nav>
-  <Session bind:this={sessionGetter} />
+  <SessionGet bind:this={sessionGetter} />
 </header>
 
 <style>

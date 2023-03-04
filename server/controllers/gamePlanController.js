@@ -125,7 +125,7 @@ export async function updateGame(req, res) {
       gameDuration: gameDuration,
       markers: markers,
     };
-    //const options = { sort: { _id: 1 }, new: true, overwrite: true };
+    //const options = { sort: { _id: 1 }, new: true, overwrite: true }; //overwrites the whole thing
     const options = { sort: { _id: 1 }, new: true };
 
     let updatedGamePlan = await GamePlan.findOneAndUpdate(
@@ -144,9 +144,15 @@ export async function updateGame(req, res) {
 export async function updateMarker(req, res) {
   try {
     const filter = { _id: req.params.id };
-    const { marker } = req.body;
-    const options = { sort: { _id: 1 }, new: true, overwrite: true };
-    let updatedMarker = await Marker.findOneAndUpdate(filter, marker, options);
+    console.log("req.body ", req.body.content.quiz.answers);
+    //const options = { sort: { _id: 1 }, new: true, overwrite: true };  //overwrites the whole thing
+    const options = { sort: { _id: 1 }, new: true };
+    let updatedMarker = await Marker.findOneAndUpdate(
+      filter,
+      req.body,
+      options
+    );
+    console.log("updatedMarker ", updatedMarker);
     res.status(200).send(updatedMarker);
   } catch (error) {
     res.status(500).send({ error: error });
