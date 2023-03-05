@@ -19,7 +19,7 @@
   // Icon properties
   export let size = "2em"; // string | number
   export let ariaHidden = false; // boolean
-
+  let show = false;
   async function deleteGamePlan() {
     const response = await fetch(
       `${baseURL}/game-plan/delete/${$currentGamePlan._id}`,
@@ -117,57 +117,62 @@
       <a href="#/game-plan/game-map/{$currentGamePlan._id}"
         ><h3>Mängu kaart</h3></a
       >
+      <label>
+        <input type="checkbox" bind:checked={show} />
+        Spikker
+      </label>
     </div>
-
-    <div class="info-box">
-      <h4>from STORE $currentGamePlan</h4>
-      <p>Map: {$currentGamePlan.gameMap}</p>
-      <p>ID: {$currentGamePlan._id}</p>
-      <p>OwnerId: {$currentGamePlan.ownerId}</p>
-      <p>Markers:</p>
-      <div>
-        {#each $currentGamePlan.markers as marker}
-          <p>{marker}</p>
-        {/each}
-      </div>
-      <h4>Markers from STORE $currentGamePlanMarkers</h4>
-      <div>
-        {#each Object.entries($currentGamePlanMarkers) as [key, value]}
-          <h4>MARKER {key}:</h4>
-          {#each Object.entries(value) as [key, value]}
-            <h4>{key}:</h4>
-            {#if typeof value !== "string"}
-              {#each Object.entries(value) as [key, value]}
-                <h4>{key}:</h4>
-                {#if typeof value !== "string"}
-                  {#each Object.entries(value) as [key, value]}
-                    <h4>{key}:</h4>
-                    {#if typeof value !== "string"}
-                      {#each Object.entries(value) as [key, value]}
-                        <h4>{key}:</h4>
-                        {#if typeof value !== "string"}
-                          {#each Object.entries(value) as [key, value]}
-                            <p>{key}: {value}</p>
-                          {/each}
-                        {:else}
-                          <p>{value}</p>
-                        {/if}
-                      {/each}
-                    {:else}
-                      <p>{value}</p>
-                    {/if}
-                  {/each}
-                {:else}
-                  <p>{value}</p>
-                {/if}
-              {/each}
-            {:else}
-              <p>{value}</p>
-            {/if}
+    {#if show}
+      <div class="info-box">
+        <h4>from STORE $currentGamePlan</h4>
+        <p>Map: {$currentGamePlan.gameMap}</p>
+        <p>ID: {$currentGamePlan._id}</p>
+        <p>OwnerId: {$currentGamePlan.ownerId}</p>
+        <p>Markers:</p>
+        <div>
+          {#each $currentGamePlan.markers as marker}
+            <p>{marker}</p>
           {/each}
-        {/each}
+        </div>
+        <h4>Markers from STORE $currentGamePlanMarkers</h4>
+        <div>
+          {#each Object.entries($currentGamePlanMarkers) as [key, value]}
+            <h4>MARKER {key}:</h4>
+            {#each Object.entries(value) as [key, value]}
+              <h4>{key}:</h4>
+              {#if typeof value !== "string"}
+                {#each Object.entries(value) as [key, value]}
+                  <h4>{key}:</h4>
+                  {#if typeof value !== "string"}
+                    {#each Object.entries(value) as [key, value]}
+                      <h4>{key}:</h4>
+                      {#if typeof value !== "string"}
+                        {#each Object.entries(value) as [key, value]}
+                          <h4>{key}:</h4>
+                          {#if typeof value !== "string"}
+                            {#each Object.entries(value) as [key, value]}
+                              <p>{key}: {value}</p>
+                            {/each}
+                          {:else}
+                            <p>{value}</p>
+                          {/if}
+                        {/each}
+                      {:else}
+                        <p>{value}</p>
+                      {/if}
+                    {/each}
+                  {:else}
+                    <p>{value}</p>
+                  {/if}
+                {/each}
+              {:else}
+                <p>{value}</p>
+              {/if}
+            {/each}
+          {/each}
+        </div>
       </div>
-    </div>
+    {/if}
   </div>
 {:else}
   <p><Loader /></p>

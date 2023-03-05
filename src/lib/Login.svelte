@@ -51,6 +51,10 @@
   <div class="column-container">
     <div class="login-form">
       <h3>Logige sisse</h3>
+      <div class="spikker">
+        <span>toomas@toomas.com</span><br />
+        <span>toomastoomas</span>
+      </div>
       <form action="" method="post">
         <div class="login-container">
           <input
@@ -84,4 +88,7 @@
 </div>
 
 <style>
+  .spikker {
+    font-size: 1rem;
+  }
 </style>

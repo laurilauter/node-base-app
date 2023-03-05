@@ -142,6 +142,7 @@ export async function updateGame(req, res) {
 
 //must not update the gamePlanId
 export async function updateMarker(req, res) {
+  console.log("req.body ", req.body);
   try {
     const filter = { _id: req.params.id };
     //const options = { sort: { _id: 1 }, new: true, overwrite: true };  //overwrites the whole thing

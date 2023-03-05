@@ -10,10 +10,10 @@
   import MapFrame from "./MapFrame.svelte";
   import MapPlus from "svelte-material-icons/MapPlus.svelte";
   import { fade } from "svelte/transition";
-  export let params = {};
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
 
+  export let params = {};
   // Icon properties
   export let size = "3em"; // string | number
   export let ariaHidden = false; // boolean
@@ -22,10 +22,14 @@
   let gamePlanMarkerGetter;
 
   let m = { x: 0, y: 0 };
-
+  let marekerKey = 0;
   function handleMousemove(event) {
-    m.x = event.clientX;
-    m.y = event.clientY;
+    m.x = event.offsetX;
+    m.y = event.offsetY;
+  }
+
+  function handleRadio(key) {
+    marekerKey = key;
   }
 
   //let gamePlan;
@@ -33,6 +37,7 @@
 
   let statusCode;
 
+  //image upload
   async function handleSubmit() {
     const locationParts = $currentGamePlanLink.location.split("/");
     if (input.files.length > 0) {
@@ -52,52 +57,30 @@
     }
   }
 
-  function submit(field) {
+  function handleMapClick(field) {
+    console.log("marekerKey ", marekerKey);
+    console.log("m.x ", m.x);
+    console.log("m.y ", m.y);
     return ({ detail: newValue }) => {
-      const fragments = field.split("-");
-      console.log("fragments ", fragments);
       console.log("newValue ", newValue);
-
-      // if (fragments[0] === "question") {
-      //   $currentGamePlanMarkers[fragments[1]].content.quiz.question = newValue;
-      // } else if (fragments[0] === "answer" && fragments.length > 2) {
-      //   $currentGamePlanMarkers[fragments[1]].content.quiz.answers[
-      //     fragments[2]
-      //   ].text = newValue;
-      // } else if (fragments[0] === "check" && fragments.length > 2) {
-      //   let toggle =
-      //     $currentGamePlanMarkers[fragments[1]].content.quiz.answers[
-      //       fragments[2]
-      //     ].isCorrect;
-      //   $currentGamePlanMarkers[fragments[1]].content.quiz.answers[
-      //     fragments[2]
-      //   ].isCorrect = !toggle;
-      // } else if (fragments[0] === "addanswer") {
-      //   $currentGamePlanMarkers[fragments[1]].content.quiz.answers.push({
-      //     text: "vastus",
-      //     isCorrect: true,
-      //   });
-      // } else if (fragments[0] === "removeanswer" && fragments.length > 2) {
-      //   $currentGamePlanMarkers[fragments[1]].content.quiz.answers.splice(
-      //     fragments[2],
-      //     1
-      //   );
-      // }
-      console.log("store after submit ", $currentGamePlanMarkers[fragments[1]]);
+      console.log(
+        "$currentGamePlanMarkers[marekerKey] ",
+        $currentGamePlanMarkers[marekerKey]
+      );
+      $currentGamePlanMarkers[marekerKey].content.position.x = m.x;
+      $currentGamePlanMarkers[marekerKey].content.position.y = m.y;
 
       (async () => {
         try {
           const response = await fetch(
-            `${baseURL}/game-plan/update-marker/${
-              $currentGamePlanMarkers[fragments[1]]._id
-            }`,
+            `${baseURL}/game-plan/update-marker/${$currentGamePlanMarkers[marekerKey]._id}`,
             {
               method: "PATCH",
               credentials: "include",
               headers: {
                 "content-type": "application/json",
               },
-              body: JSON.stringify($currentGamePlanMarkers[fragments[1]]),
+              body: JSON.stringify($currentGamePlanMarkers[marekerKey]),
             }
           );
           let updatedGamePlanMarker = await response.json();
@@ -133,37 +116,44 @@
         />
       </label>
     </div>
-
-    <!-- <MapFrame mapMarkers={gamePlan.markers}>
-      <img src="{baseURL}/uploads/{gamePlan.gameMap}" alt="map" />
-      </MapFrame> -->
     <div class="map-row-container">
       <div class="map-box">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="map-inner-box"
-          style="background-image: url({baseURL}/uploads/{$currentGamePlan.gameMap}); object-fit: conscale-down; background-repeat: no-repeat; width: 600px; height: auto;"
           on:mousemove={handleMousemove}
+          on:click={handleMapClick("map-click")}
         >
-          <h3>
+          <p>
             The mouse position is {m.x} x {m.y}
-          </h3>
-          <!-- CRIOP THE THING IN BE -->
-          <!-- <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" /> -->
+          </p>
+          <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" />
+          {#each Object.entries($currentGamePlanMarkers) as [key, value]}
+            <div
+              class="image-marker"
+              style="top: {value.content.position.y - 20}px; left: {value
+                .content.position.x - 20}px;"
+            >
+              {value.title}
+            </div>
+          {/each}
         </div>
       </div>
       <div class="info-box">
+        <h3>Vali küsimus ja määra talle asukoht kaardil klikates.</h3>
         {#each Object.entries($currentGamePlanMarkers) as [key, value]}
           <input
             type="radio"
+            name="radio"
             id={value._id}
+            group={key}
             bind:value={key}
-            on:change={submit(`mouse-${key}`)}
+            on:change={handleRadio(key)}
           />
           <!-- Need to know KEY and New X and Y -->
-          <label for={value._id}
-            >{value.title} - {value.content.quiz.question}</label
-          >
-          <p>_id: {value._id}</p>
+          <label for={value._id}>
+            {value.title} - {value.content.quiz.question}
+          </label>
           <h4>x: {value.content.position.x} y: {value.content.position.y}</h4>
         {/each}
       </div>
@@ -177,32 +167,38 @@
 <GamePlanMarkersGet bind:this={gamePlanMarkerGetter} />
 
 <style>
-  /* img {
+  img {
     width: 100%;
     height: auto;
     object-fit: cover;
-    border-radius: 8px;
-    border: none;
-  } */
+    border-radius: 9px;
+    /* border: 1px solid green; */
+  }
 
   .map-box {
     margin: 10px;
     border: none;
-    border-radius: 9px;
-    width: 600px;
-    height: 600px;
+    max-width: 600px;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    /* border: 1px solid blue; */
   }
   .map-inner-box {
-    border-radius: 9px;
     min-width: 100%;
     min-height: 100%;
+    position: relative;
+    border: none;
+    /* border: 1px solid yellow; */
   }
 
-  .map-inner-box > h3 {
+  .map-inner-box > p {
     color: black;
+    top: -15px;
+    left: 20px;
+    position: absolute;
   }
 
   .map-row-container {
@@ -214,12 +210,25 @@
     align-items: top;
   }
 
+  .image-marker {
+    position: absolute;
+    color: green;
+    border: 3px solid green;
+    background-color: rgb(142, 200, 142);
+    opacity: 0.8;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .info-box {
     margin: 10px;
-    font-size: 0.7rem;
     border: 1px solid var(--main-color);
     border-radius: 9px;
-    min-width: 560px;
+    max-width: 560px;
     height: auto;
     padding: 20px;
   }

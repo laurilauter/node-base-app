@@ -155,7 +155,7 @@
       {#each Object.entries($currentGamePlanMarkers) as [key, value]}
         <div class="question-container">
           <div class="question-box">
-            <div class="row-container">
+            <div class="row-container-question">
               <div class="question-title">
                 <span>{parseInt(key) + 1}</span>
                 <!-- <span>{value.title}</span> -->
@@ -168,17 +168,17 @@
                   />
                 </span>
               </div>
-            </div>
-            <div class="question-box-trash">
-              <span
-                class="link-button"
-                on:click={removeQuestion(value._id)}
-                on:keypress
-              >
-                <span>
-                  <TrashCanOutline size={"2rem"} ariaHidden={false} />
+              <div class="question-box-trash">
+                <span
+                  class="link-button"
+                  on:click={removeQuestion(value._id)}
+                  on:keypress
+                >
+                  <span>
+                    <TrashCanOutline size={"2rem"} ariaHidden={false} />
+                  </span>
                 </span>
-              </span>
+              </div>
             </div>
           </div>
           <div class="answers-container">
@@ -261,6 +261,17 @@
     min-width: 24px;
     height: auto;
     font-weight: 900;
+  }
+
+  .row-container-question {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    height: auto;
+    min-width: 100%;
   }
 
   .add-answer {
