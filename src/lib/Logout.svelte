@@ -4,12 +4,16 @@
 </script>
 
 <div class="row-container">
-  <slot />
-  <button class="link-button" on:click={logOutGetter.logout()}
-    >Logi välja</button
-  >
-  <LogOutFunc bind:this={logOutGetter} />
+  <div>
+    <slot />
+  </div>
+  <div>
+    <button class="link-button" on:click={logOutGetter.logout()}
+      >Logi välja</button
+    >
+  </div>
 </div>
+<LogOutFunc bind:this={logOutGetter} />
 
 <style>
 </style>

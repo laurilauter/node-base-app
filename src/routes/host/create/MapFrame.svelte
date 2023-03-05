@@ -1,12 +1,23 @@
-<div class="box">
+<script>
+  export let mapMarkers;
+</script>
+
+<div class="map-box">
   <slot />
+</div>
+<div>
+  {#each mapMarkers as marker}
+    <p>{marker}</p>
+  {:else}
+    <h3>Küsimused puuduvad</h3>
+  {/each}
 </div>
 
 <style>
-  .box {
-    border: 1px solid grey;
+  .map-box {
+    border: none;
     border-radius: 9px;
-    max-width: 90%;
+    max-width: 600px;
     height: auto;
     display: flex;
     flex-direction: column;

@@ -144,7 +144,6 @@ export async function updateGame(req, res) {
 export async function updateMarker(req, res) {
   try {
     const filter = { _id: req.params.id };
-    console.log("req.body ", req.body.content.quiz.answers);
     //const options = { sort: { _id: 1 }, new: true, overwrite: true };  //overwrites the whole thing
     const options = { sort: { _id: 1 }, new: true };
     let updatedMarker = await Marker.findOneAndUpdate(

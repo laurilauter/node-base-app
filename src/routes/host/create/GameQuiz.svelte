@@ -7,6 +7,7 @@
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
   import GamePlanGet from "../../../lib/utilities/GamePlanGet.svelte";
+  import GamePlanMarkersGet from "../../../lib/utilities/GamePlanMarkersGet.svelte";
   import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
   import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
@@ -14,6 +15,7 @@
   import { currentGamePlanMarkers } from "../../../stores.js";
 
   let gamePlanGetter;
+  let gamePlanMarkerGetter;
   let checked;
   export let params = {};
 
@@ -59,7 +61,7 @@
 
     const responseData = await response.json();
     console.log("responseData at ADD QUESTION", responseData);
-    getQuestions(params.id);
+    gamePlanMarkerGetter.getGamePlanMarkers(params.id);
   }
 
   async function removeQuestion(markerId) {
@@ -78,7 +80,7 @@
     );
 
     console.log("delete response ", response);
-    getQuestions(params.id);
+    gamePlanMarkerGetter.getGamePlanMarkers(params.id);
   }
 
   function submit(field) {
@@ -134,20 +136,14 @@
         } catch (error) {
           console.log({ error: error });
         }
-        await getQuestions(params.id);
+        gamePlanMarkerGetter.getGamePlanMarkers(params.id);
       })();
     };
   }
 
-  async function getQuestions(id) {
-    const response = await fetch(`${baseURL}/game-plan/markers/${id}`);
-    $currentGamePlanMarkers = await response.json();
-    console.log("$currentGamePlanMarkers ", $currentGamePlanMarkers);
-  }
-
   onMount(async () => {
     await gamePlanGetter.getGamePlan(params.id);
-    await getQuestions(params.id);
+    await gamePlanMarkerGetter.getGamePlanMarkers(params.id);
   });
 </script>
 
@@ -239,6 +235,7 @@
   <PlusCircleOutline size={"3rem"} ariaHidden={false} />
 </span>
 <GamePlanGet bind:this={gamePlanGetter} />
+<GamePlanMarkersGet bind:this={gamePlanMarkerGetter} />
 
 <style>
   .question-container {
@@ -250,6 +247,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .question-box-trash {
+    max-width: 65px;
   }
 
   .question-title {

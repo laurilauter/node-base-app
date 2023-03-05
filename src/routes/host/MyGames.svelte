@@ -5,6 +5,7 @@
   import { fade } from "svelte/transition";
   import { isUserLoggedIn } from "../../stores.js";
   import { sessionUserInfo } from "../../stores.js";
+  import { currentGamePlanMarkers } from "../../stores.js";
   import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
 
   // Icon properties
@@ -24,6 +25,7 @@
 
   onMount(async () => {
     getGamePlans();
+    $currentGamePlanMarkers = [];
   });
 
   async function addGamePlan() {
