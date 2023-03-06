@@ -80,6 +80,7 @@
     padding-left: 0;
   }
   li {
-    margin: 10px;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
   }
 </style>

@@ -112,11 +112,12 @@
       </div>
 
       <a href="#/game-plan/game-quiz/{$currentGamePlan._id}"
-        ><h3 class="bold">Mängu küsimused</h3></a
+        ><h3 class="menu-list-item">Mängu küsimused</h3></a
       >
       <a href="#/game-plan/game-map/{$currentGamePlan._id}"
-        ><h3>Mängu kaart</h3></a
+        ><h3 class="menu-list-item">Mängu kaart</h3></a
       >
+
       <label>
         <input type="checkbox" bind:checked={show} />
         Igavad andmed
@@ -220,5 +221,10 @@
     border: 1px solid var(--main-color);
     border-radius: 9px;
     min-width: 320px;
+  }
+
+  .menu-list-item {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
   }
 </style>

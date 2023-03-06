@@ -1,21 +1,64 @@
+<script>
+  import baseURL from "./../../lib/utilities/baseUrl";
+  import SessionGet from "./../../lib/utilities/SessionGet.svelte";
+  import { sessionUserInfo } from "../../stores.js";
+  import { onMount } from "svelte";
+  import Select from "./play//Select.svelte";
+
+  let selected;
+  let userGamePlans;
+  let sessionGetter;
+  let yes;
+  function say() {
+    yes = selected.gameTitle;
+  }
+  async function getGamePlans() {
+    try {
+      const response = await fetch(
+        `${baseURL}/game-plan/list/${$sessionUserInfo.id}`
+      );
+      let gamePlanList = await response.json();
+
+      userGamePlans = gamePlanList;
+      console.log("userGamePlans ", userGamePlans);
+    } catch (error) {
+      console.log({ error: error });
+    }
+  }
+
+  onMount(async () => {
+    await sessionGetter.getSession();
+    getGamePlans();
+  });
+</script>
+
 <div>
   <h1>Jooksev mäng</h1>
+  <p>Valmi mänuplaan ja alusta mängu.</p>
 
-  <p>
-    This sample shows how to set up the router with minimum functionality. <br
-    />
-    The route definition object contains a number of routes (including some with
-    parameters and a catch-all at the end).<br />
-    The links below allow navigating between pages.
-  </p>
-
-  <p>This is the Home component, which contains markup only.</p>
-
-  <p>
-    <em>Hint:</em> Try navigating with the links below, then use your browser's back
-    and forward buttons.
-  </p>
+  <Select
+    options={userGamePlans}
+    display_func={(o) => o.gameTitle}
+    bind:value={selected}
+  />
+  <br />
+  {JSON.stringify(selected, null, 2)}
+  <br />
+  {(console.log(selected), "")}
 </div>
+<br />
+
+<div>
+  <label for="appt">Vali möngu lõpuaeg:</label>
+  <input type="time" id="appt" name="appt" required />
+</div>
+
+<button on:click={say}>Alusta</button>
+<h2>
+  {yes}
+</h2>
+
+<SessionGet bind:this={sessionGetter} />
 
 <style>
 </style>
