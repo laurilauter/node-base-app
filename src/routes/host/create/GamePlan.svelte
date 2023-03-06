@@ -119,7 +119,7 @@
       >
       <label>
         <input type="checkbox" bind:checked={show} />
-        Spikker
+        Igavad andmed
       </label>
     </div>
     {#if show}

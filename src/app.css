@@ -98,7 +98,7 @@ button:hover {
   color: var(--link-color);
   border-radius: 0;
   border: 0px solid transparent;
-  padding: 0.6em 1.2em;
+  margin: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -122,6 +122,16 @@ input[type="password"] {
   border: 1px solid var(--input-border-color);
   box-sizing: border-box;
   border-radius: 9px;
+}
+
+.link-text {
+  color: var(--link-color);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.link-text:hover {
+  color: var(--link-hover-color);
 }
 
 #app {

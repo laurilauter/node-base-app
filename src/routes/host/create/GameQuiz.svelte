@@ -147,7 +147,8 @@
   });
 </script>
 
-<h1>Mängu küsimused</h1>
+<h2>Mängu küsimused</h2>
+<p>Klikka küsimustel ja vastustel, et neid muuta.</p>
 
 {#if $currentGamePlanMarkers}
   <div class="column-container" in:fade={{ duration: 1000 }}>
@@ -161,7 +162,7 @@
                 <!-- <span>{value.title}</span> -->
               </div>
               <div>
-                <span>
+                <span class="link-text">
                   <InPlaceEdit
                     bind:value={value.content.quiz.question}
                     on:submit={submit(`question-${key}`)}
@@ -184,7 +185,7 @@
           <div class="answers-container">
             {#each Object.entries(value.content.quiz.answers) as [answersKey, answersValue]}
               <div class="answer">
-                <div class="answer-ckh-txt">
+                <div class="answer-ckh-txt link-text">
                   <div>
                     <input
                       type="checkbox"
@@ -201,7 +202,7 @@
                     />
                   </label>
                 </div>
-                <div>
+                <div class="answer-trash">
                   <span
                     class="link-button"
                     on:click={submit(`removeanswer-${key}-${answersKey}`)}
@@ -250,7 +251,9 @@
   }
 
   .question-box-trash {
-    max-width: 65px;
+    display: flex;
+    text-align: center;
+    width: 65px;
   }
 
   .question-title {
@@ -283,7 +286,7 @@
   }
 
   .add-answer > span {
-    margin-left: -19px;
+    margin-left: 0px;
   }
 
   .answer {
@@ -292,7 +295,13 @@
   }
 
   .answer-ckh-txt {
+    padding: 10px 0 10px 0;
     display: flex;
     justify-content: space-between;
+  }
+
+  .answer-trash {
+    display: flex;
+    text-align: center;
   }
 </style>

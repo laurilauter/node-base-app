@@ -103,7 +103,7 @@
   <div class="column-container" in:fade={{ duration: 1000 }}>
     <!-- {statusCode} -->
     <div class="row-container">
-      <h1>Mängu kaart</h1>
+      <h2>Mängu kaart</h2>
       <label>
         <span class="link-button">
           <MapPlus {size} {ariaHidden} />
@@ -140,7 +140,7 @@
         </div>
       </div>
       <div class="info-box">
-        <h3>Vali küsimus ja määra talle asukoht kaardil klikates.</h3>
+        <h4>Vali küsimus ja määra talle asukoht kaardil klikates.</h4>
         {#each Object.entries($currentGamePlanMarkers) as [key, value]}
           <input
             type="radio"
@@ -176,10 +176,10 @@
   }
 
   .map-box {
-    margin: 10px;
+    margin: 0px;
     border: none;
-    max-width: 600px;
-    height: auto;
+    width: 360px;
+    height: 360px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -225,11 +225,11 @@
   }
 
   .info-box {
-    margin: 10px;
-    border: 1px solid var(--main-color);
+    margin: 0px;
+    /* border: 1px solid var(--main-color); */
     border-radius: 9px;
     max-width: 560px;
     height: auto;
-    padding: 20px;
+    padding: 10px;
   }
 </style>

@@ -30,6 +30,7 @@ export async function activateGame(req, res) {
     const { gamePlanId } = req.body;
     let foundGamePlan = await GamePlan.findOne({ _id: gamePlanId });
     if (foundGamePlan) {
+      //check if a game is runnning with the same game plan and owner, if not continue
       let foundGame = await Game.findOne({
         gameOwnerId: foundGamePlan.ownerId,
       });
