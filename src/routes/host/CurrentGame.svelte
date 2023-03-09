@@ -34,7 +34,7 @@
 
 <div>
   <h1>Jooksev mäng</h1>
-  <p>Valmi mänuplaan ja alusta mängu.</p>
+  <p>Valmi mänugplaan ja alusta mängu.</p>
 
   <Select
     options={userGamePlans}
@@ -53,7 +53,7 @@
   <input type="time" id="appt" name="appt" required />
 </div>
 
-<button on:click={say}>Alusta</button>
+<button class="alusta-btn" on:click={say}>Alusta</button>
 <h2>
   {yes}
 </h2>
@@ -61,4 +61,7 @@
 <SessionGet bind:this={sessionGetter} />
 
 <style>
+  .alusta-btn {
+    max-width: 160px;
+  }
 </style>

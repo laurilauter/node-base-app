@@ -11,6 +11,7 @@
   import GamePlanGet from "../../../lib/utilities/GamePlanGet.svelte";
   import GamePlanMarkersGet from "../../../lib/utilities/GamePlanMarkersGet.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
+  import Pencil from "svelte-material-icons/Pencil.svelte";
   import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
   export let params = {};
 
@@ -85,7 +86,9 @@
             <InPlaceEdit
               bind:value={$currentGamePlan.gameTitle}
               on:submit={submit("title")}
-            />
+            >
+              <Pencil size={"2rem"} ariaHidden={false} />
+            </InPlaceEdit>
           </h2>
         </div>
 

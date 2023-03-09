@@ -51,6 +51,9 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class="value-div" on:click={edit}>
     {value}
+    <span>
+      <slot />
+    </span>
   </div>
 {/if}
 
@@ -61,6 +64,11 @@
   .value-div {
     margin: 0 5px 0 5px;
   }
+
+  .value-div > span {
+    margin-left: 5px;
+  }
+
   input {
     width: 100%;
     border: none;

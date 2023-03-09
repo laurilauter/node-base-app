@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const ActiveGameSchema = new Schema({
   gamePlan: { type: GamePlan.schema },
-  gameStartTime: { type: Date, required: true },
+  gameStartTime: { type: Date },
   gameEndTime: { type: Date, required: true },
   players: { type: [Player.schema] }, //array  of player ids?
 });

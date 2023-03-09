@@ -16,7 +16,7 @@
   let sessionGetter;
 
   onMount(async () => {
-    sessionGetter.getSession();
+    await sessionGetter.getSession();
   });
 </script>
 

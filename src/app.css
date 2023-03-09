@@ -64,16 +64,31 @@ a:hover {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  font-weight: 500;
 }
 
 h2 {
   font-size: 2.2em;
   line-height: 1.1;
+  font-weight: 400;
 }
 
 h3 {
   font-size: 1.6em;
   line-height: 1.1;
+  font-weight: 400;
+}
+
+h4 {
+  font-size: 1.2em;
+  line-height: 1.1;
+  font-weight: 400;
+}
+
+h5 {
+  font-size: 1em;
+  line-height: 1.1;
+  font-weight: 400;
 }
 
 /* Set a style for all buttons */
@@ -100,7 +115,7 @@ button:hover {
   border: 0px solid transparent;
   margin: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 400;
   font-family: inherit;
   background-color: transparent;
   cursor: pointer;

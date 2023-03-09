@@ -10,6 +10,7 @@
   import GamePlanMarkersGet from "../../../lib/utilities/GamePlanMarkersGet.svelte";
   import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
+  import Pencil from "svelte-material-icons/Pencil.svelte";
   import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
   import { currentGamePlan } from "../../../stores.js";
   import { currentGamePlanMarkers } from "../../../stores.js";
@@ -166,7 +167,9 @@
                   <InPlaceEdit
                     bind:value={value.content.quiz.question}
                     on:submit={submit(`question-${key}`)}
-                  />
+                  >
+                    <Pencil size={"2rem"} ariaHidden={false} />
+                  </InPlaceEdit>
                 </span>
               </div>
               <div class="question-box-trash">
@@ -199,10 +202,19 @@
                     <InPlaceEdit
                       bind:value={answersValue.text}
                       on:submit={submit(`answer-${key}-${answersKey}`)}
-                    />
+                    >
+                      <Pencil size={"1rem"} ariaHidden={false} />
+                      <span
+                        class="answer-link-button"
+                        on:click={submit(`removeanswer-${key}-${answersKey}`)}
+                        on:keypress
+                      >
+                        <TrashCanOutline size={"1rem"} ariaHidden={false} />
+                      </span>
+                    </InPlaceEdit>
                   </label>
                 </div>
-                <div class="answer-trash">
+                <!-- <div class="answer-trash">
                   <span
                     class="link-button"
                     on:click={submit(`removeanswer-${key}-${answersKey}`)}
@@ -210,7 +222,7 @@
                   >
                     <TrashCanOutline size={"1.4rem"} ariaHidden={false} />
                   </span>
-                </div>
+                </div> -->
               </div>
             {/each}
             <div class="add-answer">
@@ -300,8 +312,29 @@
     justify-content: space-between;
   }
 
-  .answer-trash {
+  .answer-ckh-txt > label,
+  input {
+    cursor: pointer;
+  }
+
+  /* .answer-trash {
     display: flex;
     text-align: center;
+  } */
+
+  .answer-link-button {
+    color: var(--link-color);
+    border-radius: 0;
+    border: 0px solid transparent;
+    margin-left: 0.2em;
+    font-size: 1em;
+    font-weight: 400;
+    font-family: inherit;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  .answer-link-button:hover {
+    color: var(--link-hover-color);
   }
 </style>

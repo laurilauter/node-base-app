@@ -14,7 +14,8 @@ class ActiveGame {
   players = [];
 
   constructor(gamePlan) {
-    this.gameId = crypto.randomUUID();
+    const n = crypto.randomInt(0, 10000);
+    this.gameId = n.toString().padStart(4, "0");
     this.gamePlan = gamePlan;
     this.gameOwnerId = gamePlan.ownerId;
     this.duaration = gamePlan.gameDuration;
@@ -41,7 +42,7 @@ class ActiveGame {
       gameStartTime: now,
       gameEndTime: now.add(this.duaration, "minutes"),
     };
-    const options = { sort: { _id: 1 }, new: true, overwrite: true };
+    const options = { sort: { _id: 1 }, new: true };
 
     try {
       await Game.findOneAndUpdate(filter, update, options);
