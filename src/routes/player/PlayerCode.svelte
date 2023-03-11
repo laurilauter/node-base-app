@@ -9,7 +9,7 @@
 
   function toStart() {
     if (code) {
-      push("/player-start/:id");
+      push(`/player-start/${code}`);
     }
   }
 </script>

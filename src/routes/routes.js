@@ -97,9 +97,7 @@ export default {
   //player routes
   "/player-code": PlayerCode,
   "/player-start/:id": PlayerStart,
-  "/player": Dashboard,
-  "/player/*": Dashboard,
-  "/player/map-view": MapView,
+  "/player/map-view/:id": MapView,
   "/player/question-view": QuestionView,
 
   //THESE ARE EXAMPLES BELOW

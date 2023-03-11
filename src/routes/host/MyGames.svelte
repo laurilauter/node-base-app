@@ -13,7 +13,7 @@
   export let ariaHidden = false; // boolean
 
   let gamePlans = [];
-  //THIS LISTS GAMES FROM ALL USERS !!
+
   async function getGamePlans() {
     const response = await fetch(
       `${baseURL}/game-plan/list/${$sessionUserInfo.id}`
@@ -39,7 +39,6 @@
         gameTitle: "Mängu Nimi",
         gameMap: "testmap.png",
         ownerId: $sessionUserInfo.id,
-        gameDuration: 45,
         markers: [],
       }),
     });

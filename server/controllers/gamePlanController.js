@@ -10,13 +10,12 @@ const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 export async function createGame(req, res) {
   try {
-    const { gameTitle, gameMap, ownerId, gameDuration } = req.body;
+    const { gameTitle, gameMap, ownerId } = req.body;
     if (gameTitle && ownerId) {
       const newGamePlanData = {
         gameTitle: gameTitle,
         gameMap: gameMap,
         ownerId: ownerId,
-        gameDuration: gameDuration,
         markers: [],
       };
 
@@ -117,12 +116,11 @@ export async function getMarkers(req, res) {
 export async function updateGame(req, res) {
   try {
     const filter = { _id: req.params.id };
-    const { gameTitle, ownerId, gameMap, gameDuration, markers } = req.body;
+    const { gameTitle, ownerId, gameMap, markers } = req.body;
     const update = {
       gameTitle: gameTitle,
       gameMap: gameMap,
       ownerId: ownerId,
-      gameDuration: gameDuration,
       markers: markers,
     };
     //const options = { sort: { _id: 1 }, new: true, overwrite: true }; //overwrites the whole thing

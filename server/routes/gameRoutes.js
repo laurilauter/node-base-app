@@ -12,4 +12,10 @@ gameRouter.post("/sharejoinlink", gameController.shareJoinLink);
 
 gameRouter.post("/playerjoin", gameController.playerJoin);
 
+gameRouter.get("/info/:id", gameController.getGame);
+
+gameRouter.get("/players/:id", gameController.getPlayers);
+
+gameRouter.get("/end/:id", gameController.endGame);
+
 export default gameRouter;

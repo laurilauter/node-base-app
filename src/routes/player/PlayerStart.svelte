@@ -1,44 +1,59 @@
 <script>
   import baseURL from "../../lib/utilities/baseUrl";
+  import { onMount } from "svelte";
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";
+  import { playerName } from "../../stores.js";
   export let params = {};
 
   let name;
-  let message;
   let error;
+  let player;
+  let currentGame;
+  let code;
 
-  async function startGame() {
+  async function joinGame() {
     const response = await fetch(`${baseURL}/game/playerjoin`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        gameId: params,
+        gameCode: params.id,
         name: name,
       }),
     });
 
     const responseData = await response.json();
-    //responseData = JSON.stringify(json);
-    message = responseData.message;
     error = responseData.error;
-    console.log("message ", message);
+    player = responseData.player;
 
-    //Send gameInfo from BE. Store this on LocalStorage, so that when the player
-    //follows the joinGame link again then name is taken from LocalStorage and
-    //if the BE tells the game is still on then the player can continue current game
-
-    // if (session) {
-    //   console.log("in");
-    //   $isUserLoggedIn = true;
-    //   replace("/dashboard");
-    // } else {
-    //   $isUserLoggedIn = false;
-    // }
-    // console.log("isUserLoggedIn Login afterSession  ", $isUserLoggedIn);
+    if (player) {
+      //save data to localstorage, to recognize the player
+      localStorage.setItem("player", JSON.stringify(player.name));
+      localStorage.setItem("game", JSON.stringify(player.gameCode));
+      //save player name to storage to trigger header in map view
+      $playerName = player.name;
+      push(`/player/map-view/${code}`);
+    }
   }
+
+  async function getGameInfo() {
+    try {
+      const response = await fetch(`${baseURL}/game/info/${params.id}`);
+      const responseData = await response.json();
+      currentGame = responseData.currentGame;
+      code = currentGame.gameCode;
+      console.log("currentGame", currentGame.gameCode);
+      error = responseData.error;
+    } catch (error) {
+      console.log({ error: error });
+    }
+  }
+
+  onMount(async () => {
+    getGameInfo();
+  });
 </script>
 
 <div class="row-container">
@@ -55,17 +70,19 @@
             bind:value={name}
             required
           />
-          <button type="button" id="login-button" on:click={startGame}
+          <button type="button" id="login-button" on:click={joinGame}
             >Alusta</button
           >
+          {#if params.id === code}
+            <h3>Mäng {currentGame.gameCode} leitud!</h3>
+          {:else}
+            <h3>Mängu {params.id} ei leitud!</h3>
+          {/if}
           <p>
-            {#if params.id}
-              {params.id}
-            {/if}
-          </p>
-          <p>
-            {#if message}
-              {message}
+            {#if player}
+              <p>code: {player.gameCode}</p>
+              <p>name: {player.name}</p>
+              <p>_id: {player._id}</p>
             {/if}
           </p>
           <p>

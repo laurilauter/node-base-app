@@ -4,62 +4,66 @@ import crypto from "crypto";
 import moment from "moment";
 
 class ActiveGame {
-  gameId;
-  gameOwnerId;
   gamePlan;
-  isGameActive;
-  isGameArchived = false; //cant be unpaused, will only show in archived games
-  isStarted = false;
-  duaration;
+  gameCode;
+  gameOwnerId;
+  gameStatus;
+  gameStartTime;
+  gameEndTime;
   players = [];
 
   constructor(gamePlan) {
-    const n = crypto.randomInt(0, 10000);
-    this.gameId = n.toString().padStart(4, "0");
     this.gamePlan = gamePlan;
+    const n = crypto.randomInt(0, 10000);
+    this.gameCode = n.toString().padStart(4, "0");
     this.gameOwnerId = gamePlan.ownerId;
-    this.duaration = gamePlan.gameDuration;
-    this.isGameActive = true;
+    this.gameStatus = "activated";
+    this.gameStartTime = null;
+    this.gameEndTime = null;
     this.saveActiveGame(gamePlan);
   }
 
-  get getIsGameActivated() {
-    return this.isGameActive;
+  get getGameStatus() {
+    return this.gameStatus;
   }
 
-  get getActiveGameId() {
-    return this.gameId;
+  get getActiveGameCode() {
+    return this.gameCode;
   }
 
   get getActiveGameOwnerId() {
-    return this.gameId.ownerId;
+    return this.gameOwnerId;
   }
 
-  async startGame() {
-    const filter = { _id: this.gameId };
+  async startGame(gameEndTime) {
+    //figure out how to pass a meaningful end time
+    const filter = { _id: this.gameCode };
     const now = moment();
     const update = {
       gameStartTime: now,
-      gameEndTime: now.add(this.duaration, "minutes"),
+      gameEndTime: gameEndTime,
+      gameStatus: "started",
     };
     const options = { sort: { _id: 1 }, new: true };
 
     try {
       await Game.findOneAndUpdate(filter, update, options);
-      this.isStarted = true;
+      this.gameStatus = "started";
     } catch (error) {
       console.log(error);
     }
   }
 
+  //saves the ActiveGame instance in DB upon creation
   async saveActiveGame(gamePlan) {
     const newGameData = {
       gamePlan: gamePlan,
-      gameId: this.gameId,
+      gameCode: this.gameCode,
       gameOwnerId: this.gameOwnerId,
-      gameStartTime: null,
-      gameEndTime: null,
-      players: [],
+      gameStartTime: this.gameStartTime,
+      gameEndTime: this.gameEndTime,
+      gameStatus: this.gameStatus,
+      players: this.players,
     };
     try {
       await Game.create(newGameData);

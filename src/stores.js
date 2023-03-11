@@ -15,9 +15,18 @@ export const currentGamePlan = writable({
   gameTitle: "",
   gameMap: "",
   ownerId: "",
-  gameDuration: "",
   markers: "",
 });
 export const currentGamePlanMarkers = writable([]);
+//Game
+export const currentJoinLink = writable();
+export const currentGame = writable({
+  _id: "",
+  gameStatus: "none",
+  gameCode: "",
+  players: [],
+});
+export const currentPlayers = writable([]);
+
 //player
 export const playerName = writable();

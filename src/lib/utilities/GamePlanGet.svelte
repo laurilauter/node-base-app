@@ -19,7 +19,6 @@
         gameTitle: gamePlan.gameTitle,
         gameMap: gamePlan.gameMap,
         ownerId: gamePlan.ownerId,
-        gameDuration: gamePlan.gameDuration,
         markers: gamePlan.markers,
       };
     } catch (error) {

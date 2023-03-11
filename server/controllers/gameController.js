@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { GamePlan } from "../db/dbConnection.js";
 import { Game } from "../db/dbConnection.js";
+import { Player } from "../db/dbConnection.js";
 import ActiveGame from "../classes/ActiveGame.js";
 
 let client_url = "http://localhost:5173";
@@ -30,24 +31,12 @@ export async function activateGame(req, res) {
     const { gamePlanId } = req.body;
     let foundGamePlan = await GamePlan.findOne({ _id: gamePlanId });
     if (foundGamePlan) {
-      //check if a game is runnning with the same game plan and owner, if not continue
-      let foundGame = await Game.findOne({
-        gameOwnerId: foundGamePlan.ownerId,
+      currentGame = new ActiveGame(foundGamePlan);
+      //make this link a QR code for the game master in the client
+      console.log("Game activated");
+      res.status(200).send({
+        joinUrl: client_url + "/#/player-start/" + currentGame.gameCode,
       });
-      if (!foundGame) {
-        currentGame = new ActiveGame(foundGamePlan);
-        //make this link a QR code for the game master in the client
-        res.status(200).send({
-          //message: "join link here",
-          joinUrl: client_url + "/start/" + currentGame.gameId,
-          //this could be a separate endpoint in case the owner needs
-          //to get the link again without relaunching the game
-        });
-      } else {
-        res
-          .status(400)
-          .send({ error: "The user is already hosting this game" });
-      }
     } else {
       res.status(404).send({ error: "Game Plan not found" });
     }
@@ -58,14 +47,30 @@ export async function activateGame(req, res) {
 
 export async function shareJoinLink(req, res) {
   try {
-    const { gameId } = req.body;
-    let foundGame = await Game.findOne({ gameId: gameId });
+    const { gameCode } = req.body;
+    let foundGame = await Game.findOne({ gameCode: gameCode });
     if (foundGame) {
       res.status(200).send({
-        joinUrl: client_url + "/start/" + foundGame.gameId,
-        //this could be a separate endpoint in case the owner needs
-        //to get the link again without relaunching the game
+        joinUrl: client_url + "/#/player-start/" + currentGame.gameCode,
       });
+    } else {
+      res.status(404).send({ error: "Game not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+export async function getGame(req, res) {
+  try {
+    const filter = { gameCode: req.params.id };
+    let currentGame = await Game.findOne(filter);
+    if (currentGame) {
+      if (currentGame.gameStatus === "activated") {
+        res.status(200).send({ currentGame: currentGame });
+      } else {
+        res.status(400).send({ error: "Game not active" });
+      }
     } else {
       res.status(404).send({ error: "Game not found" });
     }
@@ -77,21 +82,68 @@ export async function shareJoinLink(req, res) {
 //Fix this
 export async function playerJoin(req, res) {
   const { name } = req.body;
-  const { gameId } = req.body;
+  const { gameCode } = req.body;
+  console.log("name", name);
+  console.log("gameCode", gameCode);
   try {
-    if (name && gameId) {
-      //try to get an active game with the id and register a name on it
+    if (name && gameCode) {
+      const newPlayer = {
+        gameCode: gameCode,
+        name: name,
+        pointsTotal: 0,
+        markersFound: 0,
+      };
 
-      console.log(`name: ${name} and gameId: ${gameId} received`); //add player instance with given name to ActiveGame
+      const player = await Player.create(newPlayer);
+      console.log("player", player);
 
+      if (player) {
+        const filter = { gameCode: gameCode };
+        const update = {
+          $push: {
+            players: player._id,
+          },
+        };
+        const options = { sort: { _id: 1 }, new: true };
+        const currentGame = await Game.findOneAndUpdate(
+          filter,
+          update,
+          options
+        );
+        console.log("player added to currentGame ", currentGame.players);
+      }
       res.status(200).send({
-        message:
-          "all good: SEND GAME ID AND NAME, SO FE CAN SAVE TO STORE AND PUSH MAPVIEW",
+        player: player,
       });
-      //res.redirect(client_url + "/map-view"); //  "/gamestart" or something
     } else {
       res.status(404).send({ error: "No active game with this Id" });
     }
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+export async function getPlayers(req, res) {
+  try {
+    const filter = { gameCode: req.params.id };
+    const players = await Player.find(filter);
+    res.status(200).send({ players: players });
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+//BROKEN
+export async function endGame(req, res) {
+  try {
+    const { gameId } = req.body;
+    const filter = { gameCode: req.params.id };
+    const update = {
+      gameStatus: "archived",
+    };
+    const options = { sort: { _id: 1 }, new: true };
+    const endedGame = await Game.findOneAndUpdate(filter, update, options);
+    res.status(200).send({ message: "game ended" });
   } catch (error) {
     res.status(500).send({ error: error });
   }

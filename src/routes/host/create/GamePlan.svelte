@@ -39,14 +39,6 @@
         bodyContent = JSON.stringify({
           gameTitle: newValue,
         });
-      } else if (field === "duration") {
-        newValue = parseInt(newValue);
-        if (isNaN(newValue)) {
-          newValue = 45;
-        }
-        bodyContent = JSON.stringify({
-          gameDuration: newValue,
-        });
       }
 
       (async () => {
@@ -98,29 +90,12 @@
           </span>
         </div>
       </div>
-      <div class="row-container min-box-wrapper">
-        <span class="min-span-height"><h3>Kestus</h3></span>
-        <div class="min-box">
-          <span
-            ><h3>
-              <InPlaceEdit
-                bind:value={$currentGamePlan.gameDuration}
-                on:submit={submit("duration")}
-              />
-            </h3>
-          </span>
-        </div>
-
-        <span> <h3>min</h3></span>
-      </div>
-
       <a href="#/game-plan/game-quiz/{$currentGamePlan._id}"
         ><h3 class="menu-list-item">Mängu küsimused</h3></a
       >
       <a href="#/game-plan/game-map/{$currentGamePlan._id}"
         ><h3 class="menu-list-item">Mängu kaart</h3></a
       >
-
       <label>
         <input type="checkbox" bind:checked={show} />
         Igavad andmed
@@ -198,25 +173,6 @@
   .invisible-dummy {
     width: 72px;
     display: block;
-  }
-
-  .min-box {
-    display: flex;
-    align-items: center;
-    color: var(--link-color);
-    width: 42px;
-    max-height: 2rem;
-    margin: 0 10px 0 10px;
-  }
-
-  .min-box:hover {
-    color: var(--link-hover-color);
-  }
-
-  .min-box-wrapper {
-    display: flex;
-    align-items: center;
-    max-height: 3rem;
   }
 
   .info-box {
