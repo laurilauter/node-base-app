@@ -14,7 +14,6 @@
   let joinLink;
   let sessionGetter;
   let myCurrentGame;
-  let yes;
   let error;
   let message;
 
@@ -131,21 +130,10 @@
 </script>
 
 <h1>Jooksev mäng</h1>
-<div class="info-box">
-  <span>$currentGame._id </span>
-  1currentGame._id<br />
-  <span>$currentGame.gameStatus </span>
-  {$currentGame.gameStatus}<br />
-  <span>$currentGame.gameCode </span>
-  {$currentGame.gameCode}<br />
-  <span>$currentGame.players </span>
-  {$currentGame.players}<br />
-</div>
-<br />
 
 {#if $currentGame.gameStatus === "none"}
   <div>
-    <p>Valmi mänugplaan ja alusta mängu.</p>
+    <p>Vali mänugplaan ja alusta mängu.</p>
     <Select
       options={userGamePlans}
       display_func={(o) => o.gameTitle}
@@ -154,25 +142,36 @@
   </div>
   <br />
 
-  <p>{yes}</p>
-
   <button class="btn" on:click={activateGame}>Alusta</button>
 {:else if $currentGame.gameStatus === "activated"}
   <div>
-    <label for="appt">Vali millal mäng lõppeb (default is now +1h):</label>
-    <input type="time" bind:value={time} required />
+    <p>Mängu lõpu aeg on testimiseks PRAEGU +1 tund</p>
+    <!-- <label for="appt">Vali millal mäng lõppeb (default is now +1h):</label>
+    <input type="time" bind:value={time} required /> -->
     <p>{time}</p>
   </div>
   <h3>Kui mängijad on kohal, siis vajuta Start.</h3>
   <!-- set btn to disabled if no players -->
-  <button class="btn" on:click={startGame}>Start</button>
+  <button
+    class="btn"
+    disabled={$currentPlayers.length > 0 ? false : true}
+    on:click={startGame}>Start</button
+  >
 {:else if $currentGame.gameStatus === "started"}
   <button class="btn" on:click={endGame}>Lõpeta</button>
 {/if}
 
 {#if $currentJoinLink}
-  <p><a href={$currentJoinLink} target="”_blank”">{joinLink}</a></p>
+  <p>
+    Use the code in an incognito tab to test a player joining. Press "Uuenda" to
+    see the joined player.
+  </p>
+  <p>You can also paste the below link into an incognito tab.</p>
+  <h3>{$currentGame.gameCode}</h3>
+  <!-- <p><a href={$currentJoinLink} target="”_blank”">{$currentJoinLink}</a></p> -->
+  <p>{$currentJoinLink}</p>
 {/if}
+
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
   <div>
     <h2>
@@ -192,11 +191,29 @@
           <span>
             Punkte: {player.pointsTotal}
           </span>
+          <span>EEMALDA</span>
+          <!--   -->
         </div>
       {/each}
     {/if}
   </div>
 {/if}
+
+<br />
+<div class="info-box">
+  <p>METADATA</p>
+  <span>$currentGame._id: </span>
+  1currentGame._id<br />
+  <span>$currentGame.gameStatus: </span>
+  {$currentGame.gameStatus}<br />
+  <span>$currentGame.gameCode: </span>
+  {$currentGame.gameCode}<br />
+  <span>$currentGame.players: </span>
+  {$currentGame.players}<br />
+  <span>Start disabled: </span>
+  {$currentPlayers.length > 0 ? false : true}
+</div>
+
 <SessionGet bind:this={sessionGetter} />
 
 <style>

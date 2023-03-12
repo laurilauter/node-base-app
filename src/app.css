@@ -109,6 +109,11 @@ button:hover {
   opacity: 0.8;
 }
 
+button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 .link-button {
   color: var(--link-color);
   border-radius: 0;
