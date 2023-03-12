@@ -9,10 +9,10 @@
   import GamePlanMarkersGet from "../../../lib/utilities/GamePlanMarkersGet.svelte";
   import MapFrame from "./MapFrame.svelte";
   import MapPlus from "svelte-material-icons/MapPlus.svelte";
-  import Navigation from "svelte-material-icons/Navigation.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
+  import Compass from "../../../lib/utilities/Compass.svelte";
 
   export let params = {};
   // Icon properties
@@ -33,22 +33,10 @@
     marekerKey = key;
   }
   //EXPERIMENTAL
-  let direction;
-  function handleDirection(event) {
-    direction = event.alpha;
-  }
-
-  let orientation;
-
-  function handleOrientation(event) {
-    orientation = event.alpha;
-  }
-
-  window.addEventListener("deviceorientation", handleOrientation);
-
-  function handleClick() {
-    alert(`Device orientation is ${orientation}`);
-  }
+  // let direction;
+  // function handleDirection(event) {
+  //   direction = event.alpha;
+  // }
 
   //EXPERIMENTAL END
 
@@ -178,29 +166,7 @@
         {/each}
       </div>
     </div>
-    <div on:deviceorientation={handleDirection}>
-      <span>Device direction:</span>
-      <span>direction: {direction}</span>
-      <span>
-        <Navigation
-          size={"2rem"}
-          ariaHidden={false}
-          rotate={direction}
-          color={"#ff0000"}
-        />
-      </span>
-      <span>Device orientation:</span>
-      <span>direction: {orientation}</span>
-      <span>
-        <Navigation
-          size={"2rem"}
-          ariaHidden={false}
-          rotate={orientation}
-          color={"#ff0000"}
-        />
-      </span>
-      <button on:click={handleClick}> Click to get device orientation </button>
-    </div>
+    <p><Compass /></p>
   </div>
 {:else}
   <p><Loader /></p>
