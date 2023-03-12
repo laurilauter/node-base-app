@@ -32,11 +32,25 @@
   function handleRadio(key) {
     marekerKey = key;
   }
-
+  //EXPERIMENTAL
   let direction;
   function handleDirection(event) {
     direction = event.alpha;
   }
+
+  let orientation;
+
+  function handleOrientation(event) {
+    orientation = event.alpha;
+  }
+
+  window.addEventListener("deviceorientation", handleOrientation);
+
+  function handleClick() {
+    alert(`Device orientation is ${orientation}`);
+  }
+
+  //EXPERIMENTAL END
 
   //let gamePlan;
   let input;
@@ -166,7 +180,7 @@
     </div>
     <div on:deviceorientation={handleDirection}>
       <span>Device direction:</span>
-      <span>{direction}</span>
+      <span>direction: {direction}</span>
       <span>
         <Navigation
           size={"2rem"}
@@ -175,6 +189,17 @@
           color={"#ff0000"}
         />
       </span>
+      <span>Device orientation:</span>
+      <span>direction: {orientation}</span>
+      <span>
+        <Navigation
+          size={"2rem"}
+          ariaHidden={false}
+          rotate={orientation}
+          color={"#ff0000"}
+        />
+      </span>
+      <button on:click={handleClick}> Click to get device orientation </button>
     </div>
   </div>
 {:else}
