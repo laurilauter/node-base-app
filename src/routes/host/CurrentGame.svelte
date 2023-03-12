@@ -77,10 +77,9 @@
         },
         body: JSON.stringify({
           gamePlanId: selected._id,
-          gameStartTime: time.toISOString(),
+          gameEndTime: time.toISOString(), //fix this so it comes from the user selection
         }),
       });
-
       let activeGame = await response.json();
 
       joinLink = activeGame.joinUrl;
@@ -96,8 +95,24 @@
   }
 
   async function startGame() {
-    console.log("started");
-    $currentGame.gameStatus = "started";
+    try {
+      const response = await fetch(
+        `${baseURL}/game/start/${$currentGame.gameCode}`
+      );
+      const responseData = await response.json();
+      myCurrentGame = responseData.currentGame;
+      console.log("currentGame", myCurrentGame);
+      $currentGame.gameStatus = "started";
+      $currentGame = {
+        _id: myCurrentGame._id,
+        gameStatus: myCurrentGame.gameStatus,
+        gameCode: myCurrentGame.gameCode,
+        players: myCurrentGame.players,
+      };
+      error = responseData.error;
+    } catch (error) {
+      console.log({ error: error });
+    }
   }
 
   async function endGame() {
@@ -122,10 +137,16 @@
   }
 
   onMount(async () => {
+    $currentGame = { _id: "", gameStatus: "none", gameCode: "", players: [] };
+    $currentPlayers = [];
+    $currentJoinLink = "";
+
     await sessionGetter.getSession();
     await getGamePlans();
-    await getGameInfo();
-    await getPlayers();
+    if ($currentGame.gameCode) {
+      await getGameInfo();
+      await getPlayers();
+    }
   });
 </script>
 

@@ -12,14 +12,14 @@ class ActiveGame {
   gameEndTime;
   players = [];
 
-  constructor(gamePlan) {
+  constructor(gamePlan, gameEndTime) {
     this.gamePlan = gamePlan;
     const n = crypto.randomInt(0, 10000);
     this.gameCode = n.toString().padStart(4, "0");
     this.gameOwnerId = gamePlan.ownerId;
     this.gameStatus = "activated";
     this.gameStartTime = null;
-    this.gameEndTime = null;
+    this.gameEndTime = gameEndTime;
     this.saveActiveGame(gamePlan);
   }
 
@@ -35,24 +35,22 @@ class ActiveGame {
     return this.gameOwnerId;
   }
 
-  async startGame(gameEndTime) {
-    //figure out how to pass a meaningful end time
-    const filter = { _id: this.gameCode };
-    const now = moment();
-    const update = {
-      gameStartTime: now,
-      gameEndTime: gameEndTime,
-      gameStatus: "started",
-    };
-    const options = { sort: { _id: 1 }, new: true };
-
-    try {
-      await Game.findOneAndUpdate(filter, update, options);
-      this.gameStatus = "started";
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //OBSOLETE - this is already in gameController
+  // async startGame() {
+  //   const filter = { gameCode: this.gameCode };
+  //   const now = moment();
+  //   const update = {
+  //     gameStartTime: now,
+  //     gameStatus: "started",
+  //   };
+  //   const options = { sort: { _id: 1 }, new: true };
+  //   try {
+  //     await Game.findOneAndUpdate(filter, update, options);
+  //     this.gameStatus = "started";
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   //saves the ActiveGame instance in DB upon creation
   async saveActiveGame(gamePlan) {

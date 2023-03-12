@@ -7,12 +7,10 @@
   import { currentGamePlanMarkers } from "../../../stores.js";
   import GamePlanGet from "../../../lib/utilities/GamePlanGet.svelte";
   import GamePlanMarkersGet from "../../../lib/utilities/GamePlanMarkersGet.svelte";
-  import MapFrame from "./MapFrame.svelte";
   import MapPlus from "svelte-material-icons/MapPlus.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
-  import Compass from "../../../lib/utilities/Compass.svelte";
 
   export let params = {};
   // Icon properties
@@ -32,13 +30,6 @@
   function handleRadio(key) {
     marekerKey = key;
   }
-  //EXPERIMENTAL
-  // let direction;
-  // function handleDirection(event) {
-  //   direction = event.alpha;
-  // }
-
-  //EXPERIMENTAL END
 
   //let gamePlan;
   let input;
@@ -166,7 +157,6 @@
         {/each}
       </div>
     </div>
-    <p><Compass /></p>
   </div>
 {:else}
   <p><Loader /></p>
