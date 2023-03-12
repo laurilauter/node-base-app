@@ -13,21 +13,16 @@
 
 <div on:deviceorientation={handleOrientation}>
   <span>Device orientation: {orientation}</span>
-  <span>
-    <!-- <Navigation
-      size={"2rem"}
-      ariaHidden={false}
-      rotate={orientation}
-      color={"#ff0000"}
-    /> -->
-    <Navigation
-      size={"2rem"}
-      ariaHidden={false}
-      horizontal
-      rotate={orientation}
-      color={"#ff0033"}
-    />
-  </span>
+  <Navigation
+    size={"2rem"}
+    ariaHidden={false}
+    horizontal
+    rotate={orientation}
+    color={"#ff0033"}
+  />
+  <div style="rotate: {orientation}deg;">
+    <Navigation size={"2rem"} ariaHidden={false} horizontal color={"#ff0099"} />
+  </div>
 </div>
 
 <style>
