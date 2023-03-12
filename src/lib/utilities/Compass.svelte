@@ -3,7 +3,7 @@
 
   import Navigation from "svelte-material-icons/Navigation.svelte";
 
-  let orientation = 0;
+  let orientation;
 
   function handleOrientation(event) {
     orientation = Math.trunc(event.alpha);
