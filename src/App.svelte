@@ -17,7 +17,7 @@
 
   // Handles the "routeLoaded" event dispatched by the router when a component was loaded
   function routeLoaded(event) {
-    console.log("routeLoaded event", event.detail);
+    // console.log("routeLoaded event", event.detail);
   }
 </script>
 

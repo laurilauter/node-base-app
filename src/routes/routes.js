@@ -20,10 +20,10 @@ import Dashboard from "./host/Dashboard.svelte";
 import HostLogin from "./host/HostLogin.svelte";
 import HostRegister from "./host/HostRegister.svelte";
 //host routes
-import CurrentGame from "./host/CurrentGame.svelte";
+import ActiveGame from "./host/ActiveGame.svelte";
 import GameHistory from "./host/GameHistory.svelte";
 import MyCodes from "./host/create/MyCodes.svelte";
-import MyGames from "./host/MyGames.svelte";
+import MyGamePlans from "./host/MyGamePlans.svelte";
 //host game creation routes
 import GameMap from "./host/create/GameMap.svelte";
 import GamePlan from "./host/create/GamePlan.svelte";
@@ -86,8 +86,8 @@ export default {
   // }),
 
   //START guarded host routes
-  "/host/current-game": CurrentGame,
-  "/host/my-games": MyGames,
+  "/host/active-game": ActiveGame,
+  "/host/my-plans": MyGamePlans,
   "/host/game-history": GameHistory,
   "/host/my-codes": MyCodes,
   "/game-plan/:id": GamePlan,

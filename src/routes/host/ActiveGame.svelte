@@ -1,12 +1,12 @@
 <script>
-  import baseURL from "./../../lib/utilities/baseUrl";
-  import SessionGet from "./../../lib/utilities/SessionGet.svelte";
+  import baseURL from "../../lib/utilities/baseUrl";
+  import SessionGet from "../../lib/utilities/SessionGet.svelte";
   import { sessionUserInfo } from "../../stores.js";
   import { currentGame } from "../../stores.js";
   import { currentPlayers } from "../../stores.js";
   import { currentJoinLink } from "../../stores.js";
   import { onMount } from "svelte";
-  import Select from "./play//Select.svelte";
+  import Select from "./play/Select.svelte";
   import moment from "moment";
 
   let selected;
@@ -26,7 +26,6 @@
         `${baseURL}/game-plan/list/${$sessionUserInfo.id}`
       );
       let gamePlanList = await response.json();
-
       userGamePlans = gamePlanList;
       console.log("userGamePlans ", userGamePlans);
     } catch (error) {
@@ -47,24 +46,26 @@
     }
   }
 
-  async function getGameInfo() {
+  async function getActiveGame() {
     try {
       const response = await fetch(
-        `${baseURL}/game/info/${$currentGame.gameCode}`
+        `${baseURL}/game/active/${$sessionUserInfo.id}`
       );
       const responseData = await response.json();
-      myCurrentGame = responseData.currentGame;
-      console.log("currentGame", myCurrentGame);
-      $currentGame = {
-        _id: myCurrentGame._id,
-        gameStatus: myCurrentGame.gameStatus,
-        gameCode: myCurrentGame.gameCode,
-        players: myCurrentGame.players,
-      };
-      error = responseData.error;
+      if (responseData.currentGame) {
+        myCurrentGame = responseData.currentGame;
+        console.log("currentGame", myCurrentGame);
+        $currentGame = myCurrentGame;
+      } else {
+        error = responseData.error;
+        $currentGame = { _id: "", gameStatus: "", gameCode: "", players: [] };
+        $currentPlayers = [];
+        $currentJoinLink = "";
+      }
     } catch (error) {
       console.log({ error: error });
     }
+    console.log("$currentGame ", $currentGame);
   }
 
   async function activateGame() {
@@ -122,37 +123,36 @@
       );
       let endedGame = await response.json();
       message = endedGame.message;
-      $currentGame.gameStatus = "none";
       $currentJoinLink = "";
       $currentGame = {
         _id: "",
-        gameStatus: "none",
+        gameStatus: "",
         gameCode: "",
         players: [],
       };
-      console.log("message ", message);
+      await getGamePlans();
     } catch (error) {
       console.log({ error: error });
     }
   }
 
   onMount(async () => {
-    $currentGame = { _id: "", gameStatus: "none", gameCode: "", players: [] };
-    $currentPlayers = [];
-    $currentJoinLink = "";
-
     await sessionGetter.getSession();
-    await getGamePlans();
-    if ($currentGame.gameCode) {
-      await getGameInfo();
+    await getActiveGame();
+    if ($currentGame.gameStatus === "") {
+      await getGamePlans();
+    }
+    if (
+      $currentGame.gameStatus === "activated" ||
+      $currentGame.gameStatus === "started"
+    ) {
       await getPlayers();
     }
   });
 </script>
 
 <h1>Jooksev mäng</h1>
-
-{#if $currentGame.gameStatus === "none"}
+{#if $currentGame.gameStatus === ""}
   <div>
     <p>Vali mänugplaan ja alusta mängu.</p>
     <Select
@@ -195,44 +195,47 @@
 
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
   <div>
-    <h2>
-      Mängijad
-      <span><button class="btn" on:click={getPlayers}>Uuenda</button></span>
-    </h2>
-
-    {#if $currentPlayers}
-      {#each $currentPlayers as player}
-        <div class="player-box">
-          <span class="bold">
-            {player.name}
-          </span>
-          <span>
-            Vastatud: {player.markersFound}
-          </span>
-          <span>
-            Punkte: {player.pointsTotal}
-          </span>
-          <span>EEMALDA</span>
-          <!--   -->
-        </div>
-      {/each}
-    {/if}
+    <h2>Mängijad</h2>
+    <span><button class="btn" on:click={getPlayers}>Uuenda</button></span>
+    <div class="players-frame column-container">
+      {#if $currentPlayers}
+        {#each $currentPlayers as player}
+          <div class="player">
+            <span class="bold">
+              {player.name}
+            </span>
+            <span>
+              Vastatud: {player.markersFound}
+            </span>
+            <span>
+              Punkte: {player.pointsTotal}
+            </span>
+            <span>EEMALDA</span>
+          </div>
+        {/each}
+      {/if}
+    </div>
   </div>
 {/if}
 
 <br />
-<div class="info-box">
-  <p>METADATA</p>
-  <span>$currentGame._id: </span>
-  1currentGame._id<br />
-  <span>$currentGame.gameStatus: </span>
-  {$currentGame.gameStatus}<br />
-  <span>$currentGame.gameCode: </span>
-  {$currentGame.gameCode}<br />
-  <span>$currentGame.players: </span>
-  {$currentGame.players}<br />
-  <span>Start disabled: </span>
-  {$currentPlayers.length > 0 ? false : true}
+<div class="info-wrapper">
+  <div class="info-box">
+    <p>BORING METADATA</p>
+    <span>$currentGame._id: </span>
+    1currentGame._id<br />
+    <span>$currentGame.gameStatus: </span>
+    {$currentGame.gameStatus}<br />
+    <span>$currentGame.gameCode: </span>
+    {$currentGame.gameCode}<br />
+    <span>$currentGame.players: </span>
+    {#each $currentGame.players as player}
+      <p>{player}</p>
+    {/each}
+    <br />
+    <span>Start disabled: </span>
+    {$currentPlayers.length > 0 ? false : true}
+  </div>
 </div>
 
 <SessionGet bind:this={sessionGetter} />
@@ -242,25 +245,34 @@
     max-width: 160px;
   }
 
+  .info-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
   .info-box {
     border-radius: 5px;
     font-size: 0.8rem;
     border: 1px solid grey;
     width: 400px;
-    margin-left: 25%;
-    margin-right: auto;
     color: grey;
   }
+  .players-frame {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-  .player-box {
+  .player {
     display: flex;
     justify-content: space-around;
+    width: 400px;
     border-radius: 5px;
     font-size: 1rem;
     border: 1px solid grey;
-    width: 400px;
-    margin-left: 25%;
-    margin-right: auto;
     margin-top: 10px;
   }
 

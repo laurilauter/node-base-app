@@ -29,7 +29,7 @@
       }
     );
     console.log("delete response ", response);
-    replace("/host/my-games");
+    replace("/host/my-plans");
   }
 
   function submit(field) {

@@ -52,7 +52,7 @@
             <a href="#/host">Algus</a>
             {#if $location.includes("/game-plan/")}
               <span>/</span>
-              <a href="#/host/my-games">Minu mängud</a>
+              <a href="#/host/my-plans">Minu mängud</a>
               {#if $currentGamePlanLink && $location.slice(0, 15) === "/game-plan/game"}
                 <span>/</span>
                 <a href="/#{$currentGamePlanLink.location}">

@@ -79,19 +79,21 @@ export async function getGame(req, res) {
 
 export async function getGames(req, res) {
   try {
+    console.log("req.params.id ", req.params.id);
     const filter = { gameOwnerId: req.params.id };
     let currentGames = await Game.find(filter);
     if (currentGames.length > 0) {
-      res.status(200).send({ currentGames: currentGames });
+      // console.log("currentGames[0] ", currentGames[0]);
+      //this abot this a bit, should "started" be at the top?
+      res.status(200).send({ currentGame: currentGames[0] });
     } else {
-      res.status(404).send({ error: "No games found" });
+      res.status(404).send({ error: "No active games found" });
     }
   } catch (error) {
     res.status(500).send({ error: error });
   }
 }
 
-//Fix this
 export async function playerJoin(req, res) {
   const { name } = req.body;
   const { gameCode } = req.body;
@@ -178,15 +180,16 @@ export async function endGame(req, res) {
 
     const archivedGame = await ArchivedGame.create(archivedGameData);
 
-    //delete the endedGame from Games
+    //DELETE PLAYERS!!
 
-    //deleting the game
+    //deleting the game from Games
     const deleteFilter = { gameCode: req.params.id, gameStatus: "archived" };
     const result = await Game.deleteOne(deleteFilter);
     if (result.deletedCount === 0) {
       res.status(403).send({ message: "Game not found" });
+    } else {
+      res.status(200).send({ archivedGame: archivedGame });
     }
-    res.status(200).send({ archivedGame: archivedGame });
   } catch (error) {
     res.status(500).send({ error: error });
   }

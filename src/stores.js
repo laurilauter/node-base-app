@@ -22,7 +22,7 @@ export const currentGamePlanMarkers = writable([]);
 export const currentJoinLink = writable();
 export const currentGame = writable({
   _id: "",
-  gameStatus: "none",
+  gameStatus: "",
   gameCode: "",
   players: [],
 });

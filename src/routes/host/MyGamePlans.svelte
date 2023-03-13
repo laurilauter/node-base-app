@@ -18,15 +18,9 @@
     const response = await fetch(
       `${baseURL}/game-plan/list/${$sessionUserInfo.id}`
     );
-    // const response = await fetch(`${baseURL}/game-plan/list`);
     gamePlans = await response.json();
-    console.log("isUserLoggedIn at MyGames ", $isUserLoggedIn);
+    console.log("isUserLoggedIn at MyGamePlans ", $isUserLoggedIn);
   }
-
-  onMount(async () => {
-    getGamePlans();
-    $currentGamePlanMarkers = [];
-  });
 
   async function addGamePlan() {
     const response = await fetch(`${baseURL}/game-plan/create`, {
@@ -49,10 +43,15 @@
     console.log("responseData at ADD PLAN", responseData);
     getGamePlans();
   }
+
+  onMount(async () => {
+    getGamePlans();
+    $currentGamePlanMarkers = [];
+  });
 </script>
 
 <div in:fade={{ duration: 1000 }}>
-  <h1>Minu mängud</h1>
+  <h1>Minu kavandid</h1>
   <div>
     <ul>
       {#each gamePlans as gamePlan}
