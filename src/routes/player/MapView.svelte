@@ -56,10 +56,10 @@
 
   //QR scanner end
 
-  let direction;
-  function handleDirection(event) {
-    direction = event.alpha;
-  }
+  // let direction;
+  // function handleDirection(event) {
+  //   direction = event.alpha;
+  // }
 
   async function getGameInfo() {
     try {
@@ -82,7 +82,7 @@
   });
 </script>
 
-<div on:deviceorientation={handleDirection}>
+<!-- <div on:deviceorientation={handleDirection}>
   <span>Device direction:</span>
   <span>{direction}</span>
   <span>
@@ -93,10 +93,12 @@
       color={"#ff0000"}
     />
   </span>
-</div>
+</div> -->
 
 <div class="column-container" in:fade={{ duration: 1000 }}>
-  <h2>Mängu kaart</h2>
+  {#if !scanning}
+    <h2>Mängu kaart</h2>
+  {/if}
   <div class="map-row-container">
     {#if !scanning}
       <div class="map-box">
@@ -128,17 +130,15 @@
       <reader id="reader" />
       {#if scanning}
         <button on:click={stop}>Stop</button>
+        <span>
+          {decodedText}
+          {decodedResult}
+        </span>
       {:else}
         <button on:click={start}>Skaneeri</button>
       {/if}
     </div>
   </div>
-  <p>
-    {decodedText}
-  </p>
-  <p>
-    {decodedResult}
-  </p>
 </div>
 
 <GamePlanGet bind:this={gamePlanGetter} />
