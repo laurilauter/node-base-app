@@ -28,7 +28,7 @@
         <div>
           {#if $isUserLoggedIn}
             <span class="side-m5">
-              <a href="#/host/"> <Home {size} {ariaHidden} /></a>
+              <a href="#/host"> <Home {size} {ariaHidden} /></a>
             </span>
           {/if}
         </div>

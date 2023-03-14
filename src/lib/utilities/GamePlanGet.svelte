@@ -21,6 +21,7 @@
         ownerId: gamePlan.ownerId,
         markers: gamePlan.markers,
       };
+      console.log("$currentGamePlan from UTILITY ", $currentGamePlan);
     } catch (error) {
       console.log({ error: error });
     }

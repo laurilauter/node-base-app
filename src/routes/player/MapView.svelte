@@ -2,7 +2,7 @@
   // @ts-nocheck
   import { Html5Qrcode } from "html5-qrcode";
   import baseURL from "../../lib/utilities/baseUrl";
-  import Navigation from "svelte-material-icons/Navigation.svelte";
+  import { push, pop, replace } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { currentGame } from "../../stores.js";
@@ -54,20 +54,19 @@
     console.warn(`Code scan error = ${error}`);
   }
 
-  //QR scanner end
-
-  // let direction;
-  // function handleDirection(event) {
-  //   direction = event.alpha;
-  // }
-
   async function getGameInfo() {
     try {
       const response = await fetch(`${baseURL}/game/info/${params.id}`);
       const responseData = await response.json();
       $currentGame = responseData.currentGame;
-      console.log("$currentGame", $currentGame);
-      error = responseData.error;
+      if (responseData.currentGame) {
+        console.log("$currentGame loaded", $currentGame);
+      } else {
+        error = responseData.error;
+        console.warn(error);
+        localStorage.clear();
+        push("/player-code");
+      }
     } catch (error) {
       console.log({ error: error });
     }
@@ -75,25 +74,11 @@
 
   onMount(async () => {
     await getGameInfo();
-
     await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
     await gamePlanMarkerGetter.getGamePlanMarkers($currentGame.gamePlan._id);
     init();
   });
 </script>
-
-<!-- <div on:deviceorientation={handleDirection}>
-  <span>Device direction:</span>
-  <span>{direction}</span>
-  <span>
-    <Navigation
-      size={"2rem"}
-      ariaHidden={false}
-      rotate={direction}
-      color={"#ff0000"}
-    />
-  </span>
-</div> -->
 
 <div class="column-container" in:fade={{ duration: 1000 }}>
   {#if !scanning}
@@ -104,7 +89,9 @@
       <div class="map-box">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="map-inner-box">
-          <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" />
+          {#if $currentGamePlan.gameMap}
+            <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" />
+          {/if}
           {#each Object.entries($currentGamePlanMarkers) as [key, value]}
             <div
               class="image-marker"

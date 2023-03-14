@@ -8,7 +8,7 @@
       let gamePlanMarkers = await response.json();
       $currentGamePlanMarkers = gamePlanMarkers;
       console.log(
-        "$currentGamePlanMarkers from COMP ",
+        "$currentGamePlanMarkers from UTILITY ",
         $currentGamePlanMarkers
       );
     } catch (error) {

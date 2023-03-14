@@ -14,7 +14,7 @@ class ActiveGame {
 
   constructor(gamePlan, gameEndTime) {
     this.gamePlan = gamePlan;
-    const n = crypto.randomInt(0, 10000);
+    const n = crypto.randomInt(1000, 10000);
     this.gameCode = n.toString().padStart(4, "0");
     this.gameOwnerId = gamePlan.ownerId;
     this.gameStatus = "activated";
