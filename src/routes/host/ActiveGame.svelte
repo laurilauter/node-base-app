@@ -188,9 +188,9 @@
     see the joined player.
   </p>
   <p>You can also paste the below link into an incognito tab.</p>
-  <h3>{$currentGame.gameCode}</h3>
+  <h3 class="green">{$currentGame.gameCode}</h3>
   <!-- <p><a href={$currentJoinLink} target="”_blank”">{$currentJoinLink}</a></p> -->
-  <p>{$currentJoinLink}</p>
+  <p class="green">{$currentJoinLink}</p>
 {/if}
 
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
@@ -241,6 +241,9 @@
 <SessionGet bind:this={sessionGetter} />
 
 <style>
+  .green {
+    color: var(--btn-bg-color);
+  }
   .btn {
     max-width: 160px;
   }

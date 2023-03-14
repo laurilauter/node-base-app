@@ -180,7 +180,8 @@ export async function endGame(req, res) {
 
     const archivedGame = await ArchivedGame.create(archivedGameData);
 
-    //DELETE PLAYERS!!
+    const deletedPlayers = await Player.deleteMany({ gameCode: req.params.id });
+    console.log("deletedPlayers ", deletedPlayers);
 
     //deleting the game from Games
     const deleteFilter = { gameCode: req.params.id, gameStatus: "archived" };

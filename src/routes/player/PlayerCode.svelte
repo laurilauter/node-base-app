@@ -45,9 +45,7 @@
             bind:value={code}
             required
           />
-          <button type="button" id="login-button" on:click={toStart}
-            >Alusta</button
-          >
+          <button type="button" on:click={toStart}>Alusta</button>
         </div>
       </form>
     </div>

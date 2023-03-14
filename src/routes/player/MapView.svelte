@@ -1,5 +1,6 @@
 <script>
   // @ts-nocheck
+  import { Html5Qrcode } from "html5-qrcode";
   import baseURL from "../../lib/utilities/baseUrl";
   import Navigation from "svelte-material-icons/Navigation.svelte";
   import { fade } from "svelte/transition";
@@ -14,6 +15,45 @@
   let gamePlanGetter;
   let gamePlanMarkerGetter;
   let error;
+
+  //QR scanner
+
+  let scanning = false;
+
+  let html5Qrcode;
+
+  function init() {
+    html5Qrcode = new Html5Qrcode("reader");
+  }
+
+  function start() {
+    html5Qrcode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+      },
+      onScanSuccess,
+      onScanFailure
+    );
+    scanning = true;
+  }
+
+  async function stop() {
+    await html5Qrcode.stop();
+    scanning = false;
+  }
+
+  function onScanSuccess(decodedText, decodedResult) {
+    alert(`Code matched = ${decodedText}`);
+    console.log(decodedResult);
+  }
+
+  function onScanFailure(error) {
+    console.warn(`Code scan error = ${error}`);
+  }
+
+  //QR scanner end
 
   let direction;
   function handleDirection(event) {
@@ -37,6 +77,7 @@
 
     await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
     await gamePlanMarkerGetter.getGamePlanMarkers($currentGame.gamePlan._id);
+    init();
   });
 </script>
 
@@ -75,28 +116,24 @@
       </div>
     </div>
     <div class="info-box">
+      <p>{$currentGamePlan.gameMap}</p>
       <h4>
         Kasuta kaarti, er leida asukoht looduses. Sealt leiad QR koodi. Seda
         skannides saad vastata kusimustele.
       </h4>
-      <button>SKANEERI</button>
-
-      <p>{$currentGamePlan.gameMap}</p>
+      <button type="button">SKANEERI</button>
+    </div>
+    <div class="reader-box">
+      <main>
+        <reader id="reader" />
+        {#if scanning}
+          <button on:click={stop}>stop</button>
+        {:else}
+          <button on:click={start}>start</button>
+        {/if}
+      </main>
     </div>
   </div>
-</div>
-
-<div>
-  <p>
-    1. First this should display some spinner indicating that players are
-    gathering
-  </p>
-  <p>2. Game will start when the game leader starts it</p>
-  <p>3. Game ends when the game leader ends it, or game time is up.</p>
-  <p>
-    4. Alternatively the player can leave leave and come back with the same game
-    code to continue.
-  </p>
 </div>
 
 <GamePlanGet bind:this={gamePlanGetter} />
@@ -164,8 +201,23 @@
     margin: 0px;
     /* border: 1px solid var(--main-color); */
     border-radius: 9px;
-    max-width: 560px;
+    max-width: 360px;
     height: auto;
     padding: 10px;
+  }
+
+  /* SCANNER STYLE */
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  reader {
+    width: 100%;
+    min-height: 500px;
+    background-color: black;
   }
 </style>
