@@ -2,6 +2,8 @@
   import baseURL from "../../lib/utilities/baseUrl";
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";
+  import { onMount } from "svelte";
+  import { playerName } from "../../stores.js";
 
   let code;
   let message;
@@ -12,6 +14,21 @@
       push(`/player-start/${code}`);
     }
   }
+
+  function getLocalPlayer() {
+    const game = JSON.parse(localStorage.getItem("game"));
+    const player = JSON.parse(localStorage.getItem("player"));
+    console.log(game, player);
+    console.log("game ", parseInt(game));
+    if (game && player) {
+      push(`/player/map-view/${parseInt(game)}`);
+      $playerName = player;
+    }
+  }
+
+  onMount(async () => {
+    getLocalPlayer();
+  });
 </script>
 
 <div class="row-container">

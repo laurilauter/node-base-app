@@ -130,12 +130,12 @@
     /* border: 1px solid yellow; */
   }
 
-  .map-inner-box > p {
+  /* .map-inner-box > p {
     color: black;
     top: -15px;
     left: 20px;
     position: absolute;
-  }
+  } */
 
   .map-row-container {
     display: flex;
