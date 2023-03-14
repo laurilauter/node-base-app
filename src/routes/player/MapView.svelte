@@ -19,8 +19,9 @@
   //QR scanner
 
   let scanning = false;
-
   let html5Qrcode;
+  let decodedText;
+  let decodedResult;
 
   function init() {
     html5Qrcode = new Html5Qrcode("reader");
@@ -95,45 +96,49 @@
 </div>
 
 <div class="column-container" in:fade={{ duration: 1000 }}>
-  <!-- {statusCode} -->
-  <div class="row-container">
-    <h2>Mängu kaart</h2>
-  </div>
+  <h2>Mängu kaart</h2>
   <div class="map-row-container">
-    <div class="map-box">
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div class="map-inner-box">
-        <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" />
-        {#each Object.entries($currentGamePlanMarkers) as [key, value]}
-          <div
-            class="image-marker"
-            style="top: {value.content.position.y - 20}px; left: {value.content
-              .position.x - 20}px;"
-          >
-            {value.title}
-          </div>
-        {/each}
+    {#if !scanning}
+      <div class="map-box">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="map-inner-box">
+          <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" />
+          {#each Object.entries($currentGamePlanMarkers) as [key, value]}
+            <div
+              class="image-marker"
+              style="top: {value.content.position.y - 20}px; left: {value
+                .content.position.x - 20}px;"
+            >
+              {value.title}
+            </div>
+          {/each}
+        </div>
       </div>
-    </div>
-    <div class="info-box">
-      <p>{$currentGamePlan.gameMap}</p>
-      <h4>
-        Kasuta kaarti, er leida asukoht looduses. Sealt leiad QR koodi. Seda
-        skannides saad vastata kusimustele.
-      </h4>
-      <button type="button">SKANEERI</button>
-    </div>
+
+      <div class="info-box">
+        <p>{$currentGamePlan.gameMap}</p>
+        <h4>
+          Kasuta kaarti, er leida asukoht looduses/hoones. Sealt leiad QR koodi.
+          Seda skannides saad vastata kusimustele.
+        </h4>
+      </div>
+    {/if}
+
     <div class="reader-box">
-      <main>
-        <reader id="reader" />
-        {#if scanning}
-          <button on:click={stop}>stop</button>
-        {:else}
-          <button on:click={start}>start</button>
-        {/if}
-      </main>
+      <reader id="reader" />
+      {#if scanning}
+        <button on:click={stop}>Stop</button>
+      {:else}
+        <button on:click={start}>Skaneeri</button>
+      {/if}
     </div>
   </div>
+  <p>
+    {decodedText}
+  </p>
+  <p>
+    {decodedResult}
+  </p>
 </div>
 
 <GamePlanGet bind:this={gamePlanGetter} />
@@ -167,17 +172,10 @@
     /* border: 1px solid yellow; */
   }
 
-  /* .map-inner-box > p {
-    color: black;
-    top: -15px;
-    left: 20px;
-    position: absolute;
-  } */
-
   .map-row-container {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-wrap: nowrap;
     justify-content: center;
     text-align: center;
     align-items: top;
@@ -198,16 +196,12 @@
   }
 
   .info-box {
-    margin: 0px;
-    /* border: 1px solid var(--main-color); */
-    border-radius: 9px;
     max-width: 360px;
-    height: auto;
-    padding: 10px;
   }
 
   /* SCANNER STYLE */
-  main {
+  .reader-box {
+    min-width: 360px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -215,9 +209,9 @@
     gap: 20px;
   }
 
-  reader {
+  #reader {
     width: 100%;
-    min-height: 500px;
+    min-height: auto;
     background-color: black;
   }
 </style>
