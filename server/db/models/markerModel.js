@@ -9,7 +9,7 @@ const MarkerShema = new Schema({
       x: { type: Number },
       y: { type: Number },
     },
-    qrcode: { type: String },
+    qrcodeId: { type: String },
     quiz: {
       question: { type: String, required: true },
       answers: [

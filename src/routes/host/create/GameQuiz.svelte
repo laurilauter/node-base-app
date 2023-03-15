@@ -37,7 +37,7 @@
               x: 0,
               y: 0,
             },
-            qrcode: "some QR code",
+            qrcodeId: "qrcodeIdValue",
             quiz: {
               question: "Kas soovid muuta küsimust?",
               answers: [

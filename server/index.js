@@ -6,6 +6,8 @@ import userRouter from "./routes/userRoutes.js";
 import sessionsRouter from "./routes/sessionsRoutes.js";
 import gamePlanRouter from "./routes/gamePlanRoutes.js";
 import gameRouter from "./routes/gameRoutes.js";
+import qrRouter from "./routes/qrRoutes.js";
+import archiveRouter from "./routes/archiveRoutes.js";
 
 import MongoStore from "connect-mongo";
 import cors from "cors";
@@ -77,6 +79,8 @@ app.use("/user", userRouter);
 app.use("/sessions", sessionsRouter);
 app.use("/game-plan", gamePlanRouter);
 app.use("/game", gameRouter);
+app.use("/qr", qrRouter);
+app.use("/archive", archiveRouter);
 
 //serving public files, img and such
 app.use("/", express.static(path.join(__dirname, "../public")));

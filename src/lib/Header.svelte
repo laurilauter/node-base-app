@@ -53,6 +53,9 @@
             {#if $location.includes("/game-plan/")}
               <span>/</span>
               <a href="#/host/my-plans">Minu mängud</a>
+            {:else if $location.includes("/archived-game/")}
+              <span>/</span>
+              <a href="#/host/game-history">Ajalugu</a>
               {#if $currentGamePlanLink && $location.slice(0, 15) === "/game-plan/game"}
                 <span>/</span>
                 <a href="/#{$currentGamePlanLink.location}">

@@ -22,6 +22,7 @@ import HostRegister from "./host/HostRegister.svelte";
 //host routes
 import ActiveGame from "./host/ActiveGame.svelte";
 import GameHistory from "./host/GameHistory.svelte";
+import ArchivedGame from "./host/ArchivedGame.svelte";
 import MyCodes from "./host/create/MyCodes.svelte";
 import MyGamePlans from "./host/MyGamePlans.svelte";
 //host game creation routes
@@ -89,6 +90,7 @@ export default {
   "/host/active-game": ActiveGame,
   "/host/my-plans": MyGamePlans,
   "/host/game-history": GameHistory,
+  "/host/archived-game/:id": ArchivedGame,
   "/host/my-codes": MyCodes,
   "/game-plan/:id": GamePlan,
   "/game-plan/game-map/:id": GameMap,

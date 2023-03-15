@@ -152,6 +152,9 @@
 </script>
 
 <h1>Jooksev mäng</h1>
+{#if $currentGame.gameCode}
+  <h3 class="green">Kood: {$currentGame.gameCode}</h3>
+{/if}
 {#if $currentGame.gameStatus === ""}
   <div>
     <p>Vali mänugplaan ja alusta mängu.</p>
@@ -188,9 +191,9 @@
     see the joined player.
   </p>
   <p>You can also paste the below link into an incognito tab.</p>
-  <h3 class="green">{$currentGame.gameCode}</h3>
+  <h3 class="green">Kood: {$currentGame.gameCode}</h3>
   <!-- <p><a href={$currentJoinLink} target="”_blank”">{$currentJoinLink}</a></p> -->
-  <p class="green">{$currentJoinLink}</p>
+  <p class="green">Link: {$currentJoinLink}</p>
 {/if}
 
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}

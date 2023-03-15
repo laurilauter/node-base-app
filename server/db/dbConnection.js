@@ -5,6 +5,7 @@ import Game from "./models/gameModel.js";
 import Player from "./models/playerModel.js";
 import Marker from "./models/markerModel.js";
 import ArchivedGame from "./models/archivedGameModel.js";
+import QrCode from "./models/qrCodeModel.js";
 //import * as dotenv from "dotenv";
 // dotenv.config();
 
@@ -14,4 +15,4 @@ import ArchivedGame from "./models/archivedGameModel.js";
 //   console.log("Connected to MongoDB");
 // });
 
-export { User, GamePlan, Game, Player, Marker, ArchivedGame };
+export { User, GamePlan, Game, Player, Marker, ArchivedGame, QrCode };

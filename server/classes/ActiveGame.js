@@ -35,23 +35,6 @@ class ActiveGame {
     return this.gameOwnerId;
   }
 
-  //OBSOLETE - this is already in gameController
-  // async startGame() {
-  //   const filter = { gameCode: this.gameCode };
-  //   const now = moment();
-  //   const update = {
-  //     gameStartTime: now,
-  //     gameStatus: "started",
-  //   };
-  //   const options = { sort: { _id: 1 }, new: true };
-  //   try {
-  //     await Game.findOneAndUpdate(filter, update, options);
-  //     this.gameStatus = "started";
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
   //saves the ActiveGame instance in DB upon creation
   async saveActiveGame(gamePlan) {
     const newGameData = {
