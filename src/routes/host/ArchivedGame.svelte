@@ -77,7 +77,4 @@
   .player-row {
     margin: 10px;
   }
-
-  .title-row {
-  }
 </style>

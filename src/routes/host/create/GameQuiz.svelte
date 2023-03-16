@@ -214,15 +214,6 @@
                     </InPlaceEdit>
                   </label>
                 </div>
-                <!-- <div class="answer-trash">
-                  <span
-                    class="link-button"
-                    on:click={submit(`removeanswer-${key}-${answersKey}`)}
-                    on:keypress
-                  >
-                    <TrashCanOutline size={"1.4rem"} ariaHidden={false} />
-                  </span>
-                </div> -->
               </div>
             {/each}
             <div class="add-answer">

@@ -1,0 +1,8 @@
+
+
+QrCode
+
+- add a dropdown to each question for selecting QrCode
+- can select only codes from this current user?
+- once a code is selected, it can not be used for other querstions in the same gamePlan
+- make a selection "none"
