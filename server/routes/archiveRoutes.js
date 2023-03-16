@@ -9,6 +9,6 @@ archiveRouter.get("/list/:id", archiveController.listMyGames);
 
 archiveRouter.get("/:id", archiveController.getGame);
 
-archiveRouter.get("/delete/:id", archiveController.deleteGame);
+archiveRouter.delete("/delete/:id", archiveController.deleteGame);
 
 export default archiveRouter;

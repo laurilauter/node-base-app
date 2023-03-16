@@ -5,7 +5,6 @@
   import { fade } from "svelte/transition";
   import { isUserLoggedIn } from "../../stores.js";
   import { sessionUserInfo } from "../../stores.js";
-  import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
   import moment from "moment";
 
   let archivedGames = [];
@@ -35,8 +34,6 @@
             <span>{archivedGame.gamePlan.gameTitle}</span>
             <span
               >{moment(archivedGame.gameEndTime).format("DD-MMM-YYYY HH:MM")}
-            </span><span>
-              <TrashCanOutline size={"1rem"} ariaHidden={false} />
             </span>
           </a>
         </li>

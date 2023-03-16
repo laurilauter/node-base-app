@@ -25,6 +25,7 @@ export async function deleteGame(req, res) {
   try {
     const filter = { _id: req.params.id };
     const result = await ArchivedGame.deleteOne(filter);
+    console.log("result ", result);
     if (result.deletedCount === 0) {
       res.status(403).send({ message: "Game not found" });
     } else {
