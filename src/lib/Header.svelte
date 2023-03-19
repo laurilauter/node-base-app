@@ -21,7 +21,7 @@
   });
 </script>
 
-{#if !$location.includes("/code-print/")}
+{#if !$location.includes("/code-print/") || $location === "/"}
   <header>
     <nav>
       <div class="column-container width-100-perc">

@@ -58,7 +58,13 @@
         $currentGame = myCurrentGame;
       } else {
         error = responseData.error;
-        $currentGame = { _id: "", gameStatus: "", gameCode: "", players: [] };
+        $currentGame = {
+          _id: "",
+          gamePlan: {},
+          gameStatus: "",
+          gameCode: "",
+          players: [],
+        };
         $currentPlayers = [];
         $currentJoinLink = "";
       }
@@ -106,6 +112,7 @@
       $currentGame.gameStatus = "started";
       $currentGame = {
         _id: myCurrentGame._id,
+        gamePlan: myCurrentGame.gamePlan,
         gameStatus: myCurrentGame.gameStatus,
         gameCode: myCurrentGame.gameCode,
         players: myCurrentGame.players,
@@ -126,6 +133,28 @@
       $currentJoinLink = "";
       $currentGame = {
         _id: "",
+        gamePlan: {},
+        gameStatus: "",
+        gameCode: "",
+        players: [],
+      };
+      await getGamePlans();
+    } catch (error) {
+      console.log({ error: error });
+    }
+  }
+
+  async function cancelGame() {
+    try {
+      const response = await fetch(
+        `${baseURL}/game/cancel/${$currentGame.gameCode}`
+      );
+      let endedGame = await response.json();
+      message = endedGame.message;
+      $currentJoinLink = "";
+      $currentGame = {
+        _id: "",
+        gamePlan: {},
         gameStatus: "",
         gameCode: "",
         players: [],
@@ -181,6 +210,7 @@
     disabled={$currentPlayers.length > 0 ? false : true}
     on:click={startGame}>Start</button
   >
+  <button class="btn" on:click={cancelGame}>Lõpeta</button>
 {:else if $currentGame.gameStatus === "started"}
   <button class="btn" on:click={endGame}>Lõpeta</button>
 {/if}

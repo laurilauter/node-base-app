@@ -23,6 +23,9 @@ export const userQrCodes = writable([]);
 export const currentJoinLink = writable();
 export const currentGame = writable({
   _id: "",
+  gamePlan: {
+    _id: "",
+  },
   gameStatus: "",
   gameCode: "",
   players: [],

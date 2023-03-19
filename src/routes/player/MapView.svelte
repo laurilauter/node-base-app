@@ -51,7 +51,6 @@
     console.log("decodedText", decodedText);
     if (decodedText) {
       let markerId;
-      //exclude all markers from scan check that have been answered alredy
       $currentGamePlanMarkers.forEach((element) => {
         if (
           element.content.qrcode.qrCodeTitle === decodedText &&

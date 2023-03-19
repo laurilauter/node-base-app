@@ -176,10 +176,28 @@ export async function updatePlayer(req, res) {
   }
 }
 
-//BROKEN
+export async function cancelGame(req, res) {
+  try {
+    //deleting players
+    const deletedPlayers = await Player.deleteMany({ gameCode: req.params.id });
+    console.log("deletedPlayers ", deletedPlayers);
+    //deleting the game from Games
+    const deleteFilter = { gameCode: req.params.id };
+    const result = await Game.deleteOne(deleteFilter);
+    if (result.deletedCount === 0) {
+      res.status(403).send({ message: "Game not found" });
+    } else {
+      res.status(200).send({ archivedGame: archivedGame });
+    }
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
 export async function endGame(req, res) {
   try {
     const filter = { gameCode: req.params.id, gameStatus: "started" };
+    //const filter = { gameCode: req.params.id };
     const update = {
       gameStatus: "archived",
     };

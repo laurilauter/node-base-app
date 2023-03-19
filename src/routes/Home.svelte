@@ -17,6 +17,8 @@
 
   onMount(async () => {
     if ($isUserLoggedIn) {
+      replace("/host");
+    } else {
       logOutGetter.logout();
     }
   });
@@ -27,6 +29,7 @@
   <div class="column-container">
     <div class="container">
       <p>Vali kas soovid mängida, või luua mänge.</p>
+      <!-- <p>{$isUserLoggedIn}</p> -->
     </div>
     <div class="container">
       <button type="button" id="login-button" on:click={play}>Mängija</button>

@@ -26,4 +26,6 @@ gameRouter.patch("/player/:id", gameController.updatePlayer);
 
 gameRouter.get("/end/:id", gameController.endGame);
 
+gameRouter.get("/cancel/:id", gameController.cancelGame);
+
 export default gameRouter;

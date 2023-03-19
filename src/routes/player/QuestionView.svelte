@@ -28,7 +28,6 @@
     try {
       const response = await fetch(`${baseURL}/game/player/${$player._id}`, {
         method: "PATCH",
-        credentials: "include",
         headers: {
           "content-type": "application/json",
         },
@@ -40,7 +39,9 @@
       let updatedPlayerStats = await response.json();
       console.log("updatedPlayerStats ", updatedPlayerStats);
     } catch (error) {
-      console.log({ error: error });
+      console.log({
+        error: error,
+      });
     }
     //show some feedback before routing
     replace(`/player/map-view/${params.gameCode}`);
@@ -71,7 +72,9 @@
       $currentGamePlanMarker = gamePlanMarker;
       console.log("$currentGamePlanMarker ", $currentGamePlanMarker);
     } catch (error) {
-      console.log({ error: error });
+      console.log({
+        error: error,
+      });
     }
   }
 
