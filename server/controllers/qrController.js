@@ -34,8 +34,8 @@ export async function getCodes(req, res) {
   try {
     const filter = { ownerId: req.params.id };
     const list = await QrCode.find(filter);
-    console.log("filter", filter);
-    console.log("list ", list);
+    // console.log("filter", filter);
+    // console.log("list ", list);
     res.status(200).send(list);
   } catch (error) {
     res.status(500).send({ error: error });

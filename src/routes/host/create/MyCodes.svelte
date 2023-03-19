@@ -64,9 +64,9 @@
         } catch (error) {
           console.log({ error: error });
         }
+        getCodes();
       })();
     };
-    getCodes();
   }
 
   onMount(async () => {

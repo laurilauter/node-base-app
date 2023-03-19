@@ -204,16 +204,17 @@
       {#if $currentPlayers}
         {#each $currentPlayers as player}
           <div class="player">
+            <span>{$currentPlayers.indexOf(player) + 1}.</span>
             <span class="bold">
               {player.name}
             </span>
             <span>
-              Vastatud: {player.markersFound}
+              Vastatud: {player.markersFound.length}
             </span>
             <span>
               Punkte: {player.pointsTotal}
             </span>
-            <span>EEMALDA</span>
+            <!-- <span>EEMALDA</span> -->
           </div>
         {/each}
       {/if}

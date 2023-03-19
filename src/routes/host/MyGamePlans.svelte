@@ -66,10 +66,10 @@
       <PlusCircleOutline {size} {ariaHidden} />
     </span>
   </div>
-  <br />
+  <!-- <br />
   <div>
     <h3><a href="#/host/my-codes">Minu QR koodid</a></h3>
-  </div>
+  </div> -->
 </div>
 
 <style>

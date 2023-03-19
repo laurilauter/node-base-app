@@ -5,6 +5,7 @@
   import { push, pop, replace } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
+  import { player, playerStats } from "../../stores.js";
   import { currentGame } from "../../stores.js";
   import { currentGamePlan } from "../../stores.js";
   import { currentGamePlanMarkers } from "../../stores.js";
@@ -17,11 +18,11 @@
   let error;
 
   //QR scanner
-
   let scanning = false;
   let html5Qrcode;
   let decodedText;
   let decodedResult;
+  let scanStatus;
 
   function init() {
     html5Qrcode = new Html5Qrcode("reader");
@@ -46,13 +47,36 @@
   }
 
   function onScanSuccess(decodedText, decodedResult) {
-    alert(`Code matched = ${decodedText}`);
-    console.log(decodedResult);
+    console.log("decodedResult ", decodedResult);
+    console.log("decodedText", decodedText);
+    if (decodedText) {
+      let markerId;
+      //exclude all markers from scan check that have been answered alredy
+      $currentGamePlanMarkers.forEach((element) => {
+        if (
+          element.content.qrcode.qrCodeTitle === decodedText
+          //        &&
+          //         !$playerStats.markersFound.includes(element._id)
+        ) {
+          markerId = element._id;
+          console.log("markerId ", markerId);
+        } else if ($playerStats.markersFound.includes(element._id)) {
+          console.log("answered already");
+        }
+      });
+      if (markerId) {
+        push(`/player/question-view/${params.id}/${markerId}`);
+      }
+    } else {
+      console.log("Unknown code");
+    }
+    stop();
   }
 
   function onScanFailure(error) {
     console.warn(`Code scan error = ${error}`);
   }
+  //scanner end
 
   async function getGameInfo() {
     try {
@@ -72,16 +96,50 @@
     }
   }
 
+  function getLocalPlayerInfo() {
+    $player = {
+      _id: JSON.parse(localStorage.getItem("playerId")),
+      playerName: JSON.parse(localStorage.getItem("playerName")),
+      gameCode: JSON.parse(localStorage.getItem("gameId")),
+    };
+  }
+
+  async function getPlayerStats() {
+    try {
+      const response = await fetch(`${baseURL}/game/player/${$player._id}`);
+      const responseData = await response.json();
+      $playerStats = responseData.player;
+      if (responseData.player) {
+        console.log("$playerStats loaded", $playerStats);
+      } else {
+        error = responseData.error;
+      }
+    } catch (error) {
+      console.log({ error: error });
+    }
+  }
+
   onMount(async () => {
     await getGameInfo();
     await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
     await gamePlanMarkerGetter.getGamePlanMarkers($currentGame.gamePlan._id);
+    getLocalPlayerInfo();
+    console.log("$player._id ", $player._id);
+    await getPlayerStats();
     init();
   });
 </script>
 
 <div class="column-container" in:fade={{ duration: 1000 }}>
   {#if !scanning}
+    <!-- <h4>
+      <span> Aega 00:43:21 </span>
+      <span> Koht 2/8 </span>
+    </h4>
+    <h4>
+      <span> Punkte 9 </span>
+      <span> Vastatud 0/3 </span>
+    </h4> -->
     <h2>Mängu kaart</h2>
   {/if}
   <div class="map-row-container">
@@ -105,7 +163,7 @@
       </div>
 
       <div class="info-box">
-        <p>{$currentGamePlan.gameMap}</p>
+        <!-- <p>{$currentGamePlan.gameMap}</p> -->
         <h4>
           Kasuta kaarti, er leida asukoht looduses/hoones. Sealt leiad QR koodi.
           Seda skannides saad vastata kusimustele.
@@ -116,6 +174,9 @@
     <div class="reader-box">
       <reader id="reader" />
       {#if scanning}
+        {#if scanStatus}
+          <h3 class="warning" n:fade={{ duration: 500 }}>{scanStatus}</h3>
+        {/if}
         <button on:click={stop}>Stop</button>
         <span>
           {decodedText}
@@ -200,5 +261,9 @@
     width: 100%;
     min-height: auto;
     background-color: black;
+  }
+
+  .warning {
+    color: var(--link-hover-color);
   }
 </style>

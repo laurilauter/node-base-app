@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const QrCodeSchema = new Schema({
   qrCodeTitle: { type: String, required: true },
-  qrCodeImage: { type: String, required: true },
   ownerId: { type: String, required: true },
 });
 

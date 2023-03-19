@@ -225,25 +225,12 @@ input[type="password"] {
   }
 }
 
-/* SPLASH */
-
-/* .splash-frame {
-  margin-top: 5vh;
-  min-height: 140px;
-  width: auto;
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
 }
-
-.img-frame {
-  min-height: 100px;
-  width: auto;
-}
-
-.img-frame img {
-  margin: 5px;
-  height: 100px;
-  width: 100px;
-  object-fit: cover;
-} */
 
 /* LOGIN, REGISTER */
 

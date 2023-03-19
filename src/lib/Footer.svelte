@@ -3,7 +3,7 @@
 </script>
 
 <!-- <p>Otsi ja vasta - 2023</p> -->
-<p>{$location}</p>
+<p class="no-print">{$location}</p>
 
 <style>
 </style>

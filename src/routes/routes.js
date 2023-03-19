@@ -100,7 +100,7 @@ export default {
   "/player-code": PlayerCode,
   "/player-start/:id": PlayerStart,
   "/player/map-view/:id": MapView,
-  "/player/question-view": QuestionView,
+  "/player/question-view/:gameCode/:markerId": QuestionView,
 
   //THESE ARE EXAMPLES BELOW
   // Using named parameters, with last being optional

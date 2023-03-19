@@ -3,11 +3,9 @@
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";
   import { onMount } from "svelte";
-  import { playerName } from "../../stores.js";
+  import { player } from "../../stores.js";
 
   let code;
-  let message;
-  let error;
 
   function toStart() {
     if (code) {
@@ -16,13 +14,13 @@
   }
 
   function getLocalPlayer() {
-    const game = JSON.parse(localStorage.getItem("game"));
-    const player = JSON.parse(localStorage.getItem("player"));
-    console.log(game, player);
-    console.log("game ", parseInt(game));
-    if (game && player) {
-      push(`/player/map-view/${parseInt(game)}`);
-      $playerName = player;
+    const gameCode = JSON.parse(localStorage.getItem("gameId"));
+    const playerName = JSON.parse(localStorage.getItem("playerName"));
+    console.log(gameCode, playerName);
+    console.log("game ", parseInt(gameCode));
+    if (gameCode && playerName) {
+      push(`/player/map-view/${parseInt(gameCode)}`);
+      $player.playerName = playerName;
     }
   }
 

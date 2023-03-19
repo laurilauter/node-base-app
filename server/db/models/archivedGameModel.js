@@ -1,6 +1,6 @@
+import mongoose from "mongoose";
 import GamePlan from "./gamePlanModel.js";
 import Player from "./playerModel.js";
-import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const archivedGameSchema = new Schema({

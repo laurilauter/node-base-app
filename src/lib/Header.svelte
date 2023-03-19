@@ -5,7 +5,7 @@
   import Logout from "./Logout.svelte";
   import SessionGet from "./utilities/SessionGet.svelte";
   import { isUserLoggedIn } from "../stores.js";
-  import { playerName } from "../stores.js";
+  import { player } from "../stores.js";
   import { sessionUserInfo } from "../stores.js";
   import { onMount } from "svelte";
   import Home from "svelte-material-icons/Home.svelte";
@@ -21,55 +21,57 @@
   });
 </script>
 
-<header>
-  <nav>
-    <div class="column-container width-100-perc">
-      <div class="row-container-between">
-        <div>
+{#if !$location.includes("/code-print/")}
+  <header>
+    <nav>
+      <div class="column-container width-100-perc">
+        <div class="row-container-between">
+          <div>
+            {#if $isUserLoggedIn}
+              <span class="side-m5">
+                <a href="#/host"> <Home {size} {ariaHidden} /></a>
+              </span>
+            {/if}
+          </div>
           {#if $isUserLoggedIn}
-            <span class="side-m5">
-              <a href="#/host"> <Home {size} {ariaHidden} /></a>
-            </span>
+            <div>
+              <Logout>
+                <span class="side-m5 hidden-mobile">
+                  {$sessionUserInfo.email}
+                </span>
+              </Logout>
+            </div>
+          {:else if $sessionUserInfo.email === undefined}
+            No email
+          {:else if $player.playerName}
+            <div class="player-name">{$player.playerName}</div>
           {/if}
         </div>
-        {#if $isUserLoggedIn}
-          <div>
-            <Logout>
-              <span class="side-m5 hidden-mobile">
-                {$sessionUserInfo.email}
-              </span>
-            </Logout>
-          </div>
-        {:else if $sessionUserInfo.email === undefined}
-          No email
-        {:else if $playerName}
-          <div class="player-name">{$playerName}</div>
-        {/if}
-      </div>
-      <div class="row-container" in:fade={{ duration: 1000 }}>
-        <h4>
-          {#if $location.includes("/host/") || $location.includes("/game-plan/")}
-            <a href="#/host">Algus</a>
-            {#if $location.includes("/game-plan/")}
-              <span>/</span>
-              <a href="#/host/my-plans">Minu mängud</a>
-            {:else if $location.includes("/archived-game/")}
-              <span>/</span>
-              <a href="#/host/game-history">Ajalugu</a>
-              {#if $currentGamePlanLink && $location.slice(0, 15) === "/game-plan/game"}
+        <div class="row-container" in:fade={{ duration: 1000 }}>
+          <h4>
+            {#if $location.includes("/host/") || $location.includes("/game-plan/")}
+              <a href="#/host">Algus</a>
+              {#if $location.includes("/game-plan/")}
                 <span>/</span>
-                <a href="/#{$currentGamePlanLink.location}">
-                  {$currentGamePlanLink.title}</a
-                >
+                <a href="#/host/my-plans">Minu mängud</a>
+              {:else if $location.includes("/archived-game/")}
+                <span>/</span>
+                <a href="#/host/game-history">Ajalugu</a>
+                {#if $currentGamePlanLink && $location.slice(0, 15) === "/game-plan/game"}
+                  <span>/</span>
+                  <a href="/#{$currentGamePlanLink.location}">
+                    {$currentGamePlanLink.title}</a
+                  >
+                {/if}
               {/if}
             {/if}
-          {/if}
-        </h4>
+          </h4>
+        </div>
       </div>
-    </div>
-  </nav>
-  <SessionGet bind:this={sessionGetter} />
-</header>
+    </nav>
+    <SessionGet bind:this={sessionGetter} />
+  </header>
+{/if}
 
 <style>
   header {

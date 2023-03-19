@@ -1,6 +1,5 @@
 <script>
   // @ts-nocheck
-
   import baseURL from "../../../lib/utilities/baseUrl";
   import { push, pop, replace, location } from "svelte-spa-router";
   import { fade } from "svelte/transition";
@@ -11,10 +10,17 @@
   import PlusCircleOutline from "svelte-material-icons/PlusCircleOutline.svelte";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
   import Pencil from "svelte-material-icons/Pencil.svelte";
+  import PrinterOutline from "svelte-material-icons/PrinterOutline.svelte";
   import InPlaceEdit from "../../../lib/utilities/InPlaceEdit.svelte";
+  import { sessionUserInfo } from "../../../stores.js";
   import { currentGamePlan } from "../../../stores.js";
   import { currentGamePlanMarkers } from "../../../stores.js";
+  import { userQrCodes } from "../../../stores.js";
+  import QrModal from "../../../lib/utilities/popup/QrModal.svelte";
+  import { Modals, closeModal } from "svelte-modals";
+  import { openModal } from "svelte-modals";
 
+  let currentQrCodes;
   let gamePlanGetter;
   let gamePlanMarkerGetter;
   let checked;
@@ -37,7 +43,10 @@
               x: 0,
               y: 0,
             },
-            qrcodeId: "qrcodeIdValue",
+            qrcode: {
+              qrCodeTitle: `Kood ${$currentGamePlanMarkers.length + 1}`,
+              ownerId: $sessionUserInfo.id,
+            },
             quiz: {
               question: "Kas soovid muuta küsimust?",
               answers: [
@@ -142,9 +151,24 @@
     };
   }
 
+  async function getCodes() {
+    const response = await fetch(`${baseURL}/qr/list/${$sessionUserInfo.id}`);
+    console.log("$sessionUserInfo.id ", $sessionUserInfo.id);
+    currentQrCodes = await response.json();
+    currentQrCodes.unshift({ _id: "", qrCodeTitle: "Puudub" });
+    $userQrCodes = currentQrCodes;
+    console.log("currentQrCodes ", currentQrCodes);
+    console.log("$userQrCodes ", $userQrCodes);
+  }
+
+  function handleClick(code) {
+    openModal(QrModal, { code: code });
+  }
+
   onMount(async () => {
     await gamePlanGetter.getGamePlan(params.id);
     await gamePlanMarkerGetter.getGamePlanMarkers(params.id);
+    await getCodes();
   });
 </script>
 
@@ -225,6 +249,19 @@
                 <PlusCircleOutline size={"2.1rem"} ariaHidden={false} />
               </span>
             </div>
+
+            <div class="code-div">
+              <span>QR:</span>
+              <span class="bold">
+                {value.content.qrcode.qrCodeTitle}
+              </span>
+              <span
+                class="link-button"
+                on:click={handleClick(value.content.qrcode.qrCodeTitle)}
+                on:keypress
+                ><PrinterOutline size={"2.1rem"} ariaHidden={false} /></span
+              >
+            </div>
           </div>
         </div>
       {:else}
@@ -240,11 +277,18 @@
 </span>
 <GamePlanGet bind:this={gamePlanGetter} />
 <GamePlanMarkersGet bind:this={gamePlanMarkerGetter} />
+<Modals>
+  <div slot="backdrop" class="backdrop" on:click={closeModal} on:keypress />
+</Modals>
+<span />
 
 <style>
   .question-container {
     max-width: 600px;
     padding: 1rem;
+    border: 1px solid rgb(58, 58, 58);
+    border-radius: 9px;
+    margin-bottom: 10px;
   }
   .question-box {
     height: fit-content;
@@ -282,7 +326,7 @@
 
   .add-answer {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     width: fit-content;
     height: 2.4rem;
@@ -308,11 +352,6 @@
     cursor: pointer;
   }
 
-  /* .answer-trash {
-    display: flex;
-    text-align: center;
-  } */
-
   .answer-link-button {
     color: var(--link-color);
     border-radius: 0;
@@ -327,5 +366,25 @@
 
   .answer-link-button:hover {
     color: var(--link-hover-color);
+  }
+
+  .bold {
+    font-weight: bold;
+    margin: 10px;
+  }
+
+  .backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .code-div {
+    display: flex;
+    justify-content: end;
+    align-items: center;
   }
 </style>

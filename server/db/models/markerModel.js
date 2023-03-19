@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import QrCode from "./qrCodeModel.js";
 const Schema = mongoose.Schema;
 
 const MarkerShema = new Schema({
@@ -9,7 +10,7 @@ const MarkerShema = new Schema({
       x: { type: Number },
       y: { type: Number },
     },
-    qrcodeId: { type: String },
+    qrcode: { type: QrCode.schema },
     quiz: {
       question: { type: String, required: true },
       answers: [

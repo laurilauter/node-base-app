@@ -20,6 +20,10 @@ gameRouter.get("/active/:id", gameController.getGames);
 
 gameRouter.get("/players/:id", gameController.getPlayers);
 
+gameRouter.get("/player/:id", gameController.getPlayer);
+
+gameRouter.patch("/player/:id", gameController.updatePlayer);
+
 gameRouter.get("/end/:id", gameController.endGame);
 
 export default gameRouter;

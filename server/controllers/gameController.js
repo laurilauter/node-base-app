@@ -105,7 +105,7 @@ export async function playerJoin(req, res) {
         gameCode: gameCode,
         name: name,
         pointsTotal: 0,
-        markersFound: 0,
+        markersFound: [],
       };
       const player = await Player.create(newPlayer);
       console.log("player", player);
@@ -141,6 +141,36 @@ export async function getPlayers(req, res) {
     const filter = { gameCode: req.params.id };
     let players = await Player.find(filter).sort({ pointsTotal: -1 });
     res.status(200).send({ players: players });
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+export async function getPlayer(req, res) {
+  try {
+    const filter = { _id: req.params.id };
+    let player = await Player.findOne(filter);
+    res.status(200).send({ player });
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+export async function updatePlayer(req, res) {
+  try {
+    const filter = { _id: req.params.id };
+
+    const { points, marker } = req.body;
+    console.log(req.params.id);
+    console.log(req.body);
+    const update = {
+      $inc: { pointsTotal: points },
+      $addToSet: { markersFound: marker },
+    };
+    const options = { sort: { _id: 1 }, new: true };
+    let updatedPlayer = await Player.findOneAndUpdate(filter, update, options);
+    console.log("updatedPlayer ", updatedPlayer);
+    res.status(200).send(updatedPlayer);
   } catch (error) {
     res.status(500).send({ error: error });
   }

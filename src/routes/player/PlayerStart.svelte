@@ -3,12 +3,12 @@
   import { onMount } from "svelte";
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";
-  import { playerName } from "../../stores.js";
+  import { player } from "../../stores.js";
   export let params = {};
 
   let name;
   let error;
-  let player;
+  let currentPlayer;
   let currentGame;
   let code;
 
@@ -26,14 +26,20 @@
 
     const responseData = await response.json();
     error = responseData.error;
-    player = responseData.player;
-
-    if (player) {
+    currentPlayer = responseData.player;
+    console.log("currentPlayer ", currentPlayer);
+    if (currentPlayer) {
       //save data to localstorage, to recognize the player
-      localStorage.setItem("player", JSON.stringify(player.name));
-      localStorage.setItem("game", JSON.stringify(player.gameCode));
+      localStorage.setItem("playerName", JSON.stringify(currentPlayer.name));
+      localStorage.setItem("gameId", JSON.stringify(currentPlayer.gameCode));
+      localStorage.setItem("playerId", JSON.stringify(currentPlayer._id));
+
       //save player name to storage to trigger header in map view
-      $playerName = player.name;
+      $player = {
+        _id: currentPlayer._id,
+        playerName: currentPlayer.name,
+        gameCode: currentPlayer.gameCode,
+      };
       push(`/player/map-view/${code}`);
     }
   }
@@ -79,10 +85,10 @@
             <h3>Mängu {params.id} ei leitud!</h3>
           {/if}
           <p>
-            {#if player}
-              <p>code: {player.gameCode}</p>
-              <p>name: {player.name}</p>
-              <p>_id: {player._id}</p>
+            {#if currentPlayer}
+              <p>code: {currentPlayer.gameCode}</p>
+              <p>name: {currentPlayer.name}</p>
+              <p>_id: {currentPlayer._id}</p>
             {/if}
           </p>
           <p>

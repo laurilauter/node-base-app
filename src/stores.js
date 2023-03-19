@@ -18,6 +18,7 @@ export const currentGamePlan = writable({
   markers: "",
 });
 export const currentGamePlanMarkers = writable([]);
+export const userQrCodes = writable([]);
 //Game
 export const currentJoinLink = writable();
 export const currentGame = writable({
@@ -29,4 +30,29 @@ export const currentGame = writable({
 export const currentPlayers = writable([]);
 
 //player
-export const playerName = writable();
+export const player = writable({
+  _id: "",
+  playerName: "",
+  gameCode: "",
+});
+export const playerStats = writable();
+export const currentGamePlanMarker = writable({
+  title: "",
+  gamePlanId: "",
+  content: {
+    position: {
+      x: 0,
+      y: 0,
+    },
+    qrcode: "",
+    quiz: {
+      question: "",
+      answers: [
+        {
+          text: "",
+          isCorrect: false,
+        },
+      ],
+    },
+  },
+});

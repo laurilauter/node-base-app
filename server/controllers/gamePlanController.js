@@ -1,3 +1,4 @@
+import QRCode from "qrcode";
 import { GamePlan } from "../db/dbConnection.js";
 import { Marker } from "../db/dbConnection.js";
 //import moment from "moment";
@@ -32,9 +33,10 @@ export async function createGame(req, res) {
 //make sure the client sends valid gamePlanId in req.body, otherwise it will fail
 export async function createMarker(req, res) {
   try {
-    const { marker } = req.body;
+    let { marker } = req.body;
+    console.log("marker ", marker);
     const newMarker = await Marker.create(marker);
-
+    console.log("newMarker", newMarker);
     //add id of newly createrd marker to the parent GamePlan
     if (newMarker) {
       const filter = { _id: newMarker.gamePlanId };
@@ -95,7 +97,7 @@ export async function getMarker(req, res) {
   try {
     const filter = { _id: req.params.id };
     let foundMarker = await Marker.findOne(filter);
-
+    console.log("foundMarker ", foundMarker);
     res.status(200).send(foundMarker);
   } catch (error) {
     res.status(500).send({ error: error });

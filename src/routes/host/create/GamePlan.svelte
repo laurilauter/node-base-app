@@ -21,6 +21,7 @@
   export let size = "2em"; // string | number
   export let ariaHidden = false; // boolean
   let show = false;
+
   async function deleteGamePlan() {
     const response = await fetch(
       `${baseURL}/game-plan/delete/${$currentGamePlan._id}`,

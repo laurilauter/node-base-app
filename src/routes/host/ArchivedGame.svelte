@@ -60,7 +60,7 @@
         <div class="player-row">
           <span class="bold">{player.name}</span>
           <span>Punkte: {player.pointsTotal}</span>
-          <span>Märke: {player.markersFound}</span>
+          <span>Küsimusi leitud: {player.markersFound.length}</span>
         </div>
       {/each}
     {:else}
