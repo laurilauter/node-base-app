@@ -54,9 +54,9 @@
       //exclude all markers from scan check that have been answered alredy
       $currentGamePlanMarkers.forEach((element) => {
         if (
-          element.content.qrcode.qrCodeTitle === decodedText
-          //        &&
-          //         !$playerStats.markersFound.includes(element._id)
+          element.content.qrcode.qrCodeTitle === decodedText &&
+          //the next line checks if the player has answered the question already
+          !$playerStats.markersFound.includes(element._id)
         ) {
           markerId = element._id;
           console.log("markerId ", markerId);
