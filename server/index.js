@@ -23,6 +23,31 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { WebSocketServer } from "ws";
+const wss = new WebSocketServer({ port: 4040 });
+
+wss.on("connection", function connection(ws) {
+  ws.on("error", console.error);
+
+  ws.on("message", function message(data, isBinary) {
+    console.log("Server received a message");
+    wss.clients.forEach(function (client) {
+      console.log("in for each");
+      console.log("client._readyState", client._readyState);
+      //send to everybody //for some reason the clients are not readyState === WebSocketServer.OPEN
+      //   if (client !== ws && client.readyState === WebSocketServer.OPEN) {
+      client.send(data, { binary: isBinary });
+      //     }
+    });
+  });
+
+  ws.send("something from server");
+});
+
+// wss.on("connection", (ws) => {
+//   console.log("we are connected");
+// });
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());

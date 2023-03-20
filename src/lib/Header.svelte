@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import { currentGamePlanLink } from "./../stores.js";
   import { push, pop, replace, location } from "svelte-spa-router";
   import { fade } from "svelte/transition";
@@ -9,12 +11,25 @@
   import { sessionUserInfo } from "../stores.js";
   import { onMount } from "svelte";
   import Home from "svelte-material-icons/Home.svelte";
+  import { socket } from "../socket.js";
 
   // all properties are optional
   export let size = "3em"; // string | number
   export let ariaHidden = false; // boolean
 
   let sessionGetter;
+  let data;
+  let incoming;
+
+  function sendData(info) {
+    data = { info: info };
+    socket.send(JSON.stringify(data));
+  }
+
+  socket.onmessage = function (event) {
+    console.log(`WS Data received from server: ${event.data}`);
+    incoming = event.data;
+  };
 
   onMount(async () => {
     await sessionGetter.getSession();
@@ -36,15 +51,26 @@
           {#if $isUserLoggedIn}
             <div>
               <Logout>
-                <span class="side-m5 hidden-mobile">
+                <span
+                  class="side-m5 hidden-mobile"
+                  on:click={sendData($sessionUserInfo.email)}
+                  on:keydown
+                >
                   {$sessionUserInfo.email}
+                  {#if incoming}
+                    <span>
+                      {incoming}
+                    </span>
+                  {/if}
                 </span>
               </Logout>
             </div>
           {:else if $sessionUserInfo.email === undefined}
             No email
           {:else if $player.playerName}
-            <div class="player-name">{$player.playerName}</div>
+            <div>
+              {$player.playerName}
+            </div>
           {/if}
         </div>
         <div class="row-container" in:fade={{ duration: 1000 }}>
