@@ -4,6 +4,7 @@
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";
   import { player } from "../../stores.js";
+  import { socket } from "../../socket.js";
   export let params = {};
 
   let name;
@@ -11,6 +12,11 @@
   let currentPlayer;
   let currentGame;
   let code;
+  let data;
+
+  function sendData(data) {
+    socket.send(JSON.stringify(data));
+  }
 
   async function joinGame() {
     const response = await fetch(`${baseURL}/game/playerjoin`, {
@@ -40,6 +46,8 @@
         playerName: currentPlayer.name,
         gameCode: currentPlayer.gameCode,
       };
+      data = { event: "playerJoined" };
+      sendData(data);
       push(`/player/map-view/${code}`);
     }
   }

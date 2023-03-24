@@ -18,24 +18,36 @@
   export let ariaHidden = false; // boolean
 
   let sessionGetter;
-  let data;
-  let incoming;
+  // let data;
+  // let incoming;
 
-  function sendData(info) {
-    data = { info: info };
-    socket.send(JSON.stringify(data));
+  // function sendData(info) {
+  //   data = { info: info };
+  //   socket.send(JSON.stringify(data));
+  // }
+
+  // socket.onmessage = function (event) {
+  //   console.log(`WS Data received from server: ${event.data}`);
+  //   incoming = event.data;
+  // };
+
+  function checkLocalPlayerInfo() {
+    if (JSON.parse(localStorage.getItem("gameId")) === "") {
+      $player = {
+        _id: "",
+        playerName: "",
+        gameCode: "",
+      };
+    }
   }
-
-  socket.onmessage = function (event) {
-    console.log(`WS Data received from server: ${event.data}`);
-    incoming = event.data;
-  };
 
   onMount(async () => {
     await sessionGetter.getSession();
+    checkLocalPlayerInfo();
   });
 </script>
 
+<!-- Should be 2 types of headers, user and player header -->
 {#if !$location.includes("/code-print/") || $location === "/"}
   <header>
     <nav>
@@ -48,30 +60,17 @@
               </span>
             {/if}
           </div>
-          {#if $isUserLoggedIn}
-            <div>
+          <div>
+            {#if $isUserLoggedIn}
               <Logout>
-                <span
-                  class="side-m5 hidden-mobile"
-                  on:click={sendData($sessionUserInfo.email)}
-                  on:keydown
-                >
-                  {$sessionUserInfo.email}
-                  {#if incoming}
-                    <span>
-                      {incoming}
-                    </span>
-                  {/if}
-                </span>
+                {$sessionUserInfo.email}
               </Logout>
-            </div>
-          {:else if $sessionUserInfo.email === undefined}
-            No email
-          {:else if $player.playerName}
-            <div>
-              {$player.playerName}
-            </div>
-          {/if}
+            {:else if $player.playerName}
+              <div class="player-name">
+                {$player.playerName}
+              </div>
+            {/if}
+          </div>
         </div>
         <div class="row-container" in:fade={{ duration: 1000 }}>
           <h4>

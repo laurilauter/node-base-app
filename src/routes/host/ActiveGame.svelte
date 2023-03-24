@@ -8,6 +8,7 @@
   import { onMount } from "svelte";
   import Select from "./play/Select.svelte";
   import moment from "moment";
+  import { socket } from "../../socket.js";
 
   let selected;
   let userGamePlans;
@@ -19,6 +20,19 @@
 
   const now = moment();
   let time = now.add(1, "hour");
+
+  socket.onmessage = function (event) {
+    console.log(`WS Data received from server: ${event.data}`);
+    const receivedData = JSON.parse(event.data);
+    console.log("receivedData parsed", receivedData);
+    if (receivedData.event === "playerJoined") {
+      getPlayers();
+    } else if (receivedData.event === "scoreUpdate") {
+      getPlayers();
+    } else {
+      console.log("receivedData ", receivedData);
+    }
+  };
 
   async function getGamePlans() {
     try {
@@ -60,7 +74,7 @@
         error = responseData.error;
         $currentGame = {
           _id: "",
-          gamePlan: {},
+          gamePlan: { _id: "" },
           gameStatus: "",
           gameCode: "",
           players: [],
@@ -133,7 +147,7 @@
       $currentJoinLink = "";
       $currentGame = {
         _id: "",
-        gamePlan: {},
+        gamePlan: { _id: "" },
         gameStatus: "",
         gameCode: "",
         players: [],
@@ -154,7 +168,7 @@
       $currentJoinLink = "";
       $currentGame = {
         _id: "",
-        gamePlan: {},
+        gamePlan: { _id: "" },
         gameStatus: "",
         gameCode: "",
         players: [],
@@ -185,7 +199,7 @@
   <h3 class="green">Kood: {$currentGame.gameCode}</h3>
 {/if}
 {#if $currentGame.gameStatus === ""}
-  <div>
+  <div class="column-container">
     <p>Vali mänugplaan ja alusta mängu.</p>
     <Select
       options={userGamePlans}
@@ -229,7 +243,7 @@
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
   <div>
     <h2>Mängijad</h2>
-    <span><button class="btn" on:click={getPlayers}>Uuenda</button></span>
+    <!-- <span><button class="btn" on:click={getPlayers}>Uuenda</button></span> -->
     <div class="players-frame column-container">
       {#if $currentPlayers}
         {#each $currentPlayers as player}
@@ -251,7 +265,7 @@
     </div>
   </div>
 {/if}
-
+<!-- 
 <br />
 <div class="info-wrapper">
   <div class="info-box">
@@ -270,7 +284,7 @@
     <span>Start disabled: </span>
     {$currentPlayers.length > 0 ? false : true}
   </div>
-</div>
+</div> -->
 
 <SessionGet bind:this={sessionGetter} />
 

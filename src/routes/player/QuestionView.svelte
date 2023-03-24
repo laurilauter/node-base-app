@@ -5,12 +5,17 @@
   import { fade } from "svelte/transition";
   import { currentGamePlanMarker, player } from "../../stores.js";
   import { onMount } from "svelte";
+  import { socket } from "../../socket.js";
   export let params = {};
 
   let userMarkerAnswers;
   let answerHolder = [];
 
   let checked = false;
+
+  function sendData(data) {
+    socket.send(JSON.stringify(data));
+  }
 
   async function updatePlayer() {
     let points = 0;
@@ -38,6 +43,10 @@
       });
       let updatedPlayerStats = await response.json();
       console.log("updatedPlayerStats ", updatedPlayerStats);
+      if (updatedPlayerStats) {
+        let data = { event: "scoreUpdate" };
+        sendData(data);
+      }
     } catch (error) {
       console.log({
         error: error,

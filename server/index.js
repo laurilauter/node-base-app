@@ -34,19 +34,12 @@ wss.on("connection", function connection(ws) {
     wss.clients.forEach(function (client) {
       console.log("in for each");
       console.log("client._readyState", client._readyState);
-      //send to everybody //for some reason the clients are not readyState === WebSocketServer.OPEN
-      //   if (client !== ws && client.readyState === WebSocketServer.OPEN) {
       client.send(data, { binary: isBinary });
-      //     }
     });
   });
 
   ws.send("something from server");
 });
-
-// wss.on("connection", (ws) => {
-//   console.log("we are connected");
-// });
 
 const app = express();
 app.use(express.json());

@@ -5,6 +5,7 @@ import { Player } from "../db/dbConnection.js";
 import { ArchivedGame } from "../db/dbConnection.js";
 import ActiveGame from "../classes/ActiveGame.js";
 import moment from "moment";
+import { WebSocketServer } from "ws";
 
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
@@ -101,33 +102,41 @@ export async function playerJoin(req, res) {
   console.log("gameCode", gameCode);
   try {
     if (name && gameCode) {
-      const newPlayer = {
-        gameCode: gameCode,
-        name: name,
-        pointsTotal: 0,
-        markersFound: [],
-      };
-      const player = await Player.create(newPlayer);
-      console.log("player", player);
+      const filter = { name: name };
+      let playerExists = await Player.findOne(filter);
+      console.log("playerExists ", playerExists);
 
-      if (player) {
-        const filter = { gameCode: gameCode };
-        const update = {
-          $push: {
-            players: player._id,
-          },
+      if (!playerExists) {
+        const newPlayer = {
+          gameCode: gameCode,
+          name: name,
+          pointsTotal: 0,
+          markersFound: [],
         };
-        const options = { sort: { _id: 1 }, new: true };
-        const currentGame = await Game.findOneAndUpdate(
-          filter,
-          update,
-          options
-        );
-        console.log("player added to currentGame ", currentGame.players);
+        const player = await Player.create(newPlayer);
+        console.log("player", player);
+
+        if (player) {
+          const filter = { gameCode: gameCode };
+          const update = {
+            $push: {
+              players: player._id,
+            },
+          };
+          const options = { sort: { _id: 1 }, new: true };
+          const currentGame = await Game.findOneAndUpdate(
+            filter,
+            update,
+            options
+          );
+          console.log("player added to currentGame ", currentGame.players);
+        }
+        res.status(200).send({
+          player: player,
+        });
+      } else {
+        res.status(400).send({ error: "Nimi juba kasutusel" });
       }
-      res.status(200).send({
-        player: player,
-      });
     } else {
       res.status(404).send({ error: "No active game with this Id" });
     }
@@ -206,7 +215,7 @@ export async function endGame(req, res) {
 
     const finalPlayerStats = await Player.find({
       gameCode: endedGame.gameCode,
-    });
+    }).sort({ pointsTotal: -1 });
 
     const gamePlan = {
       gameTitle: endedGame.gamePlan.gameTitle,
