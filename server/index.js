@@ -15,7 +15,7 @@ import cookieParser from "cookie-parser";
 
 import * as dotenv from "dotenv";
 dotenv.config();
-const port = process.env.PORT;
+//const port = process.env.PORT;
 const secret = process.env.SESSION_SECRET;
 
 import path from "path";
@@ -23,31 +23,13 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// import { WebSocketServer } from "ws";
-// const wss = new WebSocketServer({ port: 443 });
-
-// wss.on("connection", function connection(ws) {
-//   ws.on("error", console.error);
-
-//   ws.on("message", function message(data, isBinary) {
-//     console.log("Server received a message");
-//     wss.clients.forEach(function (client) {
-//       console.log("in for each");
-//       console.log("client._readyState", client._readyState);
-//       client.send(data, { binary: isBinary });
-//     });
-//   });
-
-//   ws.send("something from server");
-// });
-
 import { WebSocketServer } from "ws";
 const wss = new WebSocketServer({ port: 443 });
 
-wss.on("connection", function connection(wss) {
-  wss.on("error", console.error);
+wss.on("connection", function connection(ws) {
+  ws.on("error", console.error);
 
-  wss.on("message", function message(data, isBinary) {
+  ws.on("message", function message(data, isBinary) {
     console.log("Server received a message");
     wss.clients.forEach(function (client) {
       console.log("in for each");
@@ -56,7 +38,7 @@ wss.on("connection", function connection(wss) {
     });
   });
 
-  wss.send("something from server");
+  ws.send("something from server");
 });
 
 const app = express();
@@ -132,6 +114,6 @@ app.get("/", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../client/join.html"));
 // });
 
-app.listen(port, () => {
-  console.log(`Server running at: http://localhost:${port}`);
+app.listen(8080, () => {
+  console.log(`Server running at: http://localhost:${8080}`);
 });
