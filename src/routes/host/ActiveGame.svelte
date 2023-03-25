@@ -295,7 +295,7 @@
   .btn {
     max-width: 160px;
   }
-
+  /* 
   .info-wrapper {
     width: 100%;
     display: flex;
@@ -309,7 +309,7 @@
     border: 1px solid grey;
     width: 400px;
     color: grey;
-  }
+  } */
   .players-frame {
     width: 100%;
     display: flex;
