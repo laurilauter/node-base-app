@@ -1,9 +1,9 @@
-import baseURL from "./lib/utilities/baseUrl";
+import baseURLWs from "./lib/utilities/baseUrlWs";
 
 //Make this dynamic
 //does this work with SSL?
 //export const socket = new WebSocket("ws://localhost:4040/");
-export const socket = new WebSocket("ws://localhost:4040");
+export const socket = new WebSocket(baseURLWs);
 
 //WS setup
 socket.onopen = function () {
