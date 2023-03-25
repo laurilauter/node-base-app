@@ -15,7 +15,7 @@ import cookieParser from "cookie-parser";
 
 import * as dotenv from "dotenv";
 dotenv.config();
-//const port = process.env.PORT;
+const port = process.env.PORT;
 const secret = process.env.SESSION_SECRET;
 
 import path from "path";
@@ -114,6 +114,6 @@ app.get("/", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../client/join.html"));
 // });
 
-app.listen(8080, () => {
-  console.log(`Server running at: http://localhost:${8080}`);
+app.listen(port, () => {
+  console.log(`Server running at: http://localhost:${port}`);
 });
