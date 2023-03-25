@@ -24,7 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import { WebSocketServer } from "ws";
-const wss = new WebSocketServer({ port: 4040 });
+const wss = new WebSocketServer({ port: 443 });
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
