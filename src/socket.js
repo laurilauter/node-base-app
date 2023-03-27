@@ -1,5 +1,5 @@
-import baseURL from "./lib/utilities/baseUrlWs";
-export const socket = new WebSocket(baseURL);
+import baseURLWs from "./lib/utilities/baseUrlWs";
+export const socket = new WebSocket(baseURLWs);
 
 //WS setup
 socket.onopen = function () {
