@@ -32,7 +32,8 @@ import http from "http";
 //import WebSocket from "ws";
 
 const server = http.createServer();
-const wss = new WebSocketServer({ server });
+//const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({ server: server }, function () {});
 
 server.listen(4040);
 
