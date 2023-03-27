@@ -23,8 +23,37 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//The SSL cert and SSL keys path on Evennode hosting is located in the /etc/ssl/certs/ directory.
+
+// import { WebSocketServer } from "ws";
+// const wss = new WebSocketServer({ port: 4040 });
+
+// wss.on("connection", function connection(ws) {
+//   ws.on("error", console.error);
+
+//   ws.on("message", function message(data, isBinary) {
+//     console.log("Server received a message");
+//     wss.clients.forEach(function (client) {
+//       console.log("in for each");
+//       console.log("client._readyState", client._readyState);
+//       client.send(data, { binary: isBinary });
+//     });
+//   });
+
+//   ws.send("something from server");
+// });
+
+import { createServer } from "https";
+import { readFileSync } from "fs";
 import { WebSocketServer } from "ws";
-const wss = new WebSocketServer({ port: 4040 });
+
+const options = {
+  key: readFileSync("/path/to/certificate/key.pem"),
+  cert: readFileSync("/path/to/certificate/cert.pem"),
+};
+
+const server = createServer(options);
+const wss = new WebSocketServer({ server });
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
@@ -40,6 +69,8 @@ wss.on("connection", function connection(ws) {
 
   ws.send("something from server");
 });
+
+server.listen(4040);
 
 const app = express();
 app.use(express.json());
