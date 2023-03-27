@@ -26,7 +26,15 @@ const __dirname = path.dirname(__filename);
 //The SSL cert and SSL keys path on Evennode hosting is located in the /etc/ssl/certs/ directory.
 
 import { WebSocketServer } from "ws";
-const wss = new WebSocketServer({ port: 4040 });
+// const wss = new WebSocketServer({ port: 4040 });
+
+import http from "http";
+//import WebSocket from "ws";
+
+const server = http.createServer();
+const wss = new WebSocketServer({ server });
+
+server.listen(4040);
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
