@@ -36,7 +36,7 @@ const server = http.createServer();
 const wss = new WebSocketServer({ server: server }, function () {});
 
 //server.listen(4040);
-server.listen(port);
+server.listen(3000);
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
