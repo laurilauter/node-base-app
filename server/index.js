@@ -16,6 +16,7 @@ import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 dotenv.config();
 const port = process.env.PORT;
+const portws = process.env.PORTWS;
 const secret = process.env.SESSION_SECRET;
 
 import path from "path";
@@ -36,7 +37,7 @@ const server = http.createServer();
 const wss = new WebSocketServer({ server: server }, function () {});
 
 //server.listen(4040);
-server.listen(3000);
+server.listen(portws);
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
