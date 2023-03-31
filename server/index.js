@@ -24,39 +24,37 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// //The SSL cert and SSL keys path on Evennode hosting is located in the /etc/ssl/certs/ directory.
+//The SSL cert and SSL keys path on Evennode hosting is located in the /etc/ssl/certs/ directory.
 
-// import http from "http";
-// import { WebSocketServer } from "ws";
-// // const wss = new WebSocketServer({ port: 4040 });
-
-// //import WebSocket from "ws";
-
-// const server = http.createServer();
-// const wss = new WebSocketServer({ server });
-// //const wss = new WebSocketServer({ server: server }, function () {});
-
-// //server.listen(4040);
-// server.listen(port, () => {
-//   console.log(`ws listening on ${port}`);
-// });
-
-// wss.on("connection", function connection(ws) {
-//   ws.on("error", console.error);
-
-//   ws.on("message", function message(data, isBinary) {
-//     console.log("Server received a message");
-//     wss.clients.forEach(function (client) {
-//       console.log("in for each");
-//       console.log("client._readyState", client._readyState);
-//       client.send(data, { binary: isBinary });
-//     });
-//   });
-
-//   ws.send("something from server");
-// });
+import http from "http";
+import { WebSocketServer } from "ws";
+// const wss = new WebSocketServer({ port: 4040 });
 
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+//const wss = new WebSocketServer({ server: server }, function () {});
+
+//server.listen(4040);
+server.listen(port, () => {
+  console.log(`ws listening on ${port}`);
+});
+
+wss.on("connection", function connection(ws) {
+  ws.on("error", console.error);
+
+  ws.on("message", function message(data, isBinary) {
+    console.log("Server received a message");
+    wss.clients.forEach(function (client) {
+      console.log("in for each");
+      console.log("client._readyState", client._readyState);
+      client.send(data, { binary: isBinary });
+    });
+  });
+
+  ws.send("something from server");
+});
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -129,6 +127,6 @@ app.get("/", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../client/join.html"));
 // });
 
-app.listen(port, () => {
-  console.log(`Server running at: ${process.env.NODE_ENV}:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running at: ${process.env.NODE_ENV}:${port}`);
+// });

@@ -24,5 +24,5 @@ socket.onclose = function (event) {
 };
 
 socket.onerror = function (error) {
-  console.log(`WS error: ${error}`);
+  console.log(`WS error: ${error.message}`);
 };
