@@ -15,8 +15,10 @@ import cookieParser from "cookie-parser";
 
 import * as dotenv from "dotenv";
 dotenv.config();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const portws = process.env.PORTWS;
+console.log(portws);
+console.log(port);
 const secret = process.env.SESSION_SECRET;
 
 import path from "path";
@@ -24,49 +26,22 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//The SSL cert and SSL keys path on Evennode hosting is located in the /etc/ssl/certs/ directory.
+// //The SSL cert and SSL keys path on Evennode hosting is located in the /etc/ssl/certs/ directory.
 
-import { WebSocketServer } from "ws";
-// const wss = new WebSocketServer({ port: 4040 });
-
-import http from "http";
-//import WebSocket from "ws";
-
-const server = http.createServer();
-//const wss = new WebSocketServer({ server });
-const wss = new WebSocketServer({ server: server }, function () {});
-
-//server.listen(4040);
-server.listen(portws, () => {
-  console.log(`ws listening on ${portws}`);
-});
-
-wss.on("connection", function connection(ws) {
-  ws.on("error", console.error);
-
-  ws.on("message", function message(data, isBinary) {
-    console.log("Server received a message");
-    wss.clients.forEach(function (client) {
-      console.log("in for each");
-      console.log("client._readyState", client._readyState);
-      client.send(data, { binary: isBinary });
-    });
-  });
-
-  ws.send("something from server");
-});
-
-// import { createServer } from "https";
-// import { readFileSync } from "fs";
+// import http from "http";
 // import { WebSocketServer } from "ws";
+// // const wss = new WebSocketServer({ port: 4040 });
 
-// const options = {
-//   key: readFileSync("/path/to/certificate/key.pem"),
-//   cert: readFileSync("/path/to/certificate/cert.pem"),
-// };
+// //import WebSocket from "ws";
 
-// const server = createServer(options);
+// const server = http.createServer();
 // const wss = new WebSocketServer({ server });
+// //const wss = new WebSocketServer({ server: server }, function () {});
+
+// //server.listen(4040);
+// server.listen(port, () => {
+//   console.log(`ws listening on ${port}`);
+// });
 
 // wss.on("connection", function connection(ws) {
 //   ws.on("error", console.error);
@@ -82,8 +57,6 @@ wss.on("connection", function connection(ws) {
 
 //   ws.send("something from server");
 // });
-
-// server.listen(4040);
 
 const app = express();
 app.use(express.json());
