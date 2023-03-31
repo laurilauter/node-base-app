@@ -37,7 +37,9 @@ const server = http.createServer();
 const wss = new WebSocketServer({ server: server }, function () {});
 
 //server.listen(4040);
-server.listen(portws);
+server.listen(portws, () => {
+  console.log(`ws listening on ${portws}`);
+});
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
