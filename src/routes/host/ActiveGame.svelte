@@ -1,5 +1,5 @@
 <script>
-  import baseURL from "../../lib/utilities/baseUrl";
+  import { baseURL } from "../../lib/utilities/baseUrl";
   import SessionGet from "../../lib/utilities/SessionGet.svelte";
   import { sessionUserInfo } from "../../stores.js";
   import { currentGame } from "../../stores.js";

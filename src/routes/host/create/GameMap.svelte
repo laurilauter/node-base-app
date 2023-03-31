@@ -1,7 +1,7 @@
 <script>
   // @ts-nocheck
 
-  import baseURL from "../../../lib/utilities/baseUrl";
+  import { baseURL } from "../../../lib/utilities/baseUrl";
   import { currentGamePlanLink } from "./../../../stores.js";
   import { currentGamePlan } from "../../../stores.js";
   import { currentGamePlanMarkers } from "../../../stores.js";

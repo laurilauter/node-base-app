@@ -15,8 +15,7 @@ import cookieParser from "cookie-parser";
 
 import * as dotenv from "dotenv";
 dotenv.config();
-const port = process.env.PORT;
-//const portws = process.env.PORTWS;
+const port = process.env.PORT || 3000;
 const secret = process.env.SESSION_SECRET;
 
 import path from "path";
@@ -24,21 +23,12 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//The SSL cert and SSL keys path on Evennode hosting is located in the /etc/ssl/certs/ directory.
-
 import http from "http";
 import { WebSocketServer } from "ws";
-// const wss = new WebSocketServer({ port: 4040 });
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
-//const wss = new WebSocketServer({ server: server }, function () {});
-
-//server.listen(4040);
-server.listen(port, () => {
-  console.log(`ws listening on ${port}`);
-});
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
@@ -64,7 +54,6 @@ if (process.env.NODE_ENV === "production") {
   client_url = "https://quizgame.eu-4.evennode.com/"; //for prod
 }
 
-//console.log("process.env.NODE_ENV: ", process.env.NODE_ENV);
 console.log("client_url: ", client_url);
 
 const corsOptions = {
@@ -74,7 +63,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 mongoose.set("strictQuery", false);
-
 mongoose.connect(process.env.MONGO_URI).then(() => {
   console.log("Connected to MongoDB");
 });
@@ -127,6 +115,6 @@ app.get("/", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../client/join.html"));
 // });
 
-// app.listen(port, () => {
-//   console.log(`Server running at: ${process.env.NODE_ENV}:${port}`);
-// });
+server.listen(port, () => {
+  console.log(`${process.env.NODE_ENV} server listening on: ${port}`);
+});

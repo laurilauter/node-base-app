@@ -1,6 +1,6 @@
 <script>
   import { push, pop, replace, location } from "svelte-spa-router";
-  import baseURL from "../../lib/utilities/baseUrl";
+  import { baseURL } from "../../lib/utilities/baseUrl";
   import Loader from "../../lib/utilities/Loader.svelte";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";

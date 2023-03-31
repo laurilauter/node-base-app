@@ -1,7 +1,7 @@
 <script>
   // @ts-nocheck
   import { Html5Qrcode } from "html5-qrcode";
-  import baseURL from "../../lib/utilities/baseUrl";
+  import { baseURL } from "../../lib/utilities/baseUrl";
   import { push, pop, replace } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";

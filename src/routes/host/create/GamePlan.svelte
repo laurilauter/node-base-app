@@ -1,7 +1,7 @@
 <script>
   // @ts-nocheck
 
-  import baseURL from "../../../lib/utilities/baseUrl";
+  import { baseURL } from "../../../lib/utilities/baseUrl";
   import { fade } from "svelte/transition";
   import { push, pop, replace, location } from "svelte-spa-router";
   import { currentGamePlan } from "../../../stores.js";

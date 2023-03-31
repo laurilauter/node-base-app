@@ -1,5 +1,5 @@
 <script>
-  import baseURL from "./baseUrl";
+  import { baseURL } from "./baseUrl";
   import { currentGamePlanMarkers } from "../../stores.js";
 
   export async function getGamePlanMarkers(id) {

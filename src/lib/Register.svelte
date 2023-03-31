@@ -1,5 +1,5 @@
 <script>
-  import baseURL from "./utilities/baseUrl";
+  import { baseURL } from "./utilities/baseUrl";
   import { push, pop, replace } from "svelte-spa-router";
   import { isUserLoggedIn } from "../stores.js";
   import { sessionId } from "../stores.js";

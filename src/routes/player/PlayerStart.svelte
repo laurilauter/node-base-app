@@ -1,5 +1,5 @@
 <script>
-  import baseURL from "../../lib/utilities/baseUrl";
+  import { baseURL } from "../../lib/utilities/baseUrl";
   import { onMount } from "svelte";
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";

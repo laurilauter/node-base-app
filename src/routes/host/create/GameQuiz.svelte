@@ -1,6 +1,6 @@
 <script>
   // @ts-nocheck
-  import baseURL from "../../../lib/utilities/baseUrl";
+  import { baseURL } from "../../../lib/utilities/baseUrl";
   import { push, pop, replace, location } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
