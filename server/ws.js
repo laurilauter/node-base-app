@@ -1,5 +1,4 @@
 const portws = process.env.PORTWS || 5000;
-const port = process.env.PORTWS;
 import http from "http";
 import { WebSocketServer } from "ws";
 // const wss = new WebSocketServer({ port: 4040 });
@@ -7,12 +6,12 @@ import { WebSocketServer } from "ws";
 //import WebSocket from "ws";
 
 const server = http.createServer();
-//const wss = new WebSocketServer({ server });
-const wss = new WebSocketServer({ server: server }, function () {});
+const wss = new WebSocketServer({ server });
+//const wss = new WebSocketServer({ server: server }, function () {});
 
 //server.listen(4040);
 console.log(portws);
-console.log(port);
+
 server.listen(portws, () => {
   console.log(`ws listening on ${portws}`);
 });

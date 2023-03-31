@@ -15,10 +15,8 @@ import cookieParser from "cookie-parser";
 
 import * as dotenv from "dotenv";
 dotenv.config();
-const port = process.env.PORT || 3000;
-const portws = process.env.PORTWS;
-console.log(portws);
-console.log(port);
+const port = process.env.PORT;
+//const portws = process.env.PORTWS;
 const secret = process.env.SESSION_SECRET;
 
 import path from "path";
@@ -68,8 +66,8 @@ if (process.env.NODE_ENV === "production") {
   client_url = "https://quizgame.eu-4.evennode.com/"; //for prod
 }
 
-console.log("process.env.NODE_ENV ", process.env.NODE_ENV);
-console.log("client_url ", client_url);
+//console.log("process.env.NODE_ENV: ", process.env.NODE_ENV);
+console.log("client_url: ", client_url);
 
 const corsOptions = {
   origin: client_url,
@@ -132,5 +130,5 @@ app.get("/", (req, res) => {
 // });
 
 app.listen(port, () => {
-  console.log(`Server running at: http://localhost:${port}`);
+  console.log(`Server running at: ${process.env.NODE_ENV}:${port}`);
 });
