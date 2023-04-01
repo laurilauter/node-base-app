@@ -86,6 +86,14 @@
   }
   //scanner end
 
+  async function getMap() {
+    const response = await fetch(
+      `${baseURL}/game-plan/map/${$currentGamePlan._id}`
+    );
+    gameMap = await response.json();
+    base64String = Buffer.from(gameMap.file.data).toString("base64");
+  }
+
   async function getGameInfo() {
     try {
       const response = await fetch(`${baseURL}/game/info/${params.id}`);
@@ -128,14 +136,6 @@
     } catch (error) {
       console.log({ error: error });
     }
-  }
-
-  async function getMap() {
-    const response = await fetch(
-      `${baseURL}/game-plan/map/${$currentGamePlan._id}`
-    );
-    gameMap = await response.json();
-    base64String = Buffer.from(gameMap.file.data).toString("base64");
   }
 
   socket.onmessage = function (event) {

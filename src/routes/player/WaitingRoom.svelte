@@ -75,11 +75,11 @@
   sendData(data);
 
   onMount(async () => {
+    $currentGame.gameStatus = "activated";
     await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
     getLocalPlayerInfo();
     await getPlayerStats();
     await getPlayers();
-    $currentGame.gameStatus = "activated";
   });
 </script>
 
