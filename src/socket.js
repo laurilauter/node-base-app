@@ -4,7 +4,7 @@ export const socket = new WebSocket(baseURLWs);
 //WS setup
 socket.onopen = function () {
   console.log("WS Connection established at client side");
-  socket.send("Client says: hello");
+  //socket.send("Client says: hello");
 };
 
 socket.onmessage = function (event) {
@@ -19,7 +19,7 @@ socket.onclose = function (event) {
   } else {
     // e.g. server process killed or network down
     // event.code is usually 1006 in this case
-    console.log("WS Connection died");
+    console.log("WS Connection died: ", event.code);
   }
 };
 

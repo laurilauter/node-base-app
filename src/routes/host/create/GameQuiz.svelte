@@ -173,10 +173,16 @@
 </script>
 
 <h2>Mängu küsimused</h2>
-<p>Klikka küsimustel ja vastustel, et neid muuta.</p>
 
 {#if $currentGamePlanMarkers}
   <div class="column-container" in:fade={{ duration: 1000 }}>
+    <div class="hint-box">
+      <p>Klikka küsimustel ja vastustel, et neid muuta.</p>
+      <span
+        >Iga õigesti vastatud küsimuse eest saab 1 punkti, kui mõni vastus on
+        vale annab küsimus 0 punkti.</span
+      >
+    </div>
     <div>
       {#each Object.entries($currentGamePlanMarkers) as [key, value]}
         <div class="question-container">
@@ -283,6 +289,11 @@
 <span />
 
 <style>
+  .hint-box {
+    max-width: 400px;
+    padding: 1rem;
+  }
+
   .question-container {
     max-width: 600px;
     padding: 1rem;

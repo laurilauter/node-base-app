@@ -14,7 +14,7 @@ const gameSchema = new Schema(
     },
     gameStartTime: { type: Date },
     gameEndTime: { type: Date },
-    players: [{ type: String }], //array  of player ids?
+    players: [{ type: String }],
   },
   { timestamps: true }
 );

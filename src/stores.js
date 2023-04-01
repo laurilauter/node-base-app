@@ -13,7 +13,6 @@ export const currentGamePlanLink = writable();
 export const currentGamePlan = writable({
   _id: "",
   gameTitle: "",
-  gameMap: "",
   ownerId: "",
   markers: "",
 });

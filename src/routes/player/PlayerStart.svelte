@@ -19,36 +19,50 @@
   }
 
   async function joinGame() {
-    const response = await fetch(`${baseURL}/game/playerjoin`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        gameCode: params.id,
-        name: name,
-      }),
-    });
+    try {
+      const response = await fetch(`${baseURL}/game/playerjoin`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          gameCode: params.id,
+          name: name,
+        }),
+      });
 
-    const responseData = await response.json();
-    error = responseData.error;
-    currentPlayer = responseData.player;
-    console.log("currentPlayer ", currentPlayer);
-    if (currentPlayer) {
-      //save data to localstorage, to recognize the player
-      localStorage.setItem("playerName", JSON.stringify(currentPlayer.name));
-      localStorage.setItem("gameId", JSON.stringify(currentPlayer.gameCode));
-      localStorage.setItem("playerId", JSON.stringify(currentPlayer._id));
+      if (response) {
+        const responseData = await response.json();
+        error = responseData.error;
+        currentPlayer = responseData.player;
+        console.log("currentPlayer ", currentPlayer);
+        console.log("error ", error);
 
-      //save player name to storage to trigger header in map view
-      $player = {
-        _id: currentPlayer._id,
-        playerName: currentPlayer.name,
-        gameCode: currentPlayer.gameCode,
-      };
-      data = { event: "playerJoined" };
-      sendData(data);
-      push(`/player/map-view/${code}`);
+        if (currentPlayer) {
+          //save data to localstorage, to recognize the player
+          localStorage.setItem(
+            "playerName",
+            JSON.stringify(currentPlayer.name)
+          );
+          localStorage.setItem(
+            "gameId",
+            JSON.stringify(currentPlayer.gameCode)
+          );
+          localStorage.setItem("playerId", JSON.stringify(currentPlayer._id));
+
+          //save player name to storage to trigger header in map view
+          $player = {
+            _id: currentPlayer._id,
+            playerName: currentPlayer.name,
+            gameCode: currentPlayer.gameCode,
+          };
+          // data = { event: "playerJoined" };
+          // sendData(data);
+          push(`/waiting-room/${params.id}`);
+        }
+      }
+    } catch (error) {
+      push(`/player-code`);
     }
   }
 
@@ -60,6 +74,9 @@
       code = currentGame.gameCode;
       console.log("currentGame", currentGame.gameCode);
       error = responseData.error;
+      if (error) {
+        push(`/player-code`);
+      }
     } catch (error) {
       console.log({ error: error });
     }

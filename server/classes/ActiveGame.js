@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Game, GamePlan } from "../db/dbConnection.js";
+import { Game, GamePlan } from "../db/modelConnector.js";
 import crypto from "crypto";
 import moment from "moment";
 

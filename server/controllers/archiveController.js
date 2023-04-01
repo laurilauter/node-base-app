@@ -1,4 +1,4 @@
-import { ArchivedGame } from "../db/dbConnection.js";
+import { ArchivedGame } from "../db/modelConnector.js";
 
 export async function listMyGames(req, res) {
   try {

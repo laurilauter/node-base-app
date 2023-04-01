@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { GamePlan } from "../db/dbConnection.js";
-import { Game } from "../db/dbConnection.js";
-import { Player } from "../db/dbConnection.js";
-import { ArchivedGame } from "../db/dbConnection.js";
+import { GamePlan } from "../db/modelConnector.js";
+import { Game } from "../db/modelConnector.js";
+import { Player } from "../db/modelConnector.js";
+import { ArchivedGame } from "../db/modelConnector.js";
 import ActiveGame from "../classes/ActiveGame.js";
 import moment from "moment";
 import { WebSocketServer } from "ws";
@@ -219,7 +219,6 @@ export async function endGame(req, res) {
 
     const gamePlan = {
       gameTitle: endedGame.gamePlan.gameTitle,
-      gameMap: endedGame.gamePlan.gameMap,
       ownerId: endedGame.gamePlan.ownerId,
       markers: endedGame.gamePlan.markers,
     };

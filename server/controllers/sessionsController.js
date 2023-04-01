@@ -1,4 +1,4 @@
-import { User } from "../db/dbConnection.js";
+import { User } from "../db/modelConnector.js";
 import bcrypt from "bcryptjs";
 
 export async function loginUser(req, res, next) {

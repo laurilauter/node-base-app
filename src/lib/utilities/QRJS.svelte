@@ -1,7 +1,5 @@
 <script>
   // @ts-nocheck
-
-  //import QRCode from "./../../node_modules/qrcode";
   import { onMount } from "svelte";
 
   export let codeValue;

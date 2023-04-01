@@ -5,9 +5,10 @@ import bodyParser from "body-parser";
 gamePlanRouter.use(bodyParser.json());
 gamePlanRouter.use(bodyParser.urlencoded({ extended: false }));
 import fileUpload from "express-fileupload";
+
 gamePlanRouter.use(
   fileUpload({
-    createParentPath: true,
+    limits: { fileSize: 5 * 1024 * 1024 },
   })
 );
 
@@ -28,6 +29,9 @@ gamePlanRouter.get("/:id", gamePlanController.getGame);
 
 //get a marker by id
 gamePlanRouter.get("/marker/:id", gamePlanController.getMarker);
+
+//get a map by gameplanid
+gamePlanRouter.get("/map/:id", gamePlanController.getMap);
 
 //get all gameplan marker by gameplan id
 gamePlanRouter.get("/markers/:id", gamePlanController.getMarkers);

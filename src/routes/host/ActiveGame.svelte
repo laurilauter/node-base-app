@@ -21,6 +21,11 @@
   const now = moment();
   let time = now.add(1, "hour");
 
+  function sendData(data) {
+    socket.send(JSON.stringify(data));
+    console.log("data sent from game server: ", data);
+  }
+
   socket.onmessage = function (event) {
     console.log(`WS Data received from server: ${event.data}`);
     const receivedData = JSON.parse(event.data);
@@ -89,6 +94,7 @@
   }
 
   async function activateGame() {
+    $currentPlayers = [];
     try {
       const response = await fetch(`${baseURL}/game/activate`, {
         method: "POST",
@@ -102,20 +108,26 @@
         }),
       });
       let activeGame = await response.json();
-
       joinLink = activeGame.joinUrl;
       if (joinLink) {
         $currentGame.gameStatus = "activated";
         $currentGame.gameCode = joinLink.split("/").pop();
+        $currentGame.players = [];
         $currentJoinLink = joinLink;
         console.log("joinLink ", joinLink);
       }
+      await getActiveGame();
+      let data = { event: "gameActivated" };
+      sendData(data);
     } catch (error) {
       console.log({ error: error });
     }
   }
 
   async function startGame() {
+    console.log("$currentGame.gameCode ", $currentGame.gameCode);
+    let data = { event: "gameStarted" };
+    sendData(data);
     try {
       const response = await fetch(
         `${baseURL}/game/start/${$currentGame.gameCode}`
@@ -131,6 +143,8 @@
         gameCode: myCurrentGame.gameCode,
         players: myCurrentGame.players,
       };
+      console.log("$currentGame new: ", $currentGame);
+
       error = responseData.error;
     } catch (error) {
       console.log({ error: error });
@@ -153,6 +167,8 @@
         players: [],
       };
       await getGamePlans();
+      let data = { event: "gameEnded" };
+      sendData(data);
     } catch (error) {
       console.log({ error: error });
     }
@@ -211,12 +227,13 @@
 
   <button class="btn" on:click={activateGame}>Alusta</button>
 {:else if $currentGame.gameStatus === "activated"}
-  <div>
-    <p>Mängu lõpu aeg on testimiseks PRAEGU +1 tund</p>
-    <!-- <label for="appt">Vali millal mäng lõppeb (default is now +1h):</label>
+  <!-- <div>
+    <p>Mängu lõpu aeg on testimiseks PRAEGU +1 tund</p> -->
+  <!-- <label for="appt">Vali millal mäng lõppeb (default is now +1h):</label>
     <input type="time" bind:value={time} required /> -->
-    <p>{time}</p>
-  </div>
+  <!-- <p>{time}</p>
+  </div> -->
+
   <h3>Kui mängijad on kohal, siis vajuta Start.</h3>
   <!-- set btn to disabled if no players -->
   <button
@@ -230,20 +247,19 @@
 {/if}
 
 {#if $currentJoinLink}
+  <p>Testimiseks kleebi link Incognito aknasse ja vali mängijale nimi.</p>
+  <p class="green">{$currentJoinLink}</p>
   <p>
-    Use the code in an incognito tab to test a player joining. Press "Uuenda" to
-    see the joined player.
+    Alternatiivina võib siseneda rakendusse mängija vaatest ja sisestada mängu
+    kood, seejärel saab valida nime.
   </p>
-  <p>You can also paste the below link into an incognito tab.</p>
   <h3 class="green">Kood: {$currentGame.gameCode}</h3>
   <!-- <p><a href={$currentJoinLink} target="”_blank”">{$currentJoinLink}</a></p> -->
-  <p class="green">Link: {$currentJoinLink}</p>
 {/if}
 
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
   <div>
     <h2>Mängijad</h2>
-    <!-- <span><button class="btn" on:click={getPlayers}>Uuenda</button></span> -->
     <div class="players-frame column-container">
       {#if $currentPlayers}
         {#each $currentPlayers as player}
@@ -252,9 +268,7 @@
             <span class="bold">
               {player.name}
             </span>
-            <span>
-              Vastatud: {player.markersFound.length}
-            </span>
+            <span />
             <span>
               Punkte: {player.pointsTotal}
             </span>

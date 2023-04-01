@@ -17,7 +17,7 @@
       $currentGamePlan = {
         _id: gamePlan._id,
         gameTitle: gamePlan.gameTitle,
-        gameMap: gamePlan.gameMap,
+
         ownerId: gamePlan.ownerId,
         markers: gamePlan.markers,
       };

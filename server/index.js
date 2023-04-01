@@ -41,8 +41,8 @@ wss.on("connection", function connection(ws) {
       client.send(data, { binary: isBinary });
     });
   });
-
-  ws.send("something from server");
+  const data = { event: "Hi from server" };
+  ws.send(JSON.stringify(data));
 });
 
 app.use(express.json());

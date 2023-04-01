@@ -105,7 +105,6 @@
     {#if show}
       <div class="info-box">
         <h4>from STORE $currentGamePlan</h4>
-        <p>Map: {$currentGamePlan.gameMap}</p>
         <p>ID: {$currentGamePlan._id}</p>
         <p>OwnerId: {$currentGamePlan.ownerId}</p>
         <p>Markers:</p>

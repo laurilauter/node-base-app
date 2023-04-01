@@ -27,8 +27,17 @@
       console.log("answerHolder ", answerHolder);
       if (userMarkerAnswers[i].isCorrect === answerHolder[i]) {
         points++;
+      } else if (userMarkerAnswers[i].isCorrect !== answerHolder[i]) {
+        points--;
       }
     }
+    console.log("points before 0 ", points);
+
+    points = points / answerHolder.length;
+    if (points < 1) {
+      points = 0;
+    }
+
     console.log("points ", points);
     try {
       const response = await fetch(`${baseURL}/game/player/${$player._id}`, {

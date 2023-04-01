@@ -6,11 +6,23 @@
   import { player } from "../../stores.js";
 
   let code;
+  let error;
 
-  function toStart() {
+  async function toStart() {
     if (code) {
-      push(`/player-start/${code}`);
+      await getGameInfo();
+      console.log("error ", error);
+      if (error === "Game not found") {
+      } else {
+        push(`/player-start/${code}`);
+      }
     }
+  }
+
+  async function getGameInfo() {
+    const response = await fetch(`${baseURL}/game/info/${code}`);
+    const responseData = await response.json();
+    error = responseData.error;
   }
 
   function getLocalPlayer() {
@@ -46,6 +58,9 @@
           <button type="button" on:click={toStart}>Alusta</button>
         </div>
       </form>
+      {#if error}
+        <p>Sellise koodiga mängu ei leitud.</p>
+      {/if}
     </div>
   </div>
 </div>

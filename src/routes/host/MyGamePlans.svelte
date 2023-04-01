@@ -37,7 +37,6 @@
       },
       body: JSON.stringify({
         gameTitle: "Mängu Nimi",
-        gameMap: "testmap.png",
         ownerId: $sessionUserInfo.id,
         markers: [],
       }),

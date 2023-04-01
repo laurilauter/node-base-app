@@ -1,4 +1,4 @@
-import { QrCode } from "../db/dbConnection.js";
+import { QrCode } from "../db/modelConnector.js";
 
 export async function createCode(req, res) {
   try {

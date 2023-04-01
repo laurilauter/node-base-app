@@ -1,5 +1,5 @@
 <script>
-  // @ts-nocheck
+  import { Buffer } from "buffer";
   import { Html5Qrcode } from "html5-qrcode";
   import { baseURL } from "../../lib/utilities/baseUrl";
   import { push, pop, replace } from "svelte-spa-router";
@@ -11,10 +11,13 @@
   import { currentGamePlanMarkers } from "../../stores.js";
   import GamePlanGet from "../../lib/utilities/GamePlanGet.svelte";
   import GamePlanMarkersGet from "../../lib/utilities/GamePlanMarkersGet.svelte";
+  import { socket } from "../../socket.js";
   export let params = {};
 
   let gamePlanGetter;
   let gamePlanMarkerGetter;
+  let gameMap;
+  let base64String;
   let error;
 
   //QR scanner
@@ -52,11 +55,17 @@
     if (decodedText) {
       let markerId;
       $currentGamePlanMarkers.forEach((element) => {
-        if (
-          element.content.qrcode.qrCodeTitle === decodedText &&
-          //the next line checks if the player has answered the question already
-          !$playerStats.markersFound.includes(element._id)
-        ) {
+        // if (
+        //   element.content.qrcode.qrCodeTitle === decodedText &&
+        //   //the next line checks if the player has answered the question already
+        //   !$playerStats.markersFound.includes(element._id)
+        // ) {
+        //   markerId = element._id;
+        //   console.log("markerId ", markerId);
+        // } else if ($playerStats.markersFound.includes(element._id)) {
+        //   console.log("answered already");
+        // }
+        if (element.content.qrcode.qrCodeTitle === decodedText) {
           markerId = element._id;
           console.log("markerId ", markerId);
         } else if ($playerStats.markersFound.includes(element._id)) {
@@ -84,12 +93,15 @@
       $currentGame = responseData.currentGame;
       if (responseData.currentGame) {
         console.log("$currentGame loaded", $currentGame);
+        console.log("$currentGame.gameStatus", $currentGame.gameStatus);
       } else {
         error = responseData.error;
+        $currentGame.gameStatus = "";
         console.warn(error);
         localStorage.clear();
         push("/player-code");
       }
+      await getMap();
     } catch (error) {
       console.log({ error: error });
     }
@@ -118,18 +130,51 @@
     }
   }
 
+  async function getMap() {
+    const response = await fetch(
+      `${baseURL}/game-plan/map/${$currentGamePlan._id}`
+    );
+    gameMap = await response.json();
+    base64String = Buffer.from(gameMap.file.data).toString("base64");
+  }
+
+  socket.onmessage = function (event) {
+    console.log(`WS Data received from server: ${event.data}`);
+    const receivedData = JSON.parse(event.data);
+    console.log("receivedData parsed", receivedData);
+    if (receivedData.event === "gameStarted") {
+      $currentGame.gameStatus = "started";
+      getGameInfo();
+      // } else if (receivedData.event === "gameActivated") {
+      //   $currentGame.gameStatus = "activated";
+      //   getGameInfo();
+    } else if (receivedData.event === "gameEnded") {
+      $currentGame.gameStatus = "";
+      localStorage.clear();
+      getGameInfo();
+      replace("/player-code");
+    } else {
+      console.log("receivedData ", receivedData);
+    }
+  };
+
+  async function initialSetup() {
+    $currentGame.gameStatus = "activated";
+  }
+
   onMount(async () => {
-    await getGameInfo();
+    await getGameInfo(); //loads map
     await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
     await gamePlanMarkerGetter.getGamePlanMarkers($currentGame.gamePlan._id);
     getLocalPlayerInfo();
-    console.log("$player._id ", $player._id);
     await getPlayerStats();
+    await initialSetup();
     init();
   });
 </script>
 
 <div class="column-container" in:fade={{ duration: 1000 }}>
+  <!-- {#if $currentGame.gameStatus === "started"} -->
   {#if !scanning}
     <!-- <h4>
       <span> Aega 00:43:21 </span>
@@ -146,8 +191,11 @@
       <div class="map-box">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="map-inner-box">
-          {#if $currentGamePlan.gameMap}
-            <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" />
+          {#if gameMap}
+            <img
+              src={`data:image/png;base64,${base64String}`}
+              alt={gameMap.filename}
+            />
           {/if}
           {#each Object.entries($currentGamePlanMarkers) as [key, value]}
             <div
@@ -174,7 +222,7 @@
       <reader id="reader" />
       {#if scanning}
         {#if scanStatus}
-          <h3 class="warning" n:fade={{ duration: 500 }}>{scanStatus}</h3>
+          <h3 class="warning" in:fade={{ duration: 500 }}>{scanStatus}</h3>
         {/if}
         <button on:click={stop}>Stop</button>
         <span>
@@ -186,6 +234,12 @@
       {/if}
     </div>
   </div>
+  <!-- {:else if $currentGame.gameStatus === "activated"}
+    <h2>Mäng algab, kui kõik on kohal!</h2>
+  {:else}
+    <h2>Mäng on läbi</h2>
+    {$currentGame.gameStatus}
+  {/if} -->
 </div>
 
 <GamePlanGet bind:this={gamePlanGetter} />

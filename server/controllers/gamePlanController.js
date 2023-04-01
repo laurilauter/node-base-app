@@ -1,21 +1,13 @@
-import QRCode from "qrcode";
-import { GamePlan } from "../db/dbConnection.js";
-import { Marker } from "../db/dbConnection.js";
-//import moment from "moment";
-import path from "path";
-import * as url from "url";
-import * as fs from "fs";
-import { rm } from "node:fs/promises";
-//const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
+import { GamePlan } from "../db/modelConnector.js";
+import { Marker } from "../db/modelConnector.js";
+import { GameMap } from "../db/modelConnector.js";
 
 export async function createGame(req, res) {
   try {
-    const { gameTitle, gameMap, ownerId } = req.body;
+    const { gameTitle, ownerId } = req.body;
     if (gameTitle && ownerId) {
       const newGamePlanData = {
         gameTitle: gameTitle,
-        gameMap: gameMap,
         ownerId: ownerId,
         markers: [],
       };
@@ -46,7 +38,6 @@ export async function createMarker(req, res) {
         },
       };
       const options = { sort: { _id: 1 }, new: true, overwrite: true };
-
       const newGamePlan = await GamePlan.findOneAndUpdate(
         filter,
         update,
@@ -118,10 +109,9 @@ export async function getMarkers(req, res) {
 export async function updateGame(req, res) {
   try {
     const filter = { _id: req.params.id };
-    const { gameTitle, ownerId, gameMap, markers } = req.body;
+    const { gameTitle, ownerId, markers } = req.body;
     const update = {
       gameTitle: gameTitle,
-      gameMap: gameMap,
       ownerId: ownerId,
       markers: markers,
     };
@@ -200,6 +190,9 @@ export async function deleteGame(req, res) {
       const deletingMarker = await Marker.deleteMany({ _id: marker });
       console.log("deletingMarker ", deletingMarker);
     }
+    const filterMapDelete = { gamePlanId: req.params.id };
+    const resultMapDelete = await GameMap.deleteOne(filterMapDelete);
+
     //deleting the game
     const result = await GamePlan.deleteOne(filter);
     if (result.deletedCount === 0) {
@@ -214,48 +207,33 @@ export async function deleteGame(req, res) {
 
 export async function uploadMap(req, res) {
   const gamePlanId = req.params.id;
+  let file = req.files.file;
   try {
-    let file = req.files.file;
-    let deletePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      ".",
-      "public",
-      "uploads",
-      gamePlanId
-    );
-    let filePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      ".",
-      "public",
-      "uploads",
-      gamePlanId,
-      file.name
-    ); //a unique id should be added
-
-    const newGameMap = gamePlanId + "/" + file.name;
-    const filter = { _id: gamePlanId };
-    const update = {
-      gameMap: newGameMap,
+    console.log("uploaded file size(bytes): ", file.size);
+    const mapFilter = { gamePlanId: gamePlanId };
+    const mapUpdate = {
+      fileName: file.name,
+      file: {
+        data: file.data,
+        contentType: file.mimetype,
+      },
+      gamePlanId: gamePlanId,
     };
-    const options = { sort: { _id: 1 }, new: true, overwrite: false };
-    await rm(deletePath, { recursive: true, force: true });
-    await file.mv(filePath, function (err) {
-      if (err) {
-        console.log("save error");
-      }
-      console.log("file saved");
-    });
+    const mapOptions = { upsert: true };
 
-    let updatedGamePlan = await GamePlan.findOneAndUpdate(
-      filter,
-      update,
-      options
-    );
-    res.status(200).send(updatedGamePlan);
+    let updatedMap = await GameMap.updateOne(mapFilter, mapUpdate, mapOptions);
+
+    res.status(200).send(updatedMap);
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
+export async function getMap(req, res) {
+  try {
+    const filter = { gamePlanId: req.params.id };
+    let foundMap = await GameMap.findOne(filter);
+    res.status(200).send(foundMap);
   } catch (error) {
     res.status(500).send({ error: error });
   }

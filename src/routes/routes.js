@@ -7,6 +7,7 @@ import { get } from "svelte/store";
 import MapView from "./player/MapView.svelte";
 import QuestionView from "./player/QuestionView.svelte";
 import PlayerStart from "./player/PlayerStart.svelte";
+import WaitingRoom from "./player/WaitingRoom.svelte";
 import PlayerCode from "./player/PlayerCode.svelte";
 
 import Home from "./Home.svelte";
@@ -99,6 +100,7 @@ export default {
   //player routes
   "/player-code": PlayerCode,
   "/player-start/:id": PlayerStart,
+  "/waiting-room/:id": WaitingRoom,
   "/player/map-view/:id": MapView,
   "/player/question-view/:gameCode/:markerId": QuestionView,
 

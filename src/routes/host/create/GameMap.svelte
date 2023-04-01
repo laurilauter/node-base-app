@@ -1,6 +1,5 @@
 <script>
   // @ts-nocheck
-
   import { baseURL } from "../../../lib/utilities/baseUrl";
   import { currentGamePlanLink } from "./../../../stores.js";
   import { currentGamePlan } from "../../../stores.js";
@@ -11,6 +10,7 @@
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
+  import { Buffer } from "buffer";
 
   export let params = {};
   // Icon properties
@@ -19,6 +19,8 @@
 
   let gamePlanGetter;
   let gamePlanMarkerGetter;
+  let gameMap;
+  let base64String;
 
   let m = { x: 0, y: 0 };
   let marekerKey = 0;
@@ -51,9 +53,9 @@
       );
       statusCode = response.status;
       const gamePlan = await response.json();
-      $currentGamePlan.gameMap = gamePlan.gameMap;
       console.log("gamePlan from HANDLE ", gamePlan);
     }
+    getMap();
   }
 
   function handleMapClick(field) {
@@ -92,15 +94,23 @@
     };
   }
 
+  async function getMap() {
+    const response = await fetch(
+      `${baseURL}/game-plan/map/${$currentGamePlan._id}`
+    );
+    gameMap = await response.json();
+    base64String = Buffer.from(gameMap.file.data).toString("base64");
+  }
+
   onMount(async () => {
     await gamePlanGetter.getGamePlan(params.id);
     await gamePlanMarkerGetter.getGamePlanMarkers(params.id);
+    await getMap();
   });
 </script>
 
 {#if $currentGamePlan}
   <div class="column-container" in:fade={{ duration: 1000 }}>
-    <!-- {statusCode} -->
     <div class="row-container">
       <h2>Mängu kaart</h2>
       <label>
@@ -126,7 +136,14 @@
           <p>
             The mouse position is {m.x} x {m.y}
           </p>
-          <img src="{baseURL}/uploads/{$currentGamePlan.gameMap}" alt="map" />
+          {#if gameMap}
+            <img
+              src={`data:image/png;base64,${base64String}`}
+              alt={gameMap.filename}
+            />
+          {:else}
+            <img src={`${baseURL}/uploads/testmap.png`} alt={"testmap"} />
+          {/if}
           {#each Object.entries($currentGamePlanMarkers) as [key, value]}
             <div
               class="image-marker"
@@ -139,7 +156,11 @@
         </div>
       </div>
       <div class="info-box">
-        <h4>Vali küsimus ja määra talle asukoht kaardil klikates.</h4>
+        <h4>
+          Vali küsimus ja määra talle asukoht kaardil klikates. Kui küsimusi
+          pole, siis lisa need eelmises vaates.
+          <!-- <p>selle teksit saaks if-else-ga paremaks</p> -->
+        </h4>
         {#each Object.entries($currentGamePlanMarkers) as [key, value]}
           <input
             type="radio"
