@@ -58,6 +58,8 @@
           };
           // data = { event: "playerJoined" };
           // sendData(data);
+
+          //check if game started. ten send to map view directly
           push(`/waiting-room/${params.id}`);
         }
       }

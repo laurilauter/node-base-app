@@ -88,7 +88,7 @@
 
   async function getMap() {
     const response = await fetch(
-      `${baseURL}/game-plan/map/${$currentGamePlan._id}`
+      `${baseURL}/game-plan/map/${$currentGame.gamePlan._id}`
     );
     gameMap = await response.json();
     base64String = Buffer.from(gameMap.file.data).toString("base64");
@@ -102,11 +102,13 @@
       if (responseData.currentGame) {
         console.log("$currentGame loaded", $currentGame);
         console.log("$currentGame.gameStatus", $currentGame.gameStatus);
+        console.log("$currentGame.gamePlan._id", $currentGame.gamePlan._id);
       } else {
         error = responseData.error;
         $currentGame.gameStatus = "";
         console.warn(error);
         localStorage.clear();
+        getLocalPlayerInfo();
         push("/player-code");
       }
       await getMap();
