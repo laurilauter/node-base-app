@@ -1,7 +1,7 @@
 <script>
   // @ts-nocheck
 
-  import { currentGamePlanLink } from "./../stores.js";
+  import { currentGamePlanLink, playerStats } from "./../stores.js";
   import { push, pop, replace, location } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import Logout from "./Logout.svelte";
@@ -66,8 +66,10 @@
                 {$sessionUserInfo.email}
               </Logout>
             {:else if $player.playerName}
-              <div class="player-name">
-                {$player.playerName}
+              <div class="player-info">
+                <span>
+                  {$player.playerName}
+                </span>
               </div>
             {/if}
           </div>
@@ -114,9 +116,10 @@
     justify-content: space-between;
   }
 
-  .player-name {
+  .player-info {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
     margin: 16px;
   }
 

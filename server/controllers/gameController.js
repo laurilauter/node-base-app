@@ -5,7 +5,7 @@ import { Player } from "../db/modelConnector.js";
 import { ArchivedGame } from "../db/modelConnector.js";
 import ActiveGame from "../classes/ActiveGame.js";
 import moment from "moment";
-import { WebSocketServer } from "ws";
+//import { WebSocketServer } from "ws";
 
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
@@ -222,14 +222,14 @@ export async function endGame(req, res) {
       ownerId: endedGame.gamePlan.ownerId,
       markers: endedGame.gamePlan.markers,
     };
-
+    const now = moment();
     //prepare to create achived game
     const archivedGameData = {
       gamePlan: gamePlan,
       gameCode: endedGame.gameCode,
       gameOwnerId: endedGame.gamePlan.ownerId,
       gameStartTime: endedGame.gameStartTime,
-      gameEndTime: endedGame.gameEndTime,
+      gameEndTime: now,
       playersStats: finalPlayerStats,
     };
     console.log("archivedGameData ", archivedGameData);

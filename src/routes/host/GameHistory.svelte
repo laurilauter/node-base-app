@@ -29,11 +29,11 @@
     <ul>
       {#each archivedGames as archivedGame}
         <li>
-          <a href="#/host/archived-game/{archivedGame._id}">
+          <a href="#/host/archived-game/code/{archivedGame.gameCode}">
             <span>{archivedGame.gameCode}</span>
             <span>{archivedGame.gamePlan.gameTitle}</span>
             <span
-              >{moment(archivedGame.gameEndTime).format("DD-MMM-YYYY HH:MM")}
+              >{moment(archivedGame.gameEndTime).format("DD-MM-YYYY HH:MM")}
             </span>
           </a>
         </li>

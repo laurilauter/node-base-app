@@ -11,10 +11,9 @@
   async function toStart() {
     if (code) {
       await getGameInfo();
-      console.log("error ", error);
       if (error === "Game not found") {
       } else {
-        push(`/player-start/${code}`);
+        replace(`/player-start/${code}`);
       }
     }
   }
@@ -23,21 +22,24 @@
     const response = await fetch(`${baseURL}/game/info/${code}`);
     const responseData = await response.json();
     error = responseData.error;
-  }
-
-  function getLocalPlayer() {
-    const gameCode = JSON.parse(localStorage.getItem("gameId"));
-    const playerName = JSON.parse(localStorage.getItem("playerName"));
-    console.log(gameCode, playerName);
-    console.log("game ", parseInt(gameCode));
-    if (gameCode && playerName) {
-      push(`/player/map-view/${parseInt(gameCode)}`);
-      $player.playerName = playerName;
+    if (error) {
+      code = "";
     }
   }
 
+  // function getLocalPlayer() {
+  //   const gameCode = JSON.parse(localStorage.getItem("gameId"));
+  //   const playerName = JSON.parse(localStorage.getItem("playerName"));
+  //   console.log(gameCode, playerName);
+  //   console.log("game ", parseInt(gameCode));
+  //   if (gameCode && playerName) {
+  //     push(`/player/map-view/${parseInt(gameCode)}`);
+  //     $player.playerName = playerName;
+  //   }
+  // }
+
   onMount(async () => {
-    getLocalPlayer();
+    //getLocalPlayer();
   });
 </script>
 

@@ -91,7 +91,7 @@ export default {
   "/host/active-game": ActiveGame,
   "/host/my-plans": MyGamePlans,
   "/host/game-history": GameHistory,
-  "/host/archived-game/:id": ArchivedGame,
+  "/host/archived-game/code/:id": ArchivedGame,
   "/host/my-codes": MyCodes,
   "/game-plan/:id": GamePlan,
   "/game-plan/game-map/:id": GameMap,

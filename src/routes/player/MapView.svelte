@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import { Buffer } from "buffer";
   import { Html5Qrcode } from "html5-qrcode";
   import { baseURL } from "../../lib/utilities/baseUrl";
@@ -7,8 +9,9 @@
   import { onMount } from "svelte";
   import { player, playerStats } from "../../stores.js";
   import { currentGame } from "../../stores.js";
-  import { currentGamePlan } from "../../stores.js";
+  import { currentPlayers } from "../../stores.js";
   import { currentGamePlanMarkers } from "../../stores.js";
+  import { waitingRoomStatus } from "../../stores.js";
   import GamePlanGet from "../../lib/utilities/GamePlanGet.svelte";
   import GamePlanMarkersGet from "../../lib/utilities/GamePlanMarkersGet.svelte";
   import { socket } from "../../socket.js";
@@ -19,6 +22,8 @@
   let gameMap;
   let base64String;
   let error;
+  //let markerColor;
+  let currentPlayerPosition = "0/0";
 
   //QR scanner
   let scanning = false;
@@ -54,6 +59,7 @@
     console.log("decodedText", decodedText);
     if (decodedText) {
       let markerId;
+      //ENABLE THIS TO ALLOWE ANSWERING JUST ONCE
       $currentGamePlanMarkers.forEach((element) => {
         // if (
         //   element.content.qrcode.qrCodeTitle === decodedText &&
@@ -108,7 +114,6 @@
         $currentGame.gameStatus = "";
         console.warn(error);
         localStorage.clear();
-        getLocalPlayerInfo();
         push("/player-code");
       }
       await getMap();
@@ -117,12 +122,26 @@
     }
   }
 
-  function getLocalPlayerInfo() {
-    $player = {
-      _id: JSON.parse(localStorage.getItem("playerId")),
-      playerName: JSON.parse(localStorage.getItem("playerName")),
-      gameCode: JSON.parse(localStorage.getItem("gameId")),
-    };
+  async function getPlayers() {
+    try {
+      const response = await fetch(`${baseURL}/game/players/${params.id}`);
+      let playersData = await response.json();
+      $currentPlayers = playersData.players;
+      console.log("$currentPlayers ", $currentPlayers);
+
+      function findByKey(key, value) {
+        return (item, i) => item[key] === value;
+      }
+      let findParams = findByKey("_id", $playerStats._id);
+      currentPlayerPosition = `${$currentPlayers.findIndex(findParams) + 1}/${
+        $currentPlayers.length
+      }`;
+
+      console.log("currentPlayerPosition ", currentPlayerPosition);
+      console.log("$playerStats._id ", $playerStats._id);
+    } catch (error) {
+      console.log({ error: error });
+    }
   }
 
   async function getPlayerStats() {
@@ -147,49 +166,50 @@
     if (receivedData.event === "gameStarted") {
       $currentGame.gameStatus = "started";
       getGameInfo();
-      // } else if (receivedData.event === "gameActivated") {
-      //   $currentGame.gameStatus = "activated";
-      //   getGameInfo();
     } else if (receivedData.event === "gameEnded") {
-      $currentGame.gameStatus = "";
-      localStorage.clear();
-      getGameInfo();
-      replace("/player-code");
+      $playerStats = receivedData.finalScores;
+      $waitingRoomStatus = "afterGame";
+      console.log("$waitingRoomStatus MapView ", $waitingRoomStatus);
+      replace(`/waiting-room/${params.id}`);
+    } else if (receivedData.event === "scoreUpdate") {
+      getPlayers();
     } else {
       console.log("receivedData ", receivedData);
     }
   };
 
-  async function initialSetup() {
-    $currentGame.gameStatus = "activated";
+  function markerColor(isVisited) {
+    return isVisited ? "grey" : "green";
   }
 
   onMount(async () => {
     await getGameInfo(); //loads map
     await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
     await gamePlanMarkerGetter.getGamePlanMarkers($currentGame.gamePlan._id);
-    getLocalPlayerInfo();
     await getPlayerStats();
-    await initialSetup();
+    $currentGame.gameStatus = "activated";
+    await getPlayers();
     init();
   });
 </script>
 
 <div class="column-container" in:fade={{ duration: 1000 }}>
-  <!-- {#if $currentGame.gameStatus === "started"} -->
   {#if !scanning}
-    <!-- <h4>
-      <span> Aega 00:43:21 </span>
-      <span> Koht 2/8 </span>
-    </h4>
-    <h4>
-      <span> Punkte 9 </span>
-      <span> Vastatud 0/3 </span>
-    </h4> -->
     <h2>Mängu kaart</h2>
+    {#if $playerStats}
+      <div>
+        <span>
+          Koht: {currentPlayerPosition}
+        </span>
+        <span>
+          Punkte: {$playerStats.pointsTotal}
+        </span>
+      </div>
+      <br />
+    {/if}
   {/if}
   <div class="map-row-container">
-    {#if !scanning}
+    {#if !scanning && $waitingRoomStatus !== "afterGame"}
       <div class="map-box">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="map-inner-box">
@@ -201,7 +221,10 @@
           {/if}
           {#each Object.entries($currentGamePlanMarkers) as [key, value]}
             <div
-              class="image-marker"
+              class="image-marker {markerColor(
+                $playerStats.markersFound.includes(value._id)
+              )}"
+              id={value._id}
               style="top: {value.content.position.y - 20}px; left: {value
                 .content.position.x - 20}px;"
             >
@@ -212,10 +235,9 @@
       </div>
 
       <div class="info-box">
-        <!-- <p>{$currentGamePlan.gameMap}</p> -->
         <h4>
-          Kasuta kaarti, er leida asukoht looduses/hoones. Sealt leiad QR koodi.
-          Seda skannides saad vastata kusimustele.
+          Kasuta kaarti, et leida asukoht, kus asub QR kood. Seda skaneerides
+          saad vastata kusimusele.
         </h4>
       </div>
     {/if}
@@ -236,12 +258,6 @@
       {/if}
     </div>
   </div>
-  <!-- {:else if $currentGame.gameStatus === "activated"}
-    <h2>Mäng algab, kui kõik on kohal!</h2>
-  {:else}
-    <h2>Mäng on läbi</h2>
-    {$currentGame.gameStatus}
-  {/if} -->
 </div>
 
 <GamePlanGet bind:this={gamePlanGetter} />
@@ -253,7 +269,6 @@
     height: auto;
     object-fit: cover;
     border-radius: 9px;
-    /* border: 1px solid green; */
   }
 
   .map-box {
@@ -265,14 +280,12 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    /* border: 1px solid blue; */
   }
   .map-inner-box {
     min-width: 100%;
     min-height: 100%;
     position: relative;
     border: none;
-    /* border: 1px solid yellow; */
   }
 
   .map-row-container {
@@ -286,9 +299,6 @@
 
   .image-marker {
     position: absolute;
-    color: green;
-    border: 3px solid green;
-    background-color: rgb(142, 200, 142);
     opacity: 0.8;
     border-radius: 50%;
     width: 40px;
@@ -296,6 +306,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .grey {
+    color: grey;
+    border: 3px solid grey;
+    background-color: rgb(210, 210, 210);
+  }
+
+  .green {
+    color: green;
+    border: 3px solid green;
+    background-color: rgb(142, 200, 142);
   }
 
   .info-box {

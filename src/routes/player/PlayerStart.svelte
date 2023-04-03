@@ -4,6 +4,7 @@
   import { push, pop, replace } from "svelte-spa-router";
   import Splash from "../../lib/utilities/Splash.svelte";
   import { player } from "../../stores.js";
+  import { waitingRoomStatus } from "../../stores.js";
   import { socket } from "../../socket.js";
   export let params = {};
 
@@ -14,7 +15,7 @@
   let code;
   let data;
 
-  function sendData(data) {
+  async function sendData(data) {
     socket.send(JSON.stringify(data));
   }
 
@@ -39,32 +40,19 @@
         console.log("error ", error);
 
         if (currentPlayer) {
-          //save data to localstorage, to recognize the player
-          localStorage.setItem(
-            "playerName",
-            JSON.stringify(currentPlayer.name)
-          );
-          localStorage.setItem(
-            "gameId",
-            JSON.stringify(currentPlayer.gameCode)
-          );
-          localStorage.setItem("playerId", JSON.stringify(currentPlayer._id));
-
-          //save player name to storage to trigger header in map view
           $player = {
             _id: currentPlayer._id,
             playerName: currentPlayer.name,
             gameCode: currentPlayer.gameCode,
           };
-          // data = { event: "playerJoined" };
-          // sendData(data);
-
-          //check if game started. ten send to map view directly
-          push(`/waiting-room/${params.id}`);
+          data = { event: "playerJoined" };
+          await sendData(data);
+          $waitingRoomStatus = "beforeGame";
+          replace(`/waiting-room/${params.id}`);
         }
       }
     } catch (error) {
-      push(`/player-code`);
+      replace(`/player-code`);
     }
   }
 
@@ -77,7 +65,7 @@
       console.log("currentGame", currentGame.gameCode);
       error = responseData.error;
       if (error) {
-        push(`/player-code`);
+        replace(`/player-code`);
       }
     } catch (error) {
       console.log({ error: error });

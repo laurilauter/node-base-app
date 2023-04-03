@@ -1,5 +1,6 @@
 <script>
   import { baseURL } from "../../lib/utilities/baseUrl";
+  import { push, pop, replace } from "svelte-spa-router";
   import SessionGet from "../../lib/utilities/SessionGet.svelte";
   import { sessionUserInfo } from "../../stores.js";
   import { currentGame } from "../../stores.js";
@@ -152,35 +153,17 @@
   }
 
   async function endGame() {
+    const finalScores = $currentPlayers;
     try {
       const response = await fetch(
         `${baseURL}/game/end/${$currentGame.gameCode}`
       );
       let endedGame = await response.json();
       message = endedGame.message;
-      $currentJoinLink = "";
-      $currentGame = {
-        _id: "",
-        gamePlan: { _id: "" },
-        gameStatus: "",
-        gameCode: "",
-        players: [],
-      };
       await getGamePlans();
-      let data = { event: "gameEnded" };
+      let data = { event: "gameEnded", finalScores: finalScores };
       sendData(data);
-    } catch (error) {
-      console.log({ error: error });
-    }
-  }
-
-  async function cancelGame() {
-    try {
-      const response = await fetch(
-        `${baseURL}/game/cancel/${$currentGame.gameCode}`
-      );
-      let endedGame = await response.json();
-      message = endedGame.message;
+      replace(`/host/archived-game/code/${$currentGame.gameCode}`);
       $currentJoinLink = "";
       $currentGame = {
         _id: "",
@@ -189,7 +172,6 @@
         gameCode: "",
         players: [],
       };
-      await getGamePlans();
     } catch (error) {
       console.log({ error: error });
     }
@@ -210,10 +192,7 @@
   });
 </script>
 
-<h1>Jooksev mäng</h1>
-{#if $currentGame.gameCode}
-  <h3 class="green">Kood: {$currentGame.gameCode}</h3>
-{/if}
+<h1>Sinu mäng</h1>
 {#if $currentGame.gameStatus === ""}
   <div class="column-container">
     <p>Vali mänugplaan ja alusta mängu.</p>
@@ -241,7 +220,6 @@
     disabled={$currentPlayers.length > 0 ? false : true}
     on:click={startGame}>Start</button
   >
-  <button class="btn" on:click={cancelGame}>Lõpeta</button>
 {:else if $currentGame.gameStatus === "started"}
   <button class="btn" on:click={endGame}>Lõpeta</button>
 {/if}
@@ -254,7 +232,6 @@
     kood, seejärel saab valida nime.
   </p>
   <h3 class="green">Kood: {$currentGame.gameCode}</h3>
-  <!-- <p><a href={$currentJoinLink} target="”_blank”">{$currentJoinLink}</a></p> -->
 {/if}
 
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
@@ -270,35 +247,17 @@
             </span>
             <span />
             <span>
+              Küsimusi: {player.markersFound.length}
+            </span>
+            <span>
               Punkte: {player.pointsTotal}
             </span>
-            <!-- <span>EEMALDA</span> -->
           </div>
         {/each}
       {/if}
     </div>
   </div>
 {/if}
-<!-- 
-<br />
-<div class="info-wrapper">
-  <div class="info-box">
-    <p>BORING METADATA</p>
-    <span>$currentGame._id: </span>
-    1currentGame._id<br />
-    <span>$currentGame.gameStatus: </span>
-    {$currentGame.gameStatus}<br />
-    <span>$currentGame.gameCode: </span>
-    {$currentGame.gameCode}<br />
-    <span>$currentGame.players: </span>
-    {#each $currentGame.players as player}
-      <p>{player}</p>
-    {/each}
-    <br />
-    <span>Start disabled: </span>
-    {$currentPlayers.length > 0 ? false : true}
-  </div>
-</div> -->
 
 <SessionGet bind:this={sessionGetter} />
 
@@ -309,21 +268,7 @@
   .btn {
     max-width: 160px;
   }
-  /* 
-  .info-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
 
-  .info-box {
-    border-radius: 5px;
-    font-size: 0.8rem;
-    border: 1px solid grey;
-    width: 400px;
-    color: grey;
-  } */
   .players-frame {
     width: 100%;
     display: flex;

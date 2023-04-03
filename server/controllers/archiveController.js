@@ -21,6 +21,16 @@ export async function getGame(req, res) {
   }
 }
 
+export async function getGameByCode(req, res) {
+  try {
+    const filter = { gameCode: req.params.id };
+    let foundArchivedGame = await ArchivedGame.findOne(filter);
+    res.status(200).send(foundArchivedGame);
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+}
+
 export async function deleteGame(req, res) {
   try {
     const filter = { _id: req.params.id };

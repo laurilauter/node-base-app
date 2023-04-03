@@ -5,12 +5,13 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import TrashCanOutline from "svelte-material-icons/TrashCanOutline.svelte";
+  import moment from "moment";
 
   let archGame;
   export let params = {};
 
   async function getGame() {
-    const response = await fetch(`${baseURL}/archive/${params.id}`);
+    const response = await fetch(`${baseURL}/archive/code/${params.id}`);
     let archivedGame = await response.json();
     archGame = {
       _id: archivedGame._id,
@@ -32,7 +33,6 @@
         "content-type": "application/json",
       },
     });
-    //console.log("deletedGame ", deletedGame.message);
     replace("/host/game-history");
   }
 
@@ -52,12 +52,21 @@
         </span>
       </div>
       <!-- <p>{archGame._id}</p> -->
-      <p><span class="bold">Algus: </span>{archGame.gameStartTime}</p>
-      <p><span class="bold">Lõpp: </span>{archGame.gameEndTime}</p>
+      <p>
+        <span class="bold">Algus: </span>{moment(archGame.gameStartTime).format(
+          "DD-MM-YYYY HH:MM"
+        )}
+      </p>
+      <p>
+        <span class="bold">Lõpp: </span>{moment(archGame.gameEndTime).format(
+          "DD-MM-YYYY HH:MM"
+        )}
+      </p>
       <span class="bold">Mängijad</span>
 
       {#each archGame.playersStats as player}
         <div class="player-row">
+          <span>{archGame.playersStats.indexOf(player) + 1}.</span>
           <span class="bold">{player.name}</span>
           <span>Punkte: {player.pointsTotal}</span>
           <span>Küsimusi leitud: {player.markersFound.length}</span>
