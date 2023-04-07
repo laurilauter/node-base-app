@@ -5,21 +5,22 @@
   import { fade } from "svelte/transition";
   import { isUserLoggedIn } from "../../stores.js";
   import { sessionUserInfo } from "../../stores.js";
+  import SessionGet from "../../lib/utilities/SessionGet.svelte";
   import moment from "moment";
 
   let archivedGames = [];
+  let sessionGetter;
 
-  async function getGamePlans() {
-    const response = await fetch(
-      `${baseURL}/archive/list/${$sessionUserInfo.id}`
-    );
+  async function getGamePlans(id) {
+    const response = await fetch(`${baseURL}/archive/list/${id}`);
     archivedGames = await response.json();
     console.log("archivedGames ", archivedGames);
     console.log("isUserLoggedIn at MyGamePlans ", $isUserLoggedIn);
   }
 
   onMount(async () => {
-    getGamePlans();
+    await sessionGetter.getSession();
+    await getGamePlans($sessionUserInfo.id);
   });
 </script>
 
@@ -43,6 +44,7 @@
     </ul>
   </div>
 </div>
+<SessionGet bind:this={sessionGetter} />
 
 <style>
   ul {

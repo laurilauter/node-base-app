@@ -33,7 +33,7 @@ export async function getGameByCode(req, res) {
 
 export async function deleteGame(req, res) {
   try {
-    const filter = { _id: req.params.id };
+    const filter = { gameCode: req.params.id };
     const result = await ArchivedGame.deleteOne(filter);
     console.log("result ", result);
     if (result.deletedCount === 0) {

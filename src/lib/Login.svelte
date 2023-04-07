@@ -84,7 +84,7 @@
 </div>
 
 <style>
-  .spikker {
+  /* .spikker {
     font-size: 1rem;
-  }
+  } */
 </style>
