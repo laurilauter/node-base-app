@@ -97,12 +97,12 @@
       <a href="#/game-plan/game-map/{$currentGamePlan._id}"
         ><h3 class="menu-list-item">Mängu kaart</h3></a
       >
-      <label>
+      <!-- <label>
         <input type="checkbox" bind:checked={show} />
         Igavad andmed
-      </label>
+      </label> -->
     </div>
-    {#if show}
+    <!-- {#if show}
       <div class="info-box">
         <h4>from STORE $currentGamePlan</h4>
         <p>ID: {$currentGamePlan._id}</p>
@@ -151,7 +151,7 @@
           {/each}
         </div>
       </div>
-    {/if}
+    {/if} -->
   </div>
 {:else}
   <p><Loader /></p>

@@ -162,19 +162,21 @@
           <!-- <p>selle teksit saaks if-else-ga paremaks</p> -->
         </h4>
         {#each Object.entries($currentGamePlanMarkers) as [key, value]}
-          <input
-            type="radio"
-            name="radio"
-            id={value._id}
-            group={key}
-            bind:value={key}
-            on:change={handleRadio(key)}
-          />
-          <!-- Need to know KEY and New X and Y -->
-          <label for={value._id}>
-            {value.title} - {value.content.quiz.question}
-          </label>
-          <h4>x: {value.content.position.x} y: {value.content.position.y}</h4>
+          <div class="question-frame">
+            <input
+              type="radio"
+              name="radio"
+              id={value._id}
+              group={key}
+              bind:value={key}
+              on:change={handleRadio(key)}
+            />
+            <!-- Need to know KEY and New X and Y -->
+            <label for={value._id}>
+              {value.title} - {value.content.quiz.question}
+            </label>
+          </div>
+          <!-- <h4>x: {value.content.position.x} y: {value.content.position.y}</h4> -->
         {/each}
       </div>
     </div>
@@ -251,5 +253,13 @@
     max-width: 560px;
     height: auto;
     padding: 10px;
+  }
+
+  .question-frame {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: first baseline;
   }
 </style>

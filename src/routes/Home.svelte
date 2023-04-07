@@ -34,7 +34,9 @@
     <div class="container">
       <button type="button" id="login-button" on:click={play}>Mängija</button>
       <br />
-      <button type="button" id="login-button" on:click={create}>Looja</button>
+      <button type="button" id="login-button" on:click={create}
+        >Mängujuht</button
+      >
     </div>
   </div>
   <LogOutFunc bind:this={logOutGetter} />

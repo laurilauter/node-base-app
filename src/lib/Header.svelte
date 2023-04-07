@@ -14,8 +14,8 @@
   import { socket } from "../socket.js";
 
   // all properties are optional
-  export let size = "3em"; // string | number
-  export let ariaHidden = false; // boolean
+  // export let size = "3em"; // string | number
+  // export let ariaHidden = false; // boolean
 
   let sessionGetter;
   // let data;
@@ -55,9 +55,12 @@
         <div class="row-container-between">
           <div>
             {#if $isUserLoggedIn}
-              <span class="side-m5">
-                <a href="#/host"> <Home {size} {ariaHidden} /></a>
-              </span>
+              <!-- <a href="#/host"> <Home {size} {ariaHidden} /></a> -->
+              <a href="#/host">
+                <div class="img-frame">
+                  <img src="logo-c-140.svg" alt="logo" />
+                </div>
+              </a>
             {/if}
           </div>
           <div>
@@ -123,7 +126,28 @@
     margin: 16px;
   }
 
-  .side-m5 {
+  /* .side-m5 {
     margin: 0 5px 0 5px;
+  } */
+
+  /* .img-frame {
+    min-height: 50px;
+    width: auto;
+  } */
+
+  .img-frame img {
+    margin: 10px;
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+  }
+
+  @media (max-width: 560px) {
+    .img-frame img {
+      margin: 5px;
+      height: 40px;
+      width: 40px;
+      object-fit: cover;
+    }
   }
 </style>
