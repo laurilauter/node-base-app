@@ -34,7 +34,7 @@
             <span>{archivedGame.gameCode}</span>
             <span>{archivedGame.gamePlan.gameTitle}</span>
             <span
-              >{moment(archivedGame.gameEndTime).format("DD-MM-YYYY HH:MM")}
+              >{moment(archivedGame.gameEndTime).format("DD.MM.YYYY HH:mm")}
             </span>
           </a>
         </li>

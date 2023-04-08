@@ -8,7 +8,7 @@
   import { currentJoinLink } from "../../stores.js";
   import { onMount } from "svelte";
   import Select from "./play/Select.svelte";
-  import moment from "moment";
+  //import moment from "moment";
   import { socket } from "../../socket.js";
 
   let selected;
@@ -19,8 +19,8 @@
   let error;
   let message;
 
-  const now = moment();
-  let time = now.add(1, "hour");
+  //const now = moment();
+  //let time = now.add(1, "hour");
 
   function sendData(data) {
     socket.send(JSON.stringify(data));
@@ -105,7 +105,7 @@
         },
         body: JSON.stringify({
           gamePlanId: selected._id,
-          gameEndTime: time.toISOString(), //fix this so it comes from the user selection
+          //gameEndTime: time.toISOString(), //fix this so it comes from the user selection
         }),
       });
       let activeGame = await response.json();
@@ -192,7 +192,7 @@
   });
 </script>
 
-<h1>Sinu mäng</h1>
+<h1>Sinu mäng {$currentGame.gameCode}</h1>
 {#if $currentGame.gameStatus === ""}
   <div class="column-container">
     <p>Vali mänugplaan ja alusta mängu.</p>
@@ -224,7 +224,7 @@
   <button class="btn" on:click={endGame}>Lõpeta</button>
 {/if}
 
-{#if $currentJoinLink}
+{#if $currentJoinLink && $currentGame.gameStatus === "activated"}
   <p>Testimiseks kleebi link Incognito aknasse ja vali mängijale nimi.</p>
   <p class="green">{$currentJoinLink}</p>
   <p>
@@ -233,7 +233,6 @@
   </p>
   <h3 class="green">Kood: {$currentGame.gameCode}</h3>
 {/if}
-
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
   <div>
     <h2>Mängijad</h2>

@@ -54,12 +54,12 @@
       <!-- <p>{archGame._id}</p> -->
       <p>
         <span class="bold">Algus: </span>{moment(archGame.gameStartTime).format(
-          "DD-MM-YYYY HH:MM"
+          "DD.MM.YYYY HH:mm"
         )}
       </p>
       <p>
         <span class="bold">Lõpp: </span>{moment(archGame.gameEndTime).format(
-          "DD-MM-YYYY HH:MM"
+          "DD.MM.YYYY HH:mm"
         )}
       </p>
       <span class="bold">Mängijad</span>

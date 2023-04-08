@@ -33,11 +33,12 @@ export async function activateGame(req, res) {
 
 export async function startGame(req, res) {
   const filter = { gameCode: req.params.id, gameStatus: "activated" };
-  const now = moment();
+  let now = moment();
   const update = {
     gameStartTime: now,
     gameStatus: "started",
   };
+  console.log("update ", update);
   const options = { sort: { _id: 1 }, new: true };
   try {
     const updatedGame = await Game.findOneAndUpdate(filter, update, options);
@@ -222,8 +223,8 @@ export async function endGame(req, res) {
       ownerId: endedGame.gamePlan.ownerId,
       markers: endedGame.gamePlan.markers,
     };
-    const now = moment();
     //prepare to create achived game
+    let now = moment();
     const archivedGameData = {
       gamePlan: gamePlan,
       gameCode: endedGame.gameCode,

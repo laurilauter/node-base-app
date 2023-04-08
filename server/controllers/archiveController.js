@@ -3,7 +3,7 @@ import { ArchivedGame } from "../db/modelConnector.js";
 export async function listMyGames(req, res) {
   try {
     const filter = { gameOwnerId: req.params.id };
-    const list = await ArchivedGame.find(filter);
+    const list = await ArchivedGame.find(filter).sort({ gameEndTime: -1 });
     //console.log("list ", list);
     res.status(200).send(list);
   } catch (error) {
