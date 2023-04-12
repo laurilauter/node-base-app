@@ -177,6 +177,30 @@
     }
   }
 
+  async function cancelGame() {
+    try {
+      const response = await fetch(
+        `${baseURL}/game/cancel/${$currentGame.gameCode}`
+      );
+      let endedGame = await response.json();
+      message = endedGame.message;
+      replace("/host/active-game");
+      $currentJoinLink = "";
+      $currentGame = {
+        _id: "",
+        gamePlan: {
+          _id: "",
+        },
+        gameStatus: "",
+        gameCode: "",
+        players: [],
+      };
+      await getGamePlans();
+    } catch (error) {
+      console.log({ error: error });
+    }
+  }
+
   onMount(async () => {
     await sessionGetter.getSession();
     await getActiveGame();
@@ -220,6 +244,7 @@
     disabled={$currentPlayers.length > 0 ? false : true}
     on:click={startGame}>Start</button
   >
+  <button class="btn" on:click={cancelGame}>Tühista</button>
 {:else if $currentGame.gameStatus === "started"}
   <button class="btn" on:click={endGame}>Lõpeta</button>
 {/if}
