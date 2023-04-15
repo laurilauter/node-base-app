@@ -32,17 +32,26 @@ const wss = new WebSocketServer({ server });
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
-
   ws.on("message", function message(data, isBinary) {
     console.log("Server received a message");
     wss.clients.forEach(function (client) {
-      console.log("in for each");
-      console.log("client._readyState", client._readyState);
+      console.log("client._readyState", client.readyState);
+      const receivedData = JSON.parse(data);
+      console.log("data arrived at server ", receivedData);
       client.send(data, { binary: isBinary });
     });
   });
   const data = { event: "Hi from server" };
   ws.send(JSON.stringify(data));
+
+  function sendPing() {
+    const ping = () => {
+      const pingdata = { event: "ping" };
+      ws.send(JSON.stringify(pingdata));
+    };
+    const nIntervId = setInterval(ping, 10000);
+  }
+  sendPing();
 });
 
 app.use(express.json());
@@ -109,11 +118,6 @@ app.use("/", express.static(path.join(__dirname, "../dist")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
-
-// //serv static FE to JOIN the game //this FE page posts the users name to BE activeGame class
-// app.get("/join", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../client/join.html"));
-// });
 
 server.listen(port, () => {
   console.log(`${process.env.NODE_ENV} server listening on: ${port}`);
