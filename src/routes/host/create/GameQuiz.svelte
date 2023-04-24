@@ -1,7 +1,6 @@
 <script>
   // @ts-nocheck
   import { baseURL } from "../../../lib/utilities/baseUrl";
-  import { push, pop, replace, location } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import Loader from "../../../lib/utilities/Loader.svelte";
@@ -162,6 +161,7 @@
   }
 
   function handleClick(code) {
+    console.log("code to printer ", code);
     openModal(QrModal, { code: code });
   }
 

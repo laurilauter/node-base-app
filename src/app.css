@@ -54,6 +54,7 @@ body {
   margin: 0 auto;
   min-width: 320px;
   min-height: 100vh;
+  accent-color: var(--btn-bg-color);
 }
 /* LINKS */
 a {

@@ -14,6 +14,25 @@
   let gamePlanGetter;
   let error;
 
+  async function getGameInfo() {
+    try {
+      const response = await fetch(`${baseURL}/game/info/${params.id}`);
+      const responseData = await response.json();
+      $currentGame = responseData.currentGame;
+      if (responseData.currentGame) {
+        console.log("$currentGame loaded", $currentGame);
+        console.log("$currentGame.gameStatus", $currentGame.gameStatus);
+        console.log("$currentGame.gamePlan._id", $currentGame.gamePlan._id);
+      } else {
+        error = responseData.error;
+        $currentGame.gameStatus = "";
+        console.warn(error);
+      }
+    } catch (error) {
+      console.log({ error: error });
+    }
+  }
+
   async function getPlayers() {
     try {
       const response = await fetch(`${baseURL}/game/players/${params.id}`);
@@ -41,7 +60,7 @@
   }
 
   socket.onmessage = function (event) {
-    console.log(`WS Data received from server: ${event.data}`);
+    //console.log(`WS Data received from server: ${event.data}`);
     const receivedData = JSON.parse(event.data);
     console.log("receivedData parsed", receivedData);
     if (receivedData.event === "gameStarted") {
@@ -71,9 +90,11 @@
 
   onMount(async () => {
     if ($waitingRoomStatus === "beforeGame") {
+      await getGameInfo();
       await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
-      await getPlayerStats();
       await getPlayers();
+      await getPlayerStats();
+      console.log("$currentGame.gamePlan._id ", $currentGame.gamePlan._id);
     }
   });
 </script>

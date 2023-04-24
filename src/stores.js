@@ -37,6 +37,7 @@ export const player = writable({
   playerName: "",
   gameCode: "",
 });
+export const playerAnswers = writable([]);
 export const playerStats = writable();
 export const waitingRoomStatus = writable();
 export const currentGamePlanMarker = writable({

@@ -14,6 +14,7 @@ gameRouter.post("/sharejoinlink", gameController.shareJoinLink);
 
 gameRouter.post("/playerjoin", gameController.playerJoin);
 
+//get game by game code
 gameRouter.get("/info/:id", gameController.getGame);
 
 gameRouter.get("/active/:id", gameController.getGames);

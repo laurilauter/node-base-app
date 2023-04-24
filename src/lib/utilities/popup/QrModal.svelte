@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import { closeModal } from "svelte-modals";
   import QRCode from "../QRJS.svelte";
   import CloseCircleOutline from "svelte-material-icons/CloseCircleOutline.svelte";
@@ -6,7 +8,8 @@
   // provided by <Modals />
   export let isOpen;
   export let code;
-  function print() {
+
+  function printMe() {
     window.print();
   }
 </script>
@@ -19,14 +22,14 @@
           <CloseCircleOutline size={"3rem"} ariaHidden={false} />
         </span>
       </div>
-      <span>
-        <QRCode codeValue={code} squareSize="360" />
-      </span>
-      <span>{code}</span>
-      <!-- <button on:click={window.print()}>PRINT</button> -->
+      <div class="printable">
+        <span>
+          <QRCode codeValue={code} squareSize="360" />
+        </span>
+        <span>{code}</span>
+      </div>
       <div class="actions no-print">
-        <!-- <button on:click={closeModal}>OK</button> -->
-        <button on:click={print}>PRINT</button>
+        <button on:click={printMe}>PRINT</button>
       </div>
     </div>
   </div>
@@ -78,10 +81,13 @@
   }
 
   @media print {
-    div,
-    span {
-      border: none;
+    .no-print {
+      visibility: hidden;
     }
+  }
+
+  .printable {
+    visibility: visible;
   }
 
   @page {

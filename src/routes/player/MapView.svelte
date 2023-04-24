@@ -12,6 +12,7 @@
   import { currentPlayers } from "../../stores.js";
   import { currentGamePlanMarkers } from "../../stores.js";
   import { waitingRoomStatus } from "../../stores.js";
+  import { playerAnswers } from "../../stores.js";
   import GamePlanGet from "../../lib/utilities/GamePlanGet.svelte";
   import GamePlanMarkersGet from "../../lib/utilities/GamePlanMarkersGet.svelte";
   import { socket } from "../../socket.js";
@@ -168,6 +169,7 @@
       getGameInfo();
     } else if (receivedData.event === "gameEnded") {
       $playerStats = receivedData.finalScores;
+      $playerAnswers = [];
       $waitingRoomStatus = "afterGame";
       console.log("$waitingRoomStatus MapView ", $waitingRoomStatus);
       replace(`/waiting-room/${params.id}`);
@@ -178,8 +180,21 @@
     }
   };
 
-  function markerColor(isVisited) {
-    return isVisited ? "grey" : "green";
+  function markerColor(hasValue, id) {
+    console.log("hasValue, id ", hasValue, id);
+    let color = "initialColor";
+    if (hasValue) {
+      $playerAnswers.forEach((element) => {
+        if (id === element.id) {
+          if (element.isCorrect) {
+            color = "correctColor";
+          } else {
+            color = "wrongColor";
+          }
+        }
+      });
+    }
+    return color;
   }
 
   onMount(async () => {
@@ -187,7 +202,8 @@
     await gamePlanGetter.getGamePlan($currentGame.gamePlan._id);
     await gamePlanMarkerGetter.getGamePlanMarkers($currentGame.gamePlan._id);
     await getPlayerStats();
-    $currentGame.gameStatus = "activated";
+    console.log("$playerStats", $playerStats);
+    //$currentGame.gameStatus = "activated";
     await getPlayers();
     init();
   });
@@ -222,7 +238,8 @@
           {#each Object.entries($currentGamePlanMarkers) as [key, value]}
             <div
               class="image-marker {markerColor(
-                $playerStats.markersFound.includes(value._id)
+                $playerStats.markersFound.includes(value._id),
+                value._id
               )}"
               id={value._id}
               style="top: {value.content.position.y - 20}px; left: {value
@@ -308,16 +325,24 @@
     align-items: center;
   }
 
-  .grey {
+  .initialColor {
     color: grey;
-    border: 3px solid grey;
-    background-color: rgb(210, 210, 210);
-  }
-
-  .green {
-    color: green;
     border: 3px solid green;
     background-color: rgb(142, 200, 142);
+  }
+
+  .correctColor {
+    color: green;
+    border: 3px solid green;
+    background-color: silver;
+    opacity: 0.7;
+  }
+
+  .wrongColor {
+    color: indianred;
+    border: 3px solid indianred;
+    background-color: silver;
+    opacity: 0.7;
   }
 
   .info-box {

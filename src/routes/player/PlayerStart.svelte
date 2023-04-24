@@ -82,7 +82,7 @@
     <Splash />
     <div class="start-form">
       <h2>Alusta mängu</h2>
-      <form action="" method="post">
+      <form action="" method="post" on:submit|preventDefault={joinGame}>
         <div class="container">
           <input
             type="text"

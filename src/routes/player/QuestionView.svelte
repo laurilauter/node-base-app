@@ -4,6 +4,7 @@
   import { push, pop, replace } from "svelte-spa-router";
   import { fade } from "svelte/transition";
   import { currentGamePlanMarker, player } from "../../stores.js";
+  import { playerAnswers } from "../../stores.js";
   import { onMount } from "svelte";
   import { socket } from "../../socket.js";
   export let params = {};
@@ -37,6 +38,18 @@
     if (points < 1) {
       points = 0;
     }
+    let result = {
+      id: $currentGamePlanMarker._id,
+      isCorrect: false,
+    };
+    if (points === 1) {
+      result.isCorrect = true;
+      $playerAnswers.push(result);
+    } else {
+      result.isCorrect = false;
+      $playerAnswers.push(result);
+    }
+    console.log("playerAnswers ", $playerAnswers);
 
     console.log("points ", points);
     try {

@@ -48,7 +48,7 @@
     <Splash />
     <div class="start-form">
       <h2>Sisesta mängu kood</h2>
-      <form action="" method="post">
+      <form action="" method="post" on:submit|preventDefault={toStart}>
         <div class="container">
           <input
             type="text"

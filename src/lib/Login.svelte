@@ -51,7 +51,7 @@
   <div class="column-container">
     <div class="login-form">
       <h3>Logige sisse</h3>
-      <form action="" method="post">
+      <form action="" method="post" on:submit|preventDefault={loginUser}>
         <div class="login-container">
           <input
             type="email"

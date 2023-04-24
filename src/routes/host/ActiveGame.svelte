@@ -239,18 +239,18 @@
 
   <h3>Kui mängijad on kohal, siis vajuta Start.</h3>
   <!-- set btn to disabled if no players -->
+  <button class="btn btn-cancel" on:click={cancelGame}>Tühista</button>
   <button
     class="btn"
     disabled={$currentPlayers.length > 0 ? false : true}
     on:click={startGame}>Start</button
   >
-  <button class="btn" on:click={cancelGame}>Tühista</button>
 {:else if $currentGame.gameStatus === "started"}
   <button class="btn" on:click={endGame}>Lõpeta</button>
 {/if}
 
 {#if $currentJoinLink && $currentGame.gameStatus === "activated"}
-  <p>Testimiseks kleebi link Incognito aknasse ja vali mängijale nimi.</p>
+  <p>Testimiseks kleebi link inkognito aknasse ja vali mängijale nimi.</p>
   <p class="green">{$currentJoinLink}</p>
   <p>
     Alternatiivina võib siseneda rakendusse mängija vaatest ja sisestada mängu
@@ -291,6 +291,10 @@
   }
   .btn {
     max-width: 160px;
+  }
+
+  .btn-cancel {
+    background-color: rgb(171, 140, 81);
   }
 
   .players-frame {
