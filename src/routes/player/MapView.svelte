@@ -60,24 +60,25 @@
     console.log("decodedText", decodedText);
     if (decodedText) {
       let markerId;
-      //ENABLE THIS TO ALLOWE ANSWERING JUST ONCE
+      //ENABLE THIS TO ALLOW ANSWERING JUST ONCE
       $currentGamePlanMarkers.forEach((element) => {
-        // if (
-        //   element.content.qrcode.qrCodeTitle === decodedText &&
-        //   //the next line checks if the player has answered the question already
-        //   !$playerStats.markersFound.includes(element._id)
-        // ) {
-        //   markerId = element._id;
-        //   console.log("markerId ", markerId);
-        // } else if ($playerStats.markersFound.includes(element._id)) {
-        //   console.log("answered already");
-        // }
-        if (element.content.qrcode.qrCodeTitle === decodedText) {
+        if (
+          element.content.qrcode.qrCodeTitle === decodedText &&
+          //the next line checks if the player has answered the question already
+          !$playerStats.markersFound.includes(element._id)
+        ) {
           markerId = element._id;
           console.log("markerId ", markerId);
         } else if ($playerStats.markersFound.includes(element._id)) {
           console.log("answered already");
         }
+        //ENABLE THIS TO ALLOW ANSWERING OVER AND OVER AGAIN
+        // if (element.content.qrcode.qrCodeTitle === decodedText) {
+        //   markerId = element._id;
+        //   console.log("markerId ", markerId);
+        // } else if ($playerStats.markersFound.includes(element._id)) {
+        //   console.log("answered already");
+        // }
       });
       if (markerId) {
         push(`/player/question-view/${params.id}/${markerId}`);
