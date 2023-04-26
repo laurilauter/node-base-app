@@ -33,7 +33,7 @@ gamePlanRouter.get("/marker/:id", gamePlanController.getMarker);
 //get a map by gameplanid
 gamePlanRouter.get("/map/:id", gamePlanController.getMap);
 
-//get all gameplan marker by gameplan id
+//get all gameplan markers by gameplan id
 gamePlanRouter.get("/markers/:id", gamePlanController.getMarkers);
 
 //patch a gameplan

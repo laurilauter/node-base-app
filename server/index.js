@@ -17,6 +17,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 const port = process.env.PORT || 3000;
 const secret = process.env.SESSION_SECRET;
+const clientUrlProd = process.env.VITE_BASE_URL_PROD;
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -60,7 +61,8 @@ app.use(cookieParser());
 //adjust client url for cors
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
-  client_url = "https://quizgame.eu-4.evennode.com/"; //for prod
+  // client_url = "https://quizgame.eu-4.evennode.com/"; //for prod
+  client_url = clientUrlProd;
 }
 
 console.log("client_url: ", client_url);

@@ -7,9 +7,14 @@ import ActiveGame from "../classes/ActiveGame.js";
 import moment from "moment";
 //import { WebSocketServer } from "ws";
 
+import * as dotenv from "dotenv";
+dotenv.config();
+const clientUrlProd = process.env.VITE_BASE_URL_PROD;
+
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
-  client_url = "https://quizgame.eu-4.evennode.com/";
+  // client_url = "https://quizgame.eu-4.evennode.com/";
+  client_url = clientUrlProd;
 }
 
 export async function activateGame(req, res) {
@@ -132,7 +137,7 @@ export async function playerJoin(req, res) {
           );
           console.log("player added to currentGame ", currentGame.players);
         }
-        res.status(200).send({
+        res.status(201).send({
           player: player,
         });
       } else {
