@@ -61,7 +61,6 @@ app.use(cookieParser());
 //adjust client url for cors
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
-  // client_url = "https://quizgame.eu-4.evennode.com/"; //for prod
   client_url = clientUrlProd;
 }
 
@@ -97,7 +96,7 @@ app.use(
   })
 );
 
-//Check if this works //should change cookie so it gets renewed
+//changes cookie so it gets renewed
 app.use(function (req, res, next) {
   req.session.nowInMinutes = Math.floor(Date.now() / 60e3);
   next();

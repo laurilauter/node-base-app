@@ -5,7 +5,6 @@ import { Player } from "../db/modelConnector.js";
 import { ArchivedGame } from "../db/modelConnector.js";
 import ActiveGame from "../classes/ActiveGame.js";
 import moment from "moment";
-//import { WebSocketServer } from "ws";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -13,7 +12,6 @@ const clientUrlProd = process.env.VITE_BASE_URL_PROD;
 
 let client_url = "http://localhost:5173";
 if (process.env.NODE_ENV === "production") {
-  // client_url = "https://quizgame.eu-4.evennode.com/";
   client_url = clientUrlProd;
 }
 
@@ -91,7 +89,7 @@ export async function getGames(req, res) {
     let currentGames = await Game.find(filter);
     if (currentGames.length > 0) {
       // console.log("currentGames[0] ", currentGames[0]);
-      //this abot this a bit, should "started" be at the top?
+      //this about this a bit, should "started" be at the top?
       res.status(200).send({ currentGame: currentGames[0] });
     } else {
       res.status(404).send({ error: "No active games found" });
