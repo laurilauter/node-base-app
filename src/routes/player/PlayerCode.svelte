@@ -52,7 +52,7 @@
         <div class="container">
           <input
             type="text"
-            placeholder="Kood"
+            placeholder="Võti"
             name="kood"
             bind:value={code}
             required
