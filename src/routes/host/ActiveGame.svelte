@@ -250,13 +250,10 @@
 {/if}
 
 {#if $currentJoinLink && $currentGame.gameStatus === "activated"}
-  <p>Testimiseks kleebi link inkognito aknasse ja vali mängijale nimi.</p>
+  <h3>Otselink:</h3>
   <p class="green">{$currentJoinLink}</p>
-  <p>
-    Alternatiivina võib siseneda rakendusse mängija vaatest ja sisestada mängu
-    kood, seejärel saab valida nime.
-  </p>
-  <h3 class="green">Kood: {$currentGame.gameCode}</h3>
+  <h3>Mänugu võti:</h3>
+  <h3 class="green">{$currentGame.gameCode}</h3>
 {/if}
 {#if $currentGame.gameStatus === "activated" || $currentGame.gameStatus === "started"}
   <div>

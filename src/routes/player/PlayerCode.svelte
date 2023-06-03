@@ -47,7 +47,7 @@
   <div class="column-container">
     <Splash />
     <div class="start-form">
-      <h2>Sisesta mängu kood</h2>
+      <h2>Sisesta mängu võti</h2>
       <form action="" method="post" on:submit|preventDefault={toStart}>
         <div class="container">
           <input
@@ -61,7 +61,7 @@
         </div>
       </form>
       {#if error}
-        <p>Sellise koodiga mängu ei leitud.</p>
+        <p>Sellise võtmega mängu ei leitud.</p>
       {/if}
     </div>
   </div>
