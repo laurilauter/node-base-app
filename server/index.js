@@ -83,8 +83,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      sameSite: false,
-      secure: false,
+      sameSite: false, //'lax' or 'strict'
+      secure: false, //true in prod
       //maxAge: 10 * 60000, // 10 min
       maxAge: 7 * 24 * 3600 * 1000, //a week
       httpOnly: true,
